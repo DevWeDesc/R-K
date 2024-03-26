@@ -18,6 +18,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
+        sans: "Roboto",
         timesNew: "Times New Roman",
       },
       colors: {
