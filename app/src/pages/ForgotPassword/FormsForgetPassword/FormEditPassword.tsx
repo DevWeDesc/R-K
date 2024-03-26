@@ -9,12 +9,20 @@ import { IFormForgetPassword } from "@/@interfaces/ForgotPasword/FormForgetPassw
 import { useNavigate } from "react-router-dom";
 import { PiShieldCheck } from "react-icons/pi";
 import Cookies from "js-cookie";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { useState } from "react";
+import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
 
 export const FormEditPassword = ({
   cardExible,
   setCardExible,
 }: IFormForgetPassword) => {
   const navigate = useNavigate();
+
+  const [InputPasswordIsVisible, setInputPasswordIsVisible] = useState({
+    password: false,
+    confirmPassword: false,
+  } as IInputPasswordIsVisible);
 
   const {
     register,
@@ -40,6 +48,20 @@ export const FormEditPassword = ({
     }
   });
 
+  const handleVisibilityPassword = () => {
+    setInputPasswordIsVisible({
+      ...InputPasswordIsVisible,
+      password: InputPasswordIsVisible.password ? false : true,
+    });
+  };
+
+  const handleVisibilityConfirmPassword = () => {
+    setInputPasswordIsVisible({
+      ...InputPasswordIsVisible,
+      confirmPassword: InputPasswordIsVisible.confirmPassword ? false : true,
+    });
+  };
+
   return (
     <CardForgotPassword
       icon={<PiShieldCheck className="font-normal" size={81} />}
@@ -52,20 +74,76 @@ export const FormEditPassword = ({
         className="flex flex-col items-center gap-4 w-full"
       >
         <div className="flex flex-col gap-4 w-full">
-          <Input
-            className="w-full"
-            {...register("password", { required: true })}
-            placeholder="Senha"
-          />
-          {errors.password && <InputRequiredError inputName="Senha" />}
-          <Input
-            className="w-full"
-            {...register("confirmPassword", { required: true })}
-            placeholder="Corfirmar Senha"
-          />
-          {errors.confirmPassword && (
-            <InputRequiredError inputName="Confirmar Senha" />
-          )}
+          <div>
+            <div className="relative">
+              <Input
+                type={
+                  !InputPasswordIsVisible.confirmPassword ? "password" : "text"
+                }
+                {...register("password", { required: true })}
+                placeholder="Senha"
+              />
+              {InputPasswordIsVisible.confirmPassword ? (
+                <Button
+                  variant="password"
+                  size="icon"
+                  type="button"
+                  onClick={handleVisibilityConfirmPassword}
+                >
+                  <FaRegEye size="16" />
+                </Button>
+              ) : (
+                <Button
+                  variant="password"
+                  size="icon"
+                  type="button"
+                  onClick={handleVisibilityConfirmPassword}
+                >
+                  <FaRegEyeSlash size="18" />
+                </Button>
+              )}
+            </div>
+            {errors.password && (
+              <InputRequiredError
+                className="px-4 text-center w-full"
+                inputName="Senha"
+              />
+            )}
+          </div>
+          <div>
+            <div className="relative">
+              <Input
+                type={!InputPasswordIsVisible.password ? "password" : "text"}
+                {...register("confirmPassword", { required: true })}
+                placeholder="Confirmar Senha"
+              />
+              {InputPasswordIsVisible.password ? (
+                <Button
+                  variant="password"
+                  size="icon"
+                  type="button"
+                  onClick={handleVisibilityPassword}
+                >
+                  <FaRegEye size="16" />
+                </Button>
+              ) : (
+                <Button
+                  variant="password"
+                  size="icon"
+                  type="button"
+                  onClick={handleVisibilityPassword}
+                >
+                  <FaRegEyeSlash size="18" />
+                </Button>
+              )}
+            </div>
+            {errors.confirmPassword && (
+              <InputRequiredError
+                className="px-4 text-center"
+                inputName="Confirmar Senha"
+              />
+            )}
+          </div>
         </div>
         <Button type="submit" className="w-full">
           Editar Senha
