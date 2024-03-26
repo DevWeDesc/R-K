@@ -9,11 +9,7 @@ import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { IRegisterForm } from "@/@interfaces/IRegisterForm";
 import { ILoginUser } from "@/@interfaces/ILoginForm";
-
-interface IInputPasswordIsVisible {
-  password: boolean;
-  confirmPassword: boolean;
-}
+import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
 
 export const FormRegister = () => {
   const navigate = useNavigate();
@@ -28,7 +24,6 @@ export const FormRegister = () => {
   } = useForm<IRegisterForm>();
 
   const handleCreateNewUser = handleSubmit((data) => {
-    console.log(data);
     const handleSubmitUser: IRegisterForm = {
       Name: data.Name,
       CRMV: data.CRMV,
