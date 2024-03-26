@@ -93,7 +93,7 @@ export const FormLogin = () => {
             )}
           </div>
           {errors.Password && (
-            <InputRequiredError className="px-4" inputName="Password" />
+            <InputRequiredError className="px-4" inputName="Senha" />
           )}
         </div>
       </div>
