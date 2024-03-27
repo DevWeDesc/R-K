@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ICardDisplayableInForgotPassword } from "@/@interfaces/ForgotPasword/ICardDisplayableInForgotPassword";
 import { FormEditPassword } from "./FormsForgetPassword/FormEditPassword";
 import { FormSendCodeEmail } from "./FormsForgetPassword/FormSendCodeEmail";

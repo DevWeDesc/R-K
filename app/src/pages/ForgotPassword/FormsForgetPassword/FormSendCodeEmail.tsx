@@ -19,6 +19,8 @@ export const FormSendCodeEmail = ({
     formState: { errors },
   } = useForm<IForgotPassword>();
 
+  Cookies.set("forgotPasswordPage", "sendCodeByEmail");
+
   const handleSendCodeForEmail = handleSubmit((data) => {
     const handleSubmitCode = {
       Email: data.email,

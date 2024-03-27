@@ -10,6 +10,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { IRegisterForm } from "@/@interfaces/IRegisterForm";
 import { ILoginUser } from "@/@interfaces/ILoginForm";
 import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
+import { userRoleEnum } from "@/enums/UserRoleEnum";
 
 export const FormRegister = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export const FormRegister = () => {
     const handleSubmitUser: IRegisterForm = {
       Name: data.Name,
       CRMV: data.CRMV,
-      Email: data.Email,
+      Email: data.Email.toLocaleLowerCase(),
       Phone: data.Phone,
       State: data.State,
       Password: data.Password,
@@ -48,7 +49,12 @@ export const FormRegister = () => {
     ) {
       toast.error("Esse Usuário já existe!");
     } else {
-      const newUser: ILoginUser = { CRMV, Email, Password };
+      const newUser: ILoginUser = {
+        CRMV,
+        Email,
+        Password,
+        userRole: userRoleEnum.veterinarian,
+      };
       UsersMock.push(newUser);
       toast.success("Usuário adicionado com sucesso!");
       navigate("/");
@@ -107,7 +113,7 @@ export const FormRegister = () => {
               {...register("Phone", { required: true })}
               placeholder="Telefone"
             />
-            {errors.Email && (
+            {errors.Phone && (
               <InputRequiredError className="px-4" inputName="Telefone" />
             )}
           </div>
@@ -117,7 +123,7 @@ export const FormRegister = () => {
             {...register("State", { required: true })}
             placeholder="Estado"
           />
-          {errors.Email && (
+          {errors.State && (
             <InputRequiredError className="px-4" inputName="Estado" />
           )}
         </div>
@@ -159,7 +165,7 @@ export const FormRegister = () => {
                 type={
                   !InputPasswordIsVisible.confirmPassword ? "password" : "text"
                 }
-                {...register("Password", { required: true })}
+                {...register("ConfirmationPassword", { required: true })}
                 placeholder="Confirmar Senha"
               />
               {InputPasswordIsVisible.confirmPassword ? (
@@ -182,7 +188,7 @@ export const FormRegister = () => {
                 </Button>
               )}
             </div>
-            {errors.Password && (
+            {errors.ConfirmationPassword && (
               <InputRequiredError
                 className="px-4"
                 inputName="Confirmar Senha"
