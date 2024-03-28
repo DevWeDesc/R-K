@@ -5,7 +5,7 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import { Home } from "./pages/Home";
 import { AdminExams } from "./pages/AdminExams";
 import { ExamsAvailable } from "./pages/ExamsAvailable/indext";
-import { TablePreview } from "./pages/TabPreview";
+import { TabPreview } from "./pages/TabPreview";
 
 export const Router = () => {
   return (
@@ -17,7 +17,7 @@ export const Router = () => {
         <Route path="home" element={<Home />} />
         <Route path="exams/admin" element={<AdminExams />} />
         <Route path="exams/available" element={<ExamsAvailable />} />
-        <Route path="tab/preview" element={<TablePreview />} />
+        <Route path="tab/preview" element={<TabPreview />} />
       </Routes>
     </BrowserRouter>
   );
