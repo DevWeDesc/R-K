@@ -54,9 +54,9 @@ export const Nav = () => {
         textButtonActive="Encerrar Sessão"
         textTitle="Tem certeza que deseja encerrar a sessão?"
         textDesciption="Após encerrar a sessão você vai sair da sua conta, deseja confirmar?"
-        textCancelButton="Cancelar"
-        textConfirmButton="Confirmar"
-        functionOnClickButtonConfirm={() => handleCloseSessionUser()}
+        textPrimaryButton="Cancelar"
+        textSecondaryButton="Confirmar"
+        functionOnClickSecondaryButton={() => handleCloseSessionUser()}
       />
     </div>
   );
