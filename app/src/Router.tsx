@@ -4,7 +4,8 @@ import { Register } from "./pages/Register";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { Home } from "./pages/Home";
 import { AdminExams } from "./pages/AdminExams";
-import { ContextSendEmailClientProvider } from "./contexts/ContextSendEmailClient";
+import { ExamsAvailable } from "./pages/ExamsAvailable/indext";
+import { TablePreview } from "./pages/TabPreview";
 
 export const Router = () => {
   return (
@@ -14,7 +15,9 @@ export const Router = () => {
         <Route path="register" element={<Register />} />
         <Route path="forgotpassword" element={<ForgotPassword />} />
         <Route path="home" element={<Home />} />
-        <Route path="adminexams" element={<AdminExams />} />
+        <Route path="exams/admin" element={<AdminExams />} />
+        <Route path="exams/available" element={<ExamsAvailable />} />
+        <Route path="tab/preview" element={<TablePreview />} />
       </Routes>
     </BrowserRouter>
   );
