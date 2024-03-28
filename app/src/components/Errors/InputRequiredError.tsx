@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 interface IInputRequiredError {
   inputName: string;
   className?: string;
-  typeError: string;
+  typeError?: string;
 }
 const errorVariant = cva("text-center text-sm text-red-800 font-medium");
 
@@ -15,7 +15,7 @@ export const InputRequiredError = ({
 }: IInputRequiredError) => {
   return (
     <span className={cn(errorVariant({ className }))}>
-      {typeError === "required" && `O campo ${inputName} é obrigatório!`}
+      {!typeError && `O campo ${inputName} é obrigatório!`}
       {typeError === "isNotValid" && `O campo ${inputName} é inválido!`}
     </span>
   );
