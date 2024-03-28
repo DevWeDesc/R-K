@@ -1,4 +1,3 @@
-import { VariantsButtonEnum } from "@/enums/VariantsButtonEnum";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -9,46 +8,37 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { LuLoader2 } from "react-icons/lu";
-
-interface IModalGeneric {
-  variantButton: VariantsButtonEnum;
-  textButtonActive: string;
-  textTitle: string;
-  textDesciption: string;
-  textCancelButton: string;
-  textConfirmButton: string;
-  functionOnClickButtonConfirm?: () => void;
-  className?: string;
-  children?: ReactNode;
-  error?: boolean;
-  isLoading?: boolean;
-}
+import { IoIosClose } from "react-icons/io";
+import { IModalGeneric } from "@/@interfaces/IModalGeneric";
 
 export function ModalGeneric({
   variantButton,
   textButtonActive,
   textTitle,
   textDesciption,
-  textCancelButton,
-  textConfirmButton,
-  functionOnClickButtonConfirm,
+  textPrimaryButton,
+  textSecondaryButton,
+  functionOnClickPrimaryButton,
+  functionOnClickSecondaryButton,
   className,
   children,
   error,
   isLoading,
+  inputIsValid,
 }: IModalGeneric) {
   const [openModal, setOpenModal] = useState(false);
 
   const handleCloseModal = async (isButtonCancel: boolean) => {
     if (error && !isButtonCancel)
       toast.error("Verifique o Campo para Prosseguir!");
-    else if (!error && !isButtonCancel && !isLoading) {
+    else if (!isButtonCancel && !inputIsValid) {
+    } else if (!error && !isButtonCancel && !isLoading && inputIsValid) {
       setTimeout(() => {
         setOpenModal(false);
-      }, 2000);
+      }, 1800);
     } else setOpenModal(false);
   };
 
@@ -64,7 +54,13 @@ export function ModalGeneric({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{textTitle}</AlertDialogTitle>
+          <AlertDialogTitle className="relative">
+            {textTitle}{" "}
+            <IoIosClose
+              onClick={() => setOpenModal(false)}
+              className="absolute -top-2 -right-1 text-4xl p-1 hover:bg-zinc-300 border rounded-full transition-all cursor-pointer"
+            />
+          </AlertDialogTitle>
           <AlertDialogDescription>{textDesciption}</AlertDialogDescription>
         </AlertDialogHeader>
         {children}
@@ -74,17 +70,18 @@ export function ModalGeneric({
             variant="ghost"
             className="border text-sm px-4 rounded-full"
           >
-            {textCancelButton}
+            {textPrimaryButton}
           </Button>
           {!isLoading ? (
             <Button
               onClick={() => {
-                functionOnClickButtonConfirm && functionOnClickButtonConfirm();
+                functionOnClickSecondaryButton &&
+                  functionOnClickSecondaryButton();
                 handleCloseModal(false);
               }}
               className="text-sm px-4"
             >
-              {textConfirmButton}
+              {textSecondaryButton}
             </Button>
           ) : (
             <Button disabled className="text-sm font-normal px-4">
