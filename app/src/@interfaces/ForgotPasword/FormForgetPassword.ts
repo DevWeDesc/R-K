@@ -1,6 +1,6 @@
 import { ICardDisplayableInForgotPassword } from "./ICardDisplayableInForgotPassword";
 
-export interface IFormForgetPassword {
+export interface IFormForgetPasswordProps {
   cardExible: ICardDisplayableInForgotPassword;
   setCardExible: React.Dispatch<
     React.SetStateAction<ICardDisplayableInForgotPassword>
