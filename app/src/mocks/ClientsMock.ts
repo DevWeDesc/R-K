@@ -1,17 +1,18 @@
-import { ILoginUser } from "@/@interfaces/ILoginForm";
-import { userRoleEnum } from "@/enums/UserRoleEnum";
+export interface IClient {
+  email: string;
+  name: string;
+  phone: string;
+}
 
-export const ClientsMock: ILoginUser[] = [
+export const ClientsMock: IClient[] = [
   {
-    CRMV: "12345",
-    Email: "cliente@gmail.com",
-    Password: "123",
-    userRole: userRoleEnum.admin,
+    email: "cliente@gmail.com",
+    name: "cliente teste",
+    phone: "(11) 99999-9999",
   },
   {
-    CRMV: "12345",
-    Email: "felipe@gmail.com",
-    Password: "teste123",
-    userRole: userRoleEnum.veterinarian,
+    email: "danilo@gmail.com",
+    name: "Danilo Scalia",
+    phone: "(11) 91111-1111",
   },
 ];
