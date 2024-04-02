@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UsersMock } from "@/mocks/UsersMock";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
@@ -11,6 +11,14 @@ import { IRegisterForm } from "@/@interfaces/IRegisterForm";
 import { ILoginUser } from "@/@interfaces/ILoginForm";
 import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
 import { userRoleEnum } from "@/enums/UserRoleEnum";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from "@/components/ui/select";
 
 export const FormRegister = () => {
   const navigate = useNavigate();
@@ -21,6 +29,7 @@ export const FormRegister = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<IRegisterForm>();
 
@@ -118,15 +127,32 @@ export const FormRegister = () => {
             )}
           </div>
         </div>
-        <div>
-          <Input
-            {...register("State", { required: true })}
-            placeholder="Estado"
-          />
-          {errors.State && (
-            <InputRequiredError className="px-4" inputName="Estado" />
+
+        <Controller
+          name="State"
+          control={control}
+          defaultValue="São Paulo"
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
+                  <SelectValue placeholder="São Paulo" {...field} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="São Paulo">São Paulo</SelectItem>
+                    <SelectItem value="Bahia">Bahia</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {errors.State && (
+                <InputRequiredError className="px-4" inputName="Estado" />
+              )}
+            </>
           )}
-        </div>
+        />
+
         <div className="grid grid-cols-2 gap-2">
           <div>
             <div className="relative">
