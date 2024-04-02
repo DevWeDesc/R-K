@@ -16,9 +16,9 @@ import { toast } from "react-toastify";
 export const GenericTable = ({ data, additionalFields }: IGenericTable) => {
   const navigate = useNavigate();
 
-  const handleAddNewExamInTab = () => {
+  const handleAddNewExamInGuide = () => {
     toast.success("Exame adicionado com sucesso!");
-    navigate("/tab/preview");
+    navigate("/guide/preview");
   };
 
   return (
@@ -64,7 +64,7 @@ export const GenericTable = ({ data, additionalFields }: IGenericTable) => {
               {additionalFields === additionalFieldsTableGenericEnum.list ? (
                 <TableCell className="font-semibold border">
                   <Button
-                    onClick={handleAddNewExamInTab}
+                    onClick={handleAddNewExamInGuide}
                     variant="outline"
                     className="rounded-full px-5"
                   >
