@@ -5,14 +5,9 @@ export interface IModalGeneric {
   variantButton: VariantsButtonEnum;
   textButtonActive: string;
   textTitle: string;
-  textDesciption: string;
-  textPrimaryButton: string;
-  textSecondaryButton: string;
-  functionOnClickPrimaryButton?: () => void;
-  functionOnClickSecondaryButton?: () => void;
+  textDescription: string;
   className?: string;
   children?: ReactNode;
-  error?: boolean;
-  isLoading?: boolean;
-  inputIsValid?: boolean;
+  openModal: boolean;
+  setModalOpen: (ev: boolean) => void;
 }
