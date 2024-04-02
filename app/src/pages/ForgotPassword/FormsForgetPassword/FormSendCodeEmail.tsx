@@ -6,13 +6,13 @@ import { CardForgotPassword } from "../CardForgotPassword";
 import { IForgotPassword } from "@/@interfaces/ForgotPasword";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { IFormForgetPassword } from "@/@interfaces/ForgotPasword/FormForgetPassword";
+import { IFormForgetPasswordProps } from "@/@interfaces/ForgotPasword/FormForgetPassword";
 import Cookies from "js-cookie";
 
 export const FormSendCodeEmail = ({
   cardExible,
   setCardExible,
-}: IFormForgetPassword) => {
+}: IFormForgetPasswordProps) => {
   const {
     register,
     handleSubmit,

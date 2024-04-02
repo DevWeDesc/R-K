@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface ICardForgotPassword {
+export interface ICardForgotPasswordProps {
   icon: ReactElement;
   title: string;
   description: string;
@@ -14,7 +14,7 @@ export const CardForgotPassword = ({
   children,
   description,
   title,
-}: ICardForgotPassword) => {
+}: ICardForgotPasswordProps) => {
   const navigate = useNavigate();
 
   return (

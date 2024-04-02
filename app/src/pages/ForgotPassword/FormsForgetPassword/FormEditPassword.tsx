@@ -5,7 +5,7 @@ import { CardForgotPassword } from "../CardForgotPassword";
 import { IForgotPassword } from "@/@interfaces/ForgotPasword";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { IFormForgetPassword } from "@/@interfaces/ForgotPasword/FormForgetPassword";
+import { IFormForgetPasswordProps } from "@/@interfaces/ForgotPasword/FormForgetPassword";
 import { useNavigate } from "react-router-dom";
 import { PiShieldCheck } from "react-icons/pi";
 import Cookies from "js-cookie";
@@ -16,7 +16,7 @@ import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
 export const FormEditPassword = ({
   cardExible,
   setCardExible,
-}: IFormForgetPassword) => {
+}: IFormForgetPasswordProps) => {
   const navigate = useNavigate();
 
   const [InputPasswordIsVisible, setInputPasswordIsVisible] = useState({
