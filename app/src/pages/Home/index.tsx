@@ -25,8 +25,8 @@ export const Home = () => {
         <div
           className={`grid ${
             Cookies.get("userRole") === "admin" &&
-            `grid-cols-${CardHomeMock.length}`
-          }  gap-20`}
+            `lg:grid-cols-${CardHomeMock.length}`
+          } gap-20 md:gap-28 `}
         >
           {Cookies.get("userRole") === "admin"
             ? CardHomeMock.map((card, index) => (
