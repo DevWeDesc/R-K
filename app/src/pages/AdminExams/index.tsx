@@ -10,7 +10,7 @@ export const AdminExams = () => {
     <>
       <Header navIsVisible />
       <div className="flex flex-col items-center text-center pt-16 gap-5 max-w-5xl m-auto">
-        <p className="text-5xl font-semibold">
+        <p className="text-4xl font-semibold">
           Administração de <br />
           Exames Disponíveis
         </p>
