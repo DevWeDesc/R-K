@@ -34,6 +34,9 @@ export const FormEditPassword = ({
     const handleSubmitVerifyCode = {
       password: data.password,
     };
+
+    console.log(handleSubmitVerifyCode);
+
     if (data.password != data.confirmPassword) {
       toast.error(`As senhas não coincidem!`);
     } else {

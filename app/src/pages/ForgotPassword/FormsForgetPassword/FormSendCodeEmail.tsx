@@ -25,6 +25,7 @@ export const FormSendCodeEmail = ({
     const handleSubmitCode = {
       Email: data.email,
     };
+    console.log(handleSubmitCode);
     Cookies.set("forgotPasswordPage", "VerifyCode");
     toast.success(`Código enviado com sucesso para o E-mail ${data.email}`);
     setCardExible({ ...cardExible, sendCodeByEmail: false, VerifyCode: true });

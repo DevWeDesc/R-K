@@ -27,6 +27,8 @@ export const FormFillTheGuide = () => {
       observations,
     };
 
+    console.log(data);
+
     navigate("/home");
     toast.success("Guia criada com sucesso!");
   });

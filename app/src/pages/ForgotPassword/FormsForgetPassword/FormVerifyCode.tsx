@@ -22,6 +22,7 @@ export const FormVerifyCode = ({
     const handleSubmitVerifyCode = {
       code: data.code,
     };
+    console.log(handleSubmitVerifyCode);
     Cookies.set("forgotPasswordPage", "EditPassword");
     toast.success(`Verificação executada com sucesso!`);
     setCardExible({ ...cardExible, VerifyCode: false, EditPassword: true });
