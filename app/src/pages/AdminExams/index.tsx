@@ -24,14 +24,14 @@ export const AdminExams = () => {
           aqui para oferecer suporte e garantir que seus animais desfrutem de
           uma vida saudável e feliz.
         </p>
-        <div className="relative w-full py-16">
+        <div className="relative w-full pt-16">
           <Button
             variant="outline"
             className="px-8 text-sm rounded-full absolute top-0 right-0"
           >
             <CiMedicalClipboard className="mr-1 text-lg" /> Adicionar Exame
           </Button>
-          <div className="overflow-auto max-h-[45vh]">
+          <div className="overflow-auto max-h-[53.5vh]">
             <GenericTable
               data={ExamsVailableMock}
               additionalFields={additionalFieldsTableGenericEnum.admin}
