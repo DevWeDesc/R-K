@@ -1,4 +1,4 @@
-interface IExams {
+export interface IExams {
   id: number;
   name: string;
   price: number;
