@@ -14,7 +14,10 @@ interface ISubmitNewClient {
   phone: string;
 }
 
-export const AddNewClientForm = ({ setTypeForm }: IFormStepperModalProps) => {
+export const AddNewClientForm = ({
+  functionPrimaryButton,
+  functionSecondaryButton,
+}: IFormStepperModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -32,7 +35,7 @@ export const AddNewClientForm = ({ setTypeForm }: IFormStepperModalProps) => {
         } else {
           setIsLoading(false);
           resolve("Usuário cadastrado com sucesso!");
-          setTypeForm();
+          functionSecondaryButton && functionSecondaryButton();
         }
       }, 2000);
     });
@@ -62,25 +65,28 @@ export const AddNewClientForm = ({ setTypeForm }: IFormStepperModalProps) => {
         {...register("name", { required: true })}
         placeholder="Nome"
       />
-      {errors.name && <InputRequiredError inputName="Nome" />}
+      {errors.name && <InputRequiredError className="pl-4" inputName="Nome" />}
       <Input
         className="w-full"
         {...register("email", { required: true })}
         placeholder="client@example.com"
       />
-      {errors.email && <InputRequiredError inputName="E-mail" />}
+      {errors.email && (
+        <InputRequiredError className="pl-4" inputName="E-mail" />
+      )}
       <Input
         className="w-full"
         {...register("phone", { required: true })}
         placeholder="(11) 99999-9999"
       />
-      {errors.phone && <InputRequiredError inputName="Telefone" />}
+      {errors.phone && (
+        <InputRequiredError className="pl-4" inputName="Telefone" />
+      )}
       <div className="grid grid-cols-2 gap-2">
-        {" "}
         <Button
           variant="outline"
           className="text-sm rounded-full"
-          onClick={() => setTypeForm()}
+          onClick={() => functionPrimaryButton()}
         >
           Voltar
         </Button>

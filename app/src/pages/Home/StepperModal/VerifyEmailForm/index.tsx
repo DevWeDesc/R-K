@@ -11,10 +11,14 @@ import { toast } from "react-toastify";
 
 export interface IFormStepperModalProps {
   setModalOpen: (ev: boolean) => void;
-  setTypeForm: () => void;
+  functionPrimaryButton: () => void;
+  functionSecondaryButton?: () => void;
 }
 
-export const VerifyEmailForm = ({ setTypeForm }: IFormStepperModalProps) => {
+export const VerifyEmailForm = ({
+  functionPrimaryButton,
+  functionSecondaryButton,
+}: IFormStepperModalProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,7 +34,6 @@ export const VerifyEmailForm = ({ setTypeForm }: IFormStepperModalProps) => {
         if (ClientsMock.find((client) => client.email === email)) {
           setIsLoading(false);
           resolve("Usuário encontrado com sucesso!");
-          navigate("/exams/available");
         } else {
           setIsLoading(false);
           reject("Usuário não encontrado!");
@@ -43,6 +46,7 @@ export const VerifyEmailForm = ({ setTypeForm }: IFormStepperModalProps) => {
     setIsLoading(true);
     await handleGetEmailByUser(value.email)
       .then((res) => {
+        functionSecondaryButton && functionSecondaryButton();
         toast.success(res);
       })
       .catch((res) => {
@@ -63,7 +67,7 @@ export const VerifyEmailForm = ({ setTypeForm }: IFormStepperModalProps) => {
           <Button
             variant="outline"
             className="text-sm rounded-full"
-            onClick={() => setTypeForm()}
+            onClick={() => functionPrimaryButton()}
           >
             Cadastrar Cliente
           </Button>
