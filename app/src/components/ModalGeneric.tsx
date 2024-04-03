@@ -21,7 +21,10 @@ export function ModalGeneric({
   setModalOpen,
 }: IModalGeneric) {
   return (
-    <AlertDialog open={openModal} onOpenChange={() => setModalOpen(true)}>
+    <AlertDialog
+      open={openModal}
+      onOpenChange={() => setModalOpen && setModalOpen(true)}
+    >
       <AlertDialogTrigger asChild>
         <Button
           className={`text-white font-semibold ${className}`}
@@ -35,7 +38,7 @@ export function ModalGeneric({
           <AlertDialogTitle className="relative">
             {textTitle}
             <IoIosClose
-              onClick={() => setModalOpen(false)}
+              onClick={() => setModalOpen && setModalOpen(false)}
               className="absolute -top-2 -right-1 text-4xl p-1 hover:bg-zinc-300 border rounded-full transition-all cursor-pointer"
             />
           </AlertDialogTitle>
