@@ -1,11 +1,18 @@
 import { ModalGeneric } from "@/components/ModalGeneric";
 import { VariantsButtonEnum } from "@/enums/VariantsButtonEnum";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VerifyEmailForm } from "./VerifyEmailForm";
 import { AddNewClientForm } from "./AddNewClientForm";
+import { AddNewPetForm } from "./AddNewPet";
+import { IModalGeneric } from "@/@interfaces/IModalGeneric";
+import { SelectPetForm } from "./SelectPetForm";
 
 export const StepperModal = () => {
   const [openModal, setOpenModal] = useState(false);
+
+  const [attributesByModal, setAttributesByModal] = useState(
+    {} as IModalGeneric
+  );
 
   const [typeForm, setTypeForm] = useState({
     verifyEmail: true,
@@ -15,39 +22,111 @@ export const StepperModal = () => {
   });
 
   const handleMutateTypeFormForAddNewClient = () => {
-    setTypeForm({ ...typeForm, addNewClient: true, verifyEmail: false });
+    setTypeForm({
+      addNewClient: true,
+      verifyEmail: false,
+      addNewPet: false,
+      selectedPet: false,
+    });
   };
 
   const handleMutateTypeFormForVerifyEmail = () => {
-    setTypeForm({ ...typeForm, verifyEmail: true, addNewClient: false });
+    setTypeForm({
+      verifyEmail: true,
+      addNewClient: false,
+      addNewPet: false,
+      selectedPet: false,
+    });
   };
+
+  const handleMutateTypeFormForAddNewPet = () => {
+    setTypeForm({
+      addNewPet: true,
+      selectedPet: false,
+      addNewClient: false,
+      verifyEmail: false,
+    });
+  };
+  const handleMutateTypeFormForSelectPet = () => {
+    setTypeForm({
+      selectedPet: true,
+      addNewPet: false,
+      addNewClient: false,
+      verifyEmail: false,
+    });
+  };
+
+  const handleAttributesByModal = () => {
+    switch (true) {
+      case typeForm.verifyEmail:
+        setAttributesByModal({
+          textTitle: "Insira o E-mail do cliente para a verificação",
+          textDescription:
+            "Insira o E-mail do cliente que deseja atender, para validarmos se ele está disponível no sistema!",
+        });
+        break;
+      case typeForm.addNewClient:
+        setAttributesByModal({
+          textTitle: "Criação de novo Cliente",
+          textDescription:
+            "Insira o E-mail do cliente que deseja atender, para validarmos se ele está disponível no sistema!",
+        });
+        break;
+      case typeForm.addNewPet:
+        setAttributesByModal({
+          textTitle: "Criação de novo Pet",
+          textDescription:
+            "Insira o E-mail do cliente que deseja atender, para validarmos se ele está disponível no sistema!",
+        });
+        break;
+      default:
+        setAttributesByModal({
+          textTitle: "Seleção ou Adição de Pet",
+          textDescription:
+            "Para prosseguir Selecione o pet que o cliente deseja, se o pet não estiver cadastrado clique em adicionar novo Pet para cadastra-lo!",
+        });
+        break;
+    }
+  };
+
+  useEffect(() => {
+    handleAttributesByModal();
+  }, [typeForm]);
 
   return (
     <ModalGeneric
       openModal={openModal}
       setModalOpen={(ev) => setOpenModal(ev)}
       className="w-full"
-      textTitle={
-        typeForm.verifyEmail
-          ? "Insira o E-mail do cliente para a verificação"
-          : "Criação de novo Cliente"
-      }
+      textTitle={attributesByModal.textTitle}
       variantButton={VariantsButtonEnum.default}
-      textButtonActive="Verificar Email"
-      textDescription={
-        "Insira o E-mail do cliente que deseja atender, para validarmos se ele está disponível no sistema!"
-      }
+      textButtonActive="Solicitar Exames"
+      textDescription={attributesByModal.textDescription}
     >
       {typeForm.verifyEmail && (
         <VerifyEmailForm
           setModalOpen={(ev) => setOpenModal(ev)}
-          setTypeForm={() => handleMutateTypeFormForAddNewClient()}
+          functionPrimaryButton={() => handleMutateTypeFormForAddNewClient()}
+          functionSecondaryButton={() => handleMutateTypeFormForSelectPet()}
         />
       )}
       {typeForm.addNewClient && (
         <AddNewClientForm
           setModalOpen={(ev) => setOpenModal(ev)}
-          setTypeForm={() => handleMutateTypeFormForVerifyEmail()}
+          functionPrimaryButton={() => handleMutateTypeFormForVerifyEmail()}
+          functionSecondaryButton={() => handleMutateTypeFormForAddNewPet()}
+        />
+      )}
+      {typeForm.addNewPet && (
+        <AddNewPetForm
+          setModalOpen={(ev) => setOpenModal(ev)}
+          functionPrimaryButton={() => handleMutateTypeFormForVerifyEmail()}
+        />
+      )}
+      {typeForm.selectedPet && (
+        <SelectPetForm
+          setModalOpen={(ev) => setOpenModal(ev)}
+          functionPrimaryButton={() => handleMutateTypeFormForAddNewPet()}
         />
       )}
     </ModalGeneric>
