@@ -13,9 +13,11 @@ import { useEffect, useState } from "react";
 export const ExamsAvailable = () => {
   const navigate = useNavigate();
   const [guideIsVisible, setGuidIsVisible] = useState(true);
+
   useEffect(() => {
     if (guideIsVisible) setGuidIsVisible(false);
   }, [ExamsByGuideMock, guideIsVisible]);
+
   return (
     <>
       <Header navIsVisible />
