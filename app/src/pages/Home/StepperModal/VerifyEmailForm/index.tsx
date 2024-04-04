@@ -6,7 +6,6 @@ import { ClientsMock } from "@/mocks/ClientsMock";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LuLoader2 } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export interface IFormStepperModalProps {
@@ -19,7 +18,6 @@ export const VerifyEmailForm = ({
   functionPrimaryButton,
   functionSecondaryButton,
 }: IFormStepperModalProps) => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
