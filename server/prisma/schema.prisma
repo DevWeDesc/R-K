@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  Admin
+  Veterinarian
+}
+
+model UsersLogin {
+  id            Int            @id @unique @default(autoincrement())
+  password      String
+  roleUser      UserRole
+  veterinarians Veterinarians?
+}
+
+model Veterinarians {
+  id                Int        @id @unique @default(autoincrement())
+  name              String
+  crmv              String     @unique
+  email             String     @unique
+  state             String
+  phone             String
+  veterinarianLogin UsersLogin @relation(fields: [usersLoginId], references: [id])
+  usersLoginId      Int        @unique
+}
+
+model Clients {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String
+  phone String
+  pets  Pets[]
+}
+
+enum SpecieEnum {
+  Canina
+  Felino
+}
+
+model Pets {
+  id        Int        @id @default(autoincrement())
+  name      String
+  specie    SpecieEnum
+  clients   Clients    @relation(fields: [clientsId], references: [id])
+  clientsId Int        @unique
+}
+
+model Exams {
+  id      Int     @id @default(autoincrement())
+  name    String
+  value   Float
+  group   Groups? @relation(fields: [groupId], references: [id])
+  groupId Int?
+}
+
+model Groups {
+  id        Int     @id @default(autoincrement())
+  name      String
+  preparing Json
+  exams     Exams[]
+}
