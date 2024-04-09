@@ -23,8 +23,8 @@ export const ExamsAvailable = () => {
       <Header navIsVisible />
       <div
         className={`grid ${
-          ExamsByGuideMock.length > 0 && "xl:grid-cols-2"
-        } xl:gap-10`}
+          ExamsByGuideMock.length > 0 && "lg:grid-cols-2"
+        } lg:gap-10`}
       >
         <div className="flex flex-col items-center text-center pt-16 gap-5 w-full mx-auto">
           <p className="text-4xl font-semibold">

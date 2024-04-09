@@ -9,14 +9,14 @@ export const GuidePreviewComponent = () => {
   }, 0);
 
   return (
-    <div className="flex flex-col items-center text-center pt-16 gap-5 w-full m-auto">
+    <div className="flex flex-col items-center text-center pt-16 gap-5 w-full mx-auto">
       <p className="text-4xl font-semibold">
         Pré visualização <br /> da Guia
       </p>
-      <p className="text-2xl pt-16 text-left w-full font-semibold xl:pt-[150px]">
+      <p className="text-2xl text-left w-full font-semibold">
         Informações Presentes na Guia
       </p>
-      <div className="w-full grid md:grid-cols-2 md:gap-4 xl:grid-cols-1 gap-y-10">
+      <div className="w-full grid md:grid-cols-2 md:gap-4 lg:grid-cols-1 xl:grid-cols-2 gap-y-10">
         <CardGuidePreview title="Informações do Animal">
           <p>Nome do Animal</p>
           <p>Espécie do Animal</p>
@@ -50,7 +50,7 @@ export const GuidePreviewComponent = () => {
           </p>
         </CardGuidePreview>
         <div className="h-full relative xl:w-full">
-          <p className="absolute -bottom-2 font-bold text-lg xl:relative xl:w-full xl:text-left">
+          <p className="absolute -bottom-2 font-bold text-lg lg:relative xl:w-full xl:absolute xl:text-left">
             Adicionar Observações na Guia
           </p>
         </div>
