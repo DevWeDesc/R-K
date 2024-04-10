@@ -1,34 +1,16 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import {
-  getAllVeterinariansUseCase,
-  getUniqueVeterinarianUseCase,
-} from "../..";
-import { IVeterinarianModel } from "../../domain/models/Veterinarian";
+import { getAllVeterinariansUseCase } from "../..";
 
 export const VeterinarianController = {
   GetVeterinarianQuery: async (
     request: FastifyRequest<{
-      Querystring: { email?: string; id?: number; crmv?: string };
+      Querystring: { email?: string; id?: string; crmv?: string };
     }>,
     reply: FastifyReply
   ) => {
     const { email, crmv, id } = request.query;
     try {
-      let res: IVeterinarianModel[] | IVeterinarianModel =
-        await getAllVeterinariansUseCase.execute();
-
-      switch (true) {
-        case !!email:
-          res = await getUniqueVeterinarianUseCase.byEmail(email);
-          break;
-        case !!crmv:
-          res = await getUniqueVeterinarianUseCase.byCRMV(crmv);
-          break;
-        case !!id:
-          res = await getUniqueVeterinarianUseCase.byId(id);
-          break;
-      }
-
+      const res = await getAllVeterinariansUseCase.execute(email, crmv, id);
       return reply.code(201).send(res);
     } catch (err) {
       return reply.code(400).send(err);
