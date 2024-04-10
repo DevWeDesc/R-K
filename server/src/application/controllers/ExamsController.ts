@@ -26,7 +26,8 @@ export const ExamsController = {
     reply: FastifyReply
   ) => {
     try {
-      const res = await createExamsUseCase.execute(request.body);
+      const { body } = request;
+      const res = await createExamsUseCase.execute(body);
 
       return reply.code(201).send(res);
     } catch (err) {
