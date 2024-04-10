@@ -3,6 +3,8 @@ import { usersRoutes } from "./application/routes/LoginRoutes";
 import { veterinarianRoutes } from "./application/routes/VeterinarianRoutes";
 import { examsRoutes } from "./application/routes/ExamsRoutes";
 import { groupsRoutes } from "./application/routes/GroupsRoutes";
+import { clientsRoutes } from "./application/routes/ClientsRoutes";
+import { petsRoutes } from "./application/routes/PetsRoutes";
 
 const app = fastify({ logger: true });
 
@@ -10,6 +12,8 @@ app.register(usersRoutes);
 app.register(veterinarianRoutes);
 app.register(examsRoutes);
 app.register(groupsRoutes);
+app.register(clientsRoutes);
+app.register(petsRoutes);
 
 app
   .listen({ port: 3333 })
