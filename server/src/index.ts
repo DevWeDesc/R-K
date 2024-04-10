@@ -13,6 +13,9 @@ import GroupRepository from "./infra/repositories/Groups/GroupRepository";
 import { UserLoginRepository } from "./infra/repositories/UserLogin/UserLoginRepository";
 import { VeterinarianRepository } from "./infra/repositories/Veterinarian/VeterinarianRepository";
 
+// Errors
+export const VeterinarianNotFound = require("./domain/errors/VeterinarianError/VeterinarianNotFound");
+
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
 export const veterinarianRepository = new VeterinarianRepository();
