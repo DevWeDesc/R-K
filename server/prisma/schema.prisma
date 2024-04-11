@@ -30,7 +30,7 @@ model Veterinarians {
   usersLoginId      Int        @unique
 }
 
-model Clients {
+model Customers {
   id    Int    @id @default(autoincrement())
   name  String
   email String @unique
@@ -44,11 +44,11 @@ enum SpecieEnum {
 }
 
 model Pets {
-  id        Int        @id @default(autoincrement())
-  name      String
-  specie    SpecieEnum
-  clients   Clients    @relation(fields: [clientsId], references: [id])
-  clientsId Int        @unique
+  id         Int        @id @default(autoincrement())
+  name       String
+  specie     SpecieEnum
+  customer   Customers  @relation(fields: [customerId], references: [id])
+  customerId Int        @unique
 }
 
 model Exams {
