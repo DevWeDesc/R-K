@@ -1,9 +1,9 @@
 import { Customers } from "@prisma/client";
 import { prisma } from "../../../lib/prismaClient";
-import { ICustomerRepositories } from "./ICustomerRepositories";
 import { CustomerRequestDTO } from "../../../application/DTOs/CustomersDTO/CustomersRequestDTO";
+import { ICustomerRepository } from "./ICustomerRepository";
 
-export default class CustomerRepositories implements ICustomerRepositories {
+export default class CustomerRepository implements ICustomerRepository {
   public async findByEmail(email: string): Promise<Customers | null> {
     return await prisma.customers.findUnique({ where: { email } });
   }
