@@ -11,5 +11,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node16"
-  }
+  },
+  "include": [
+    "src/**/*",
+    "src/__tests__",
+    "jest.config.js"
+  ]
 }
