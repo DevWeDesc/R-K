@@ -3,8 +3,8 @@ import { usersRoutes } from "./application/routes/LoginRoutes";
 import { veterinarianRoutes } from "./application/routes/VeterinarianRoutes";
 import { examsRoutes } from "./application/routes/ExamsRoutes";
 import { groupsRoutes } from "./application/routes/GroupsRoutes";
-import { clientsRoutes } from "./application/routes/ClientsRoutes";
 import { petsRoutes } from "./application/routes/PetsRoutes";
+import { customersRoutes } from "./application/routes/CustomerRoutes";
 
 const app = fastify({ logger: true });
 
@@ -12,7 +12,7 @@ app.register(usersRoutes);
 app.register(veterinarianRoutes);
 app.register(examsRoutes);
 app.register(groupsRoutes);
-app.register(clientsRoutes);
+app.register(customersRoutes);
 app.register(petsRoutes);
 
 app
