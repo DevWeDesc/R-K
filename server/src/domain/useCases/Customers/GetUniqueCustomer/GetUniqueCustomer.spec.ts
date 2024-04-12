@@ -27,7 +27,7 @@ describe("GetUniqueUser", () => {
     };
     await expect(getAllCustomersUseCase.execute(data)).resolves.toMatchObject({
       id: 2,
-      name: "Daniel",
+      name: "Dr. Daniel",
       email: "draniel@gmail.com",
       phone: "(11) 99999-9998",
     });

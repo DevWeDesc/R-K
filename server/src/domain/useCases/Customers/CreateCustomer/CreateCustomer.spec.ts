@@ -1,3 +1,4 @@
+import test from "node:test";
 import { createCustomerUseCase } from "../../../..";
 import { CustomerRequestDTO } from "../../../../application/DTOs/CustomersDTO/CustomersRequestDTO";
 import EmailAlreadyUsedError from "../../../errors/Customers/EmailAlreadyUsedError";
@@ -12,9 +13,9 @@ describe("Create Customer Tests", () => {
      *fazendo a validação do cadastro
      */
     const data: CustomerRequestDTO = {
-      name: "EmailIsValid",
+      name: "Vinicius",
       email: "vinicius@example",
-      phone: "(11) 99999-9999",
+      phone: "(11) 99999-9990",
     };
 
     await expect(createCustomerUseCase.execute(data)).rejects.toThrow(
@@ -28,12 +29,12 @@ describe("Create Customer Tests", () => {
      *o erro EmailAlreadyUSed é disparado fazendo a validação do cadastro
      */
     const data: CustomerRequestDTO = {
-      name: "ExistEmail",
+      name: "Vinicius",
       email: "vinicius@gmail.com",
-      phone: "(11) 99999-9999",
+      phone: "(11) 90000-0000",
     };
 
-    await expect(createCustomerUseCase.execute(data)).rejects.toThrow(
+    expect(await createCustomerUseCase.execute(data)).rejects.toThrow(
       EmailAlreadyUsedError
     );
   });
@@ -49,7 +50,7 @@ describe("Create Customer Tests", () => {
       phone: "(11) 99999-9999",
     };
 
-    await expect(createCustomerUseCase.execute(data)).rejects.toThrow(
+    expect(await createCustomerUseCase.execute(data)).rejects.toThrow(
       PhoneAlreadyUsedError
     );
   });

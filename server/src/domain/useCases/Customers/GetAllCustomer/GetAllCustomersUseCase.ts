@@ -1,10 +1,10 @@
 import { UniqueCustomerEmailPhoneDTO } from "../../../../application/DTOs/CustomersDTO/UniqueCustomerEmailPhoneDTO";
-import CustomerRepositories from "../../../../infra/repositories/Customers/CustomerRepositories";
+import CustomerRepository from "../../../../infra/repositories/Customers/CustomerRepository";
 import GetUniqueCustomerUseCase from "../GetUniqueCustomer/GetUniqueUserUseCase";
 
 export default class GetAllCustomersUseCase {
   constructor(
-    readonly clientsRepositories: CustomerRepositories,
+    readonly clientsRepositories: CustomerRepository,
     readonly getUniqueCustomerUseCase: GetUniqueCustomerUseCase
   ) {}
 

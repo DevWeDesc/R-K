@@ -1,24 +1,21 @@
 import { Customers } from "@prisma/client";
 import { CustomerRequestDTO } from "../../../../application/DTOs/CustomersDTO/CustomersRequestDTO";
-import CustomerRepositories from "../../../../infra/repositories/Customers/CustomerRepositories";
-
-import { EmailValidator } from "../../../../utils/ValidateEmail";
+import CustomerRepository from "../../../../infra/repositories/Customers/CustomerRepository";
 import EmailAlreadyUsedError from "../../../errors/Customers/EmailAlreadyUsedError";
-import EmailNotValidError from "../../../errors/Customers/EmailNotValidError";
 import PhoneAlreadyUsedError from "../../../errors/Customers/PhoneAlreadyUsedError";
+import GetUniqueCustomerUseCase from "../GetUniqueCustomer/GetUniqueUserUseCase";
 
 export default class CreateCustomersUseCase {
-  constructor(readonly customerRepositories: CustomerRepositories) {}
+  constructor(
+    readonly customerRepositories: CustomerRepository,
+    readonly getUniqueCustomerUseCase: GetUniqueCustomerUseCase
+  ) {}
   async execute(customerRequestDTO: CustomerRequestDTO) {
-    const validateEmail = EmailValidator(customerRequestDTO.email);
-    if (!validateEmail) throw new EmailNotValidError();
+    const emailExists = await this.getUniqueCustomerUseCase.getCustomerByEmail(
+      customerRequestDTO.email
+    );
 
-    await this.customerRepositories
-      .findByEmail(customerRequestDTO.email)
-      .then((res: Customers | null) => {
-        if (res) throw new EmailAlreadyUsedError();
-      });
-
+    if (emailExists) throw new EmailAlreadyUsedError();
     await this.customerRepositories
       .findByPhone(customerRequestDTO.phone)
       .then((res: Customers | null) => {
