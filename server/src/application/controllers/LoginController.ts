@@ -38,15 +38,15 @@ export const LoginController = {
     }
   },
 
-  GetUnique: async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const res = await getUniqueUserUseCase.execute(1);
-      reply.code(200).send(res);
-      console.log(getUniqueUserUseCase.execute(1));
-    } catch (err) {
-      reply.code(404).send(err);
-    }
-  },
+  // GetUnique: async (request: FastifyRequest, reply: FastifyReply) => {
+  //   try {
+  //     const res = await getUniqueUserUseCase.execute(1);
+  //     reply.code(200).send(res);
+  //     console.log(getUniqueUserUseCase.execute(1));
+  //   } catch (err) {
+  //     reply.code(404).send(err);
+  //   }
+  // },
 
   Authenticate: async (
     request: FastifyRequest<{ Body: { email: string; password: string } }>,
