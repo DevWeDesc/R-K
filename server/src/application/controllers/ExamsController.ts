@@ -13,7 +13,7 @@ export const ExamsController = {
     try {
       const res = await getExamsUseCase.execute(name, id);
 
-      return reply.code(201).send(res);
+      return reply.code(200).send(res);
     } catch (err) {
       return reply.code(400).send(err);
     }
