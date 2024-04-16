@@ -17,12 +17,19 @@ export const PetsController = {
   },
 
   GetPetsPerCustomer: async (
-    request: FastifyRequest<{ Params: { idCustomer: string } }>,
+    request: FastifyRequest<{
+      Params: { idCustomer: string };
+      Querystring: { nameOfPet: string };
+    }>,
     reply: FastifyReply
   ) => {
     try {
       const { idCustomer } = request.params;
-      const res = await getPetsPerCustomerUseCase.execute(parseInt(idCustomer));
+      const { nameOfPet } = request.query;
+      const res = await getPetsPerCustomerUseCase.execute(
+        parseInt(idCustomer),
+        nameOfPet
+      );
       return reply.code(200).send(res);
     } catch (err) {
       return reply.code(400).send(err);
