@@ -20,14 +20,15 @@ model UsersLogin {
 }
 
 model Veterinarians {
-  id                Int        @id @unique @default(autoincrement())
+  id                Int             @id @unique @default(autoincrement())
   name              String
-  crmv              String     @unique
-  email             String     @unique
+  crmv              String          @unique
+  email             String          @unique
   state             String
   phone             String
-  veterinarianLogin UsersLogin @relation(fields: [usersLoginId], references: [id])
-  usersLoginId      Int        @unique
+  veterinarianLogin UsersLogin      @relation(fields: [usersLoginId], references: [id])
+  usersLoginId      Int             @unique
+  solicitations     Solicitations[]
 }
 
 model Customers {
@@ -44,19 +45,21 @@ enum SpecieEnum {
 }
 
 model Pets {
-  id         Int        @id @default(autoincrement())
-  name       String
-  specie     SpecieEnum
-  customer   Customers  @relation(fields: [customerId], references: [id])
-  customerId Int        @unique
+  id            Int             @id @default(autoincrement())
+  name          String
+  specie        SpecieEnum
+  customer      Customers       @relation(fields: [customerId], references: [id])
+  customerId    Int
+  Solicitations Solicitations[]
 }
 
 model Exams {
-  id      Int     @id @default(autoincrement())
-  name    String
-  value   Float
-  group   Groups? @relation(fields: [groupId], references: [id])
-  groupId Int?
+  id                        Int                         @id @default(autoincrement())
+  name                      String
+  value                     Float
+  group                     Groups?                     @relation(fields: [groupId], references: [id])
+  groupId                   Int?
+  ExamsInPetOnSolicitations ExamsInPetOnSolicitations[]
 }
 
 model Groups {
@@ -64,4 +67,21 @@ model Groups {
   name      String
   preparing Json
   exams     Exams[]
+}
+
+model ExamsInPetOnSolicitations {
+  id              Int            @id @default(autoincrement())
+  Exams           Exams?         @relation(fields: [examsId], references: [id])
+  examsId         Int?
+  Solicitations   Solicitations? @relation(fields: [solicitationsId], references: [id])
+  solicitationsId String?
+}
+
+model Solicitations {
+  id              String                      @id @default(uuid())
+  exams           ExamsInPetOnSolicitations[]
+  veterinariansId Int
+  veterinarians   Veterinarians               @relation(fields: [veterinariansId], references: [id])
+  pet             Pets                        @relation(fields: [petsId], references: [id])
+  petsId          Int
 }
