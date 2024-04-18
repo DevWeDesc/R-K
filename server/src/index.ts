@@ -20,7 +20,9 @@ import AutenticationUserUseCase from "./domain/useCases/UsersLogin/Autentication
 import { CreateLoginUseCase } from "./domain/useCases/UsersLogin/CreateLoginUseCase";
 import { GetAllLoginsUseCase } from "./domain/useCases/UsersLogin/GetAllUsersUseCase";
 import { GetUniqueUserUseCase } from "./domain/useCases/UsersLogin/GetUniqueUserUseCase";
+import CreateVeterinarianUseCase from "./domain/useCases/Veterinarians/CreateVeterinarianUseCase";
 import GetAllVeterinariansUseCase from "./domain/useCases/Veterinarians/GetAllVeterinariansUseCase";
+import GetSolicitationsByVeterinarian from "./domain/useCases/Veterinarians/GetSolicitationsByVeterinarian";
 import GetUniqueVeterinarianUseCase from "./domain/useCases/Veterinarians/GetUniqueVeterinarianUseCase";
 import CustomerRepository from "./infra/repositories/Customers/CustomerRepository";
 import ExamsRepository from "./infra/repositories/Exams/ExamsRepository";
@@ -30,6 +32,7 @@ import PetsRepository from "./infra/repositories/Pets/PetsRepository";
 import SolicitationsRepository from "./infra/repositories/Solicitations/SolicitationsRepository";
 import { UserLoginRepository } from "./infra/repositories/UserLogin/UserLoginRepository";
 import { VeterinarianRepository } from "./infra/repositories/Veterinarian/VeterinarianRepository";
+import TokenGenerate from "./utils/jwt/TokenGenerate";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -43,14 +46,8 @@ export const examsInPetOnSolicitationsRepository =
   new ExamsInPetOnSolicitationsRepository();
 
 // Use Cases
-export const createLoginUseCase = new CreateLoginUseCase(
-  userLoginRepository,
-  veterinarianRepository
-);
-export const getAllLoginsUseCase = new GetAllLoginsUseCase();
-export const getUniqueUserUseCase = new GetUniqueUserUseCase();
-export const autenticationUserUseCase = new AutenticationUserUseCase(
-  userLoginRepository,
+export const tokenGenerate = new TokenGenerate();
+export const createVeterinarianUseCase = new CreateVeterinarianUseCase(
   veterinarianRepository
 );
 export const getUniqueVeterinarianUseCase = new GetUniqueVeterinarianUseCase(
@@ -59,10 +56,27 @@ export const getUniqueVeterinarianUseCase = new GetUniqueVeterinarianUseCase(
 export const getAllVeterinariansUseCase = new GetAllVeterinariansUseCase(
   veterinarianRepository
 );
+export const getSolicitationsByVeterinarian =
+  new GetSolicitationsByVeterinarian(veterinarianRepository);
+
+export const createLoginUseCase = new CreateLoginUseCase(
+  userLoginRepository,
+  createVeterinarianUseCase
+);
+
+export const getAllLoginsUseCase = new GetAllLoginsUseCase();
+export const getUniqueUserUseCase = new GetUniqueUserUseCase();
+export const autenticationUserUseCase = new AutenticationUserUseCase(
+  userLoginRepository,
+  veterinarianRepository
+);
+
 export const getExamsUseCase = new GetExamsUseCase(examsRepository);
 export const createExamsUseCase = new CreateExamsUseCase(examsRepository);
+
 export const createGroupUseCase = new CreateGroupUseCase(groupRepository);
 export const getGroupsUseCase = new GetGroupsUseCase(groupRepository);
+
 export const getUniqueCustomerUseCase = new GetUniqueCustomerUseCase(
   customerRepository
 );
@@ -74,12 +88,10 @@ export const getAllCustomersUseCase = new GetAllCustomersUseCase(
   customerRepository,
   getUniqueCustomerUseCase
 );
-
 export const updatedCustomerUseCase = new UpdatedCustomerUseCase(
   customerRepository,
   getUniqueCustomerUseCase
 );
-
 export const deletedCustomerUseCase = new DeletedCustomerUseCase(
   customerRepository,
   getUniqueCustomerUseCase
@@ -94,6 +106,7 @@ export const getPetsPerCustomerUseCase = new GetPetsPerCustomerUseCase(
   petsRepository,
   getUniqueCustomerUseCase
 );
+
 export const getAllSolicitationsUseCase = new GetAllSolicitationsUseCase(
   solicitationsRepository
 );
