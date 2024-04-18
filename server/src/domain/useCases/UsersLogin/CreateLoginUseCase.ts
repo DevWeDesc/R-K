@@ -1,48 +1,41 @@
-import { UsersLogin, Veterinarians } from "@prisma/client";
+import { UsersLogin } from "@prisma/client";
 import { UserLoginRepository } from "../../../infra/repositories/UserLogin/UserLoginRepository";
-import { VeterinarianRepository } from "../../../infra/repositories/Veterinarian/VeterinarianRepository";
 import { hash } from "bcrypt";
 import { randomInt } from "crypto";
+import CreateVeterinarianUseCase from "../Veterinarians/CreateVeterinarianUseCase";
+import VeterinarianRequestDTO from "../../../application/DTOs/VeterinarianDTO/VeterinarianRequestDTO";
+import { EmailValidator } from "../../../utils/ValidateEmail";
+import EmailNotValidError from "../../errors/Customers/EmailNotValidError";
 
 export class CreateLoginUseCase {
   constructor(
     readonly userLoginRepository: UserLoginRepository,
-    readonly veterinarianRepository: VeterinarianRepository
+    readonly createVeterinarianUseCase: CreateVeterinarianUseCase
   ) {}
 
   public async execute(
-    VeterinarianRequestDTO: Veterinarians,
+    VeterinarianRequestDTO: VeterinarianRequestDTO,
     LoginRequestDTO: UsersLogin
   ): Promise<String> {
-    const { crmv, email, name, phone, state } = VeterinarianRequestDTO;
     const { password, roleUser } = LoginRequestDTO;
-
-    const emailExists = await this.veterinarianRepository.getByEmail(
-      VeterinarianRequestDTO.email
-    );
-    if (emailExists) throw new Error("Já existe uma conta com esse E-mail!");
-
-    const crmvExists = await this.veterinarianRepository.getByCRMV(
-      VeterinarianRequestDTO.crmv
-    );
-    if (crmvExists) throw new Error("O CRMV Já está em uso!");
+    const { crmv, email } = VeterinarianRequestDTO;
 
     const randomSalt = randomInt(10, 16);
-
     const passwordHashed = await hash(password, randomSalt);
+
+    if (!EmailValidator(email)) throw new EmailNotValidError();
+
+    await this.createVeterinarianUseCase.validationEmailExists(email);
+    await this.createVeterinarianUseCase.validationCRMVExists(crmv);
 
     await this.userLoginRepository
       .create({ password: passwordHashed, roleUser })
       .then(
         async (res) =>
-          await this.veterinarianRepository.create({
-            crmv,
-            email,
-            name,
-            phone,
-            state,
-            usersLoginId: res.id,
-          })
+          await this.createVeterinarianUseCase.execute(
+            VeterinarianRequestDTO,
+            res.id
+          )
       );
 
     return "Usuário criado com sucesso!";
