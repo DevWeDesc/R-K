@@ -1,4 +1,4 @@
-import { $Enums, UsersLogin } from "@prisma/client";
+import { UsersLogin } from "@prisma/client";
 import { prisma } from "../../../lib/prismaClient";
 import { IUserLoginModel } from "../../../domain/models/UserLogin";
 import { IGenericRepository } from "../IGenericRepository";

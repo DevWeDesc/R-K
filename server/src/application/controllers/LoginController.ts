@@ -1,18 +1,18 @@
-import { UsersLogin, Veterinarians } from "@prisma/client";
+import { UsersLogin } from "@prisma/client";
 import { FastifyRequest, FastifyReply } from "fastify";
 import {
   autenticationUserUseCase,
   createLoginUseCase,
   getAllLoginsUseCase,
-  getUniqueUserUseCase,
 } from "../..";
+import VeterinarianRequestDTO from "../DTOs/VeterinarianDTO/VeterinarianRequestDTO";
 
 export const LoginController = {
   CreateLogin: async (
     request: FastifyRequest<{
       Body: {
         LoginRequestDTO: UsersLogin;
-        VeterinarianRequestDTO: Veterinarians;
+        VeterinarianRequestDTO: VeterinarianRequestDTO;
       };
     }>,
     reply: FastifyReply
