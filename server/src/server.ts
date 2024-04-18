@@ -1,7 +1,9 @@
 import fastify from "fastify";
 import { registerRoutes } from "./application/routes/RegisterRoutes";
 
-const app = fastify({ logger: true });
+const app =
+  fastify();
+  // { logger: true }
 
 registerRoutes(app);
 
