@@ -4,6 +4,15 @@ import { IVeterinarianModel } from "../../../domain/models/Veterinarian";
 import { prisma } from "../../../lib/prismaClient";
 
 export class VeterinarianRepository implements IVeterinarianRepository {
+  public async getSolicitationsByVeterinarian(): Promise<IVeterinarianModel[]> {
+    return await prisma.veterinarians.findMany({
+      include: {
+        solicitations: { include: { pet: { include: { customer: true } } } },
+        _count: true,
+      },
+    });
+  }
+
   public async listAll(): Promise<Veterinarians[]> {
     return await prisma.veterinarians.findMany();
   }
