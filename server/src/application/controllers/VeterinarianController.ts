@@ -1,5 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { getAllVeterinariansUseCase } from "../..";
+import {
+  getAllVeterinariansUseCase,
+  getSolicitationsByVeterinarian,
+} from "../..";
 
 export const VeterinarianController = {
   GetVeterinarianQuery: async (
@@ -14,6 +17,18 @@ export const VeterinarianController = {
       return reply.code(201).send(res);
     } catch (err) {
       return reply.code(400).send(err);
+    }
+  },
+
+  GetQuantitySolicitationsPerVeterinarian: async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ) => {
+    try {
+      const res = await getSolicitationsByVeterinarian.execute();
+      reply.status(200).send(res);
+    } catch (err) {
+      reply.status(404).send(err);
     }
   },
 };
