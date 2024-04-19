@@ -81,6 +81,9 @@ model Solicitations {
   id              String                      @id @default(uuid())
   isFinished      Boolean                     @default(false)
   exams           ExamsInPetOnSolicitations[]
+  createdIn       DateTime                    @default(now())
+  finishedIn      DateTime?
+  observation     String?
   veterinariansId Int
   veterinarians   Veterinarians               @relation(fields: [veterinariansId], references: [id])
   pet             Pets                        @relation(fields: [petsId], references: [id])
