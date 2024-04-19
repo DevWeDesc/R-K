@@ -2,13 +2,14 @@ import { Solicitations } from "@prisma/client";
 import { SolicitationRequestDTO } from "../../../application/DTOs/SolicitationsDTO/SolicitationRequestDTO";
 import { ISolicitationsRepository } from "./ISolicitationsRepository";
 import { prisma } from "../../../lib/prismaClient";
+import { FinishedSolicitationDTO } from "../../../application/DTOs/SolicitationsDTO/FinishedSolicitationDTO";
 
 export default class SolicitationsRepository
   implements ISolicitationsRepository
 {
   public async update(
     id: string | number,
-    entity: SolicitationRequestDTO
+    entity: FinishedSolicitationDTO
   ): Promise<Solicitations> {
     return await prisma.solicitations.update({
       where: { id: id.toString() },
@@ -19,7 +20,7 @@ export default class SolicitationsRepository
     return await prisma.solicitations.findUnique({
       where: { id: id.toString() },
       include: {
-        pet: true,
+        pet: { include: { customer: true } },
         veterinarians: true,
         exams: { include: { Exams: true } },
       },
