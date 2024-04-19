@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import {
   createSolicitationsUseCase,
+  finalizeSolicitationUseCase,
   getAllSolicitationsUseCase,
   getUniqueSolicitationsUseCase,
 } from "../..";
@@ -15,6 +16,20 @@ export const SolicitationsController = {
       return reply.code(400).send(err);
     }
   },
+
+  FinalizeSolicitation: async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { id } = request.params;
+      const res = await finalizeSolicitationUseCase.execute(id);
+      return reply.code(200).send(res);
+    } catch (err) {
+      return reply.code(400).send(err);
+    }
+  },
+
   GetSolicitationById: async (
     request: FastifyRequest<{ Params: { id: string } }>,
     reply: FastifyReply
