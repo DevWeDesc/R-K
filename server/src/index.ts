@@ -1,3 +1,4 @@
+import MailModel from "./domain/models/mail/MailModel";
 import CreateCustomerUseCase from "./domain/useCases/Customers/CreateCustomer/CreateCustomerUseCase";
 import DeletedCustomerUseCase from "./domain/useCases/Customers/DeletedCustomer/DeletedCustomerUseCase";
 import GetAllCustomersUseCase from "./domain/useCases/Customers/GetAllCustomer/GetAllCustomersUseCase";
@@ -9,11 +10,13 @@ import CreateExamsInPetOnSolicitationsUseCase from "./domain/useCases/ExamsInPet
 import GetAllExamsInPetOnSolicitationsUseCase from "./domain/useCases/ExamsInPetOnSolicitations/GetAllExamsInPetOnSolicitationsUseCase";
 import CreateGroupUseCase from "./domain/useCases/Groups/CreateGroupUseCase";
 import GetGroupsUseCase from "./domain/useCases/Groups/GetGroupsUseCase";
+import SendMailUseCase from "./domain/useCases/Mail/SendMailUseCase";
 import CreatePetUseCase from "./domain/useCases/Pets/CreatePet/CreatePetUseCase";
 import GetAllPetsUseCase from "./domain/useCases/Pets/GetAllPets/GetAllPetsUseCase";
 import GetPetsPerCustomerUseCase from "./domain/useCases/Pets/GetPetsPerCustomer/GetPetsPerCustomerUseCase";
 import { AddExamInSolicitationUseCase } from "./domain/useCases/Solicitations/AddExamInSolicitation/AddExamInSolicitationUseCase";
 import CreateSolicitationsUseCase from "./domain/useCases/Solicitations/CreateSolicitations/CreateSolicitationsUseCase";
+import FinalizeSolicitationUseCase from "./domain/useCases/Solicitations/FinalizeSolicitation/FinalizeSolicitationUseCase";
 import { GetAllSolicitationsUseCase } from "./domain/useCases/Solicitations/GetAllSolicitations/GetAllSolicitationsUseCase";
 import GetUniqueSolicitationsUseCase from "./domain/useCases/Solicitations/GetUniqueSolicitation/GetUniqueSolicitationsUseCase";
 import AutenticationUserUseCase from "./domain/useCases/UsersLogin/AutenticationUserUseCase";
@@ -126,4 +129,17 @@ export const createExamsInPetOnSolicitationsUseCase =
   );
 export const getUniqueSolicitationsUseCase = new GetUniqueSolicitationsUseCase(
   solicitationsRepository
+);
+
+export const mailModel = new MailModel(
+  "Hotmail",
+  "testesmpcomvini@hotmail.com",
+  "password"
+);
+
+export const sendMailUseCase = new SendMailUseCase(mailModel);
+
+export const finalizeSolicitationUseCase = new FinalizeSolicitationUseCase(
+  solicitationsRepository,
+  sendMailUseCase
 );
