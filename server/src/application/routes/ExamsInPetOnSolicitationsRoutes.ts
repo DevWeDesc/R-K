@@ -10,4 +10,8 @@ export async function examsInPetOnSolicitationsRoutes(app: FastifyInstance) {
     "/examsinpet/solicitations",
     ExamsInPetOnSolicitationsController.CreateExamsInPet
   );
+  app.delete(
+    "/examsinpet/solicitations/:id",
+    ExamsInPetOnSolicitationsController.DeleteExamsInPet
+  );
 }
