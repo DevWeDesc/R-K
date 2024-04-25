@@ -1,8 +1,16 @@
+import { pdfModel, sendMessageWithWhatsApp } from "../../../..";
 import { ReceiverMailDTO } from "../../../../application/DTOs/MailDTO/ReceiverMailDTO";
 import SolicitationsRepository from "../../../../infra/repositories/Solicitations/SolicitationsRepository";
 import { SolicitationModel } from "../../../models/Solicitation";
-import { HtmlMailFinalizeSolicitation } from "../../../models/mail/MessageHtml";
+import { HtmlFinalizedSolicitation } from "../../../models/mail/templates/HtmlFinalizedSolicitation";
+import { HtmlMailContent } from "../../../models/mail/templates/HtmlMailContent";
+
 import SendMailUseCase from "../../Mail/SendMailUseCase";
+
+const client = require("twilio")(
+  process.env.ACCOUNTSIDWHATS,
+  process.env.AUTHTOKENWHATS
+);
 
 export default class FinalizeSolicitationUseCase {
   constructor(
@@ -19,18 +27,32 @@ export default class FinalizeSolicitationUseCase {
 
     await this.solicitationRepository.update(idSolicitation, {
       isFinished: true,
+      finishedIn: new Date(),
     });
 
-    const dataSendEmail: ReceiverMailDTO = {
-      to: "ixxvinicius@gmail.com",
-      subject: `Finalização de Guia do ${solicitationById.pet.name} RK`,
-      text: "Dados",
-      html: HtmlMailFinalizeSolicitation(),
-    };
+    await pdfModel.CreatePDF(
+      "Guide",
+      HtmlFinalizedSolicitation(solicitationById),
+      `Guia${solicitationById.pet.name}`
+    );
 
-    await this.sendMailUseCase.execute(dataSendEmail).catch((err) => {
-      throw new Error(err);
-    });
+    setTimeout(async () => {
+      const dataSendEmail: ReceiverMailDTO = {
+        to: "ixxvinicius@gmail.com",
+        subject: `Finalização Guia RK do Pet ${solicitationById.pet.name}`,
+        html: HtmlMailContent,
+        pathFile: `./src/infra/PDFs/Guide/Guia${solicitationById.pet.name}.pdf`,
+      };
+
+      await sendMessageWithWhatsApp.execute(
+        `Finalização Guia RK do Pet ${solicitationById.pet.name}`,
+        "+5511914186155"
+      );
+
+      await this.sendMailUseCase.execute(dataSendEmail).catch((err) => {
+        throw new Error(err);
+      });
+    }, 2000);
 
     return {
       message:
