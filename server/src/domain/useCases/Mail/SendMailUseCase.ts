@@ -5,7 +5,8 @@ export default class SendMailUseCase {
   constructor(readonly mailModel: MailModel) {}
 
   public async execute(receiverEmail: ReceiverMailDTO) {
-    const { subject, text, to, html } = receiverEmail;
+    const { subject, text, to, html, fileName, pathFile, contentFile } =
+      receiverEmail;
 
     const transporter = await this.mailModel.createTransportMail();
 
@@ -15,6 +16,11 @@ export default class SendMailUseCase {
       subject,
       text,
       html,
+      attachments: [
+        {
+          path: pathFile,
+        },
+      ],
     });
 
     return sendEmailResponse;
