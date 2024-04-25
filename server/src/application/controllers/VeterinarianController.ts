@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import {
+  deleteVeterinarianUseCase,
   getAllVeterinariansUseCase,
   getSolicitationsByVeterinarian,
 } from "../..";
@@ -27,6 +28,19 @@ export const VeterinarianController = {
     try {
       const res = await getSolicitationsByVeterinarian.execute();
       reply.status(200).send(res);
+    } catch (err) {
+      reply.status(404).send(err);
+    }
+  },
+
+  DeleteVeterinarian: async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { id } = request.params;
+      await deleteVeterinarianUseCase.execute(parseInt(id));
+      reply.status(204).send();
     } catch (err) {
       reply.status(404).send(err);
     }

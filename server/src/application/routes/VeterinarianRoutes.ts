@@ -7,4 +7,5 @@ export async function veterinarianRoutes(app: FastifyInstance) {
     "/veterinarian/solicitations",
     VeterinarianController.GetQuantitySolicitationsPerVeterinarian
   );
+  app.delete("/veterinarian/:id", VeterinarianController.DeleteVeterinarian);
 }
