@@ -20,8 +20,8 @@ export default class CreateVeterinarianUseCase {
   ) {
     const { crmv, email, name, phone, state } = veterinarianRequest;
 
-    this.validationEmailExists(email);
-    this.validationCRMVExists(crmv);
+    await this.validationEmailExists(email);
+    await this.validationCRMVExists(crmv);
 
     return await this.veterinarianRepository.create({
       crmv,
