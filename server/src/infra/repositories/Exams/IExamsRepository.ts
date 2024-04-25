@@ -1,8 +1,8 @@
 import { Exams } from "@prisma/client";
 import { IGenericRepository } from "../IGenericRepository";
-import { IExamsModel } from "../../../domain/models/Exams";
+import { ExamsRequestDTO } from "../../../application/DTOs/ExamsDTO/ExamsRequestDTO";
 
 export interface IExamsRepository
-  extends IGenericRepository<IExamsModel, Exams> {
+  extends IGenericRepository<ExamsRequestDTO, Exams> {
   getByName(name: string): Promise<Exams[] | Exams>;
 }

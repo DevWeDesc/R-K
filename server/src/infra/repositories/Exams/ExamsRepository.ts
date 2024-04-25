@@ -30,9 +30,13 @@ export default class ExamsRepository implements IExamsRepository {
     });
   }
   public async delete(id: string | number): Promise<boolean> {
-    await prisma.exams.delete({
-      where: { id: parseInt(id.toString()) },
-    });
-    return true;
+    try {
+      await prisma.exams.delete({
+        where: { id: parseInt(id.toString()) },
+      });
+      return true;
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 }

@@ -15,7 +15,9 @@ export default class ExamsInPetOnSolicitationsRepository
   public async findById(
     id: string | number
   ): Promise<ExamsInPetOnSolicitations | null> {
-    throw new Error("Method not implemented.");
+    return await prisma.examsInPetOnSolicitations.findUnique({
+      where: { id: parseInt(id.toString()) },
+    });
   }
   public async listAll(): Promise<ExamsInPetOnSolicitations[] | null> {
     return await prisma.examsInPetOnSolicitations.findMany({
@@ -28,6 +30,13 @@ export default class ExamsInPetOnSolicitationsRepository
     return await prisma.examsInPetOnSolicitations.create({ data: entity });
   }
   public async delete(id: string | number): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    try {
+      await prisma.examsInPetOnSolicitations.delete({
+        where: { id: parseInt(id.toString()) },
+      });
+      return true;
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 }
