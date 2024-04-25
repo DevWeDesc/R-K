@@ -45,6 +45,16 @@ export class UserLoginRepository
   }
 
   public async delete(id: string | number): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    try {
+      await prisma.usersLogin.delete({
+        where: {
+          id: parseInt(id.toString()),
+        },
+      });
+
+      return true;
+    } catch (err) {
+      throw new Error(`${err}`);
+    }
   }
 }

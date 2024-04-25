@@ -3,6 +3,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import {
   autenticationUserUseCase,
   createLoginUseCase,
+  deleteLoginUseCase,
   getAllLoginsUseCase,
 } from "../..";
 import VeterinarianRequestDTO from "../DTOs/VeterinarianDTO/VeterinarianRequestDTO";
@@ -56,6 +57,19 @@ export const LoginController = {
       const { email, password } = request.body;
       const res = await autenticationUserUseCase.execute(email, password);
       reply.code(200).send(res);
+    } catch (err) {
+      reply.code(404).send(err);
+    }
+  },
+
+  DeleteUserLogin: async (
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { id } = request.params;
+      await deleteLoginUseCase.execute(parseInt(id));
+      reply.code(204).send();
     } catch (err) {
       reply.code(404).send(err);
     }
