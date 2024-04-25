@@ -5,6 +5,7 @@
   "main": "./src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "populate": "tsx src/infra/ReadingCSV/Popullate.ts",
     "test": "jest --watch"
   },
   "keywords": [],
@@ -35,9 +36,12 @@
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
+    "html-pdf": "^3.0.1",
     "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.13",
+    "twilio": "^5.0.4",
+    "xlsx": "^0.18.5",
     "zod": "^3.22.4"
   }
 }
