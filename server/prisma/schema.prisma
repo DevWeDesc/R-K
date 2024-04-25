@@ -40,8 +40,9 @@ model Customers {
 }
 
 enum SpecieEnum {
-  Canina
+  Canino
   Felino
+  CaninaAndFelino
 }
 
 model Pets {
@@ -55,18 +56,19 @@ model Pets {
 
 model Exams {
   id                        Int                         @id @default(autoincrement())
-  name                      String
+  name                      String                      @unique
   value                     Float
-  group                     Groups?                     @relation(fields: [groupId], references: [id])
-  groupId                   Int?
+  preparing                 String?
+  deadline                  String
   ExamsInPetOnSolicitations ExamsInPetOnSolicitations[]
+  group                     Groups?                     @relation(fields: [groupsId], references: [id])
+  groupsId                  Int?
 }
 
 model Groups {
-  id        Int     @id @default(autoincrement())
-  name      String
-  preparing Json
-  exams     Exams[]
+  id    Int     @id @default(autoincrement())
+  name  String
+  exams Exams[]
 }
 
 model ExamsInPetOnSolicitations {
