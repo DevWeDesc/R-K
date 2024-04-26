@@ -5,7 +5,7 @@
   "main": "./src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "populate": "tsx src/infra/ReadingCSV/Popullate.ts",
+    "populate": "tsx src/infra/ReadingCSV/Populate.ts",
     "test": "jest --watch"
   },
   "keywords": [],
