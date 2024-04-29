@@ -1,9 +1,11 @@
-import { SolicitationModel } from "../../Solicitation";
-
-export const HtmlFinalizedSolicitation = (
-  solicitationDetails: SolicitationModel | null | any
-) => {
-  return `<body
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body
   style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; position: relative;"
 >
   <div style="margin: 6.5% 5%">
@@ -20,33 +22,19 @@ export const HtmlFinalizedSolicitation = (
       <p style="margin: 0; text-align: center; font-size: 22px; font-weight: bold;"> Solicitação de Exame</p>
       <br>
       
-      <p style="margin: 5px;"><strong>Nome do Tutor: </strong> ${
-        solicitationDetails.pet.customer.name
-      }</p>
-      <p style="margin: 5px;"><strong>CPF: </strong> ${
-        solicitationDetails.pet.customer.cpf
-      }</p>
-      <p style="margin: 5px;"><strong>E-mail: </strong> ${
-        solicitationDetails.pet.customer.email
-      }</p>
+      <p style="margin: 5px;"><strong>Nome do Tutor: </strong> ${solicitationDetails.pet.customer.name}</p>
+      <p style="margin: 5px;"><strong>CPF: </strong> ${solicitationDetails.pet.customer.cpf}</p>
+      <p style="margin: 5px;"><strong>E-mail: </strong> ${solicitationDetails.pet.customer.email}</p>
       <br>
 
       <p><strong>Dados do Pet:</strong></p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <p style="margin: 5px;"><strong>Nome do Animal: </strong> ${
-          solicitationDetails.pet.name
-        }</p>
-        <p style="margin: 5px;"><strong>Espécie: </strong> ${
-          solicitationDetails.pet.name
-        }</p>
+        <p style="margin: 5px;"><strong>Nome do Animal: </strong> ${solicitationDetails.pet.name}</p>
+        <p style="margin: 5px;"><strong>Espécie: </strong> ${solicitationDetails.pet.name}</p>
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <p style="margin: 5px;"><strong>Idade: </strong> ${
-          solicitationDetails.pet.age
-        }</p>
-        <p style="margin: 5px;"><strong>Sexo do Animal: </strong> ${
-          solicitationDetails.pet.sex
-        }</p>
+        <p style="margin: 5px;"><strong>Idade: </strong> ${solicitationDetails.pet.age}</p>
+        <p style="margin: 5px;"><strong>Sexo do Animal: </strong> ${solicitationDetails.pet.sex}</p>
       </div>
     </div>
     <br>
@@ -90,5 +78,5 @@ export const HtmlFinalizedSolicitation = (
     <p style="margin: 0;"><strong>Assinado digitalmente por:</strong> {solicitationDetails.veterinarians.name} <strong>CRMV:</strong> {solicitationDetails.veterinarians.crmv}</p>
     </div>
   </div>
-</body>`;
-};
+</body>
+</html>

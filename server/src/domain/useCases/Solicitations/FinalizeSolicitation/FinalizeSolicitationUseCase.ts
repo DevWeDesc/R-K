@@ -1,4 +1,4 @@
-import { pdfModel, sendMessageWithWhatsApp } from "../../../..";
+import { pdfModel } from "../../../..";
 import { ReceiverMailDTO } from "../../../../application/DTOs/MailDTO/ReceiverMailDTO";
 import SolicitationsRepository from "../../../../infra/repositories/Solicitations/SolicitationsRepository";
 import { SolicitationModel } from "../../../models/Solicitation";
@@ -7,10 +7,10 @@ import { HtmlMailContent } from "../../../models/mail/templates/HtmlMailContent"
 
 import SendMailUseCase from "../../Mail/SendMailUseCase";
 
-const client = require("twilio")(
-  process.env.ACCOUNTSIDWHATS,
-  process.env.AUTHTOKENWHATS
-);
+// const client = require("twilio")(
+//   process.env.ACCOUNTSIDWHATS,
+//   process.env.AUTHTOKENWHATS
+// );
 
 export default class FinalizeSolicitationUseCase {
   constructor(
@@ -44,10 +44,10 @@ export default class FinalizeSolicitationUseCase {
         pathFile: `./src/infra/PDFs/Guide/Guia${solicitationById.pet.name}.pdf`,
       };
 
-      await sendMessageWithWhatsApp.execute(
-        `Finalização Guia RK do Pet ${solicitationById.pet.name}`,
-        "+5511914186155"
-      );
+      // await sendMessageWithWhatsApp.execute(
+      //   `Finalização Guia RK do Pet ${solicitationById.pet.name}`,
+      //   "+5511914186155"
+      // );
 
       await this.sendMailUseCase.execute(dataSendEmail).catch((err) => {
         throw new Error(err);

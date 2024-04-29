@@ -12,5 +12,7 @@ export const AuthMiddleware = (
     if (!token) reply.code(401).send({ message: "Unauthorized" });
     VerifyToken(token);
     done();
+  } else {
+    reply.code(401).send({ message: "Unauthorized token notfound" });
   }
 };

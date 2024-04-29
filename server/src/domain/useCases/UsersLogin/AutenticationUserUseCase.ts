@@ -11,9 +11,13 @@ export default class AutenticationUserUseCase {
     readonly veterinarianRepository: VeterinarianRepository
   ) {}
 
-  async execute(email: string, password: string) {
+  async execute(crmv: string, email: string, password: string) {
+    const userByCrmv = await this.veterinarianRepository.getByCRMV(crmv);
+    if (!userByCrmv) throw new Error("CRMV inválido!");
+
     const userByEmail = await this.veterinarianRepository.getByEmail(email);
     if (!userByEmail) throw new Error("Usuário ou senha inválido!");
+
     const passwordLoginVet =
       userByEmail.veterinarianLogin && userByEmail.veterinarianLogin.password;
 

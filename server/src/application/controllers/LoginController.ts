@@ -50,12 +50,14 @@ export const LoginController = {
   // },
 
   Authenticate: async (
-    request: FastifyRequest<{ Body: { email: string; password: string } }>,
+    request: FastifyRequest<{
+      Body: { crmv: string; email: string; password: string };
+    }>,
     reply: FastifyReply
   ) => {
     try {
-      const { email, password } = request.body;
-      const res = await autenticationUserUseCase.execute(email, password);
+      const { crmv, email, password } = request.body;
+      const res = await autenticationUserUseCase.execute(crmv, email, password);
       reply.code(200).send(res);
     } catch (err) {
       reply.code(404).send(err);
