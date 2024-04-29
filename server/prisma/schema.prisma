@@ -36,6 +36,7 @@ model Customers {
   name  String
   email String @unique
   phone String @unique
+  cpf   String @unique
   pets  Pets[]
 }
 
@@ -45,9 +46,16 @@ enum SpecieEnum {
   CaninaAndFelino
 }
 
+enum SexEnum {
+  Macho
+  Femea
+}
+
 model Pets {
   id            Int             @id @default(autoincrement())
   name          String
+  age           String
+  sex           SexEnum
   specie        SpecieEnum
   customer      Customers       @relation(fields: [customerId], references: [id])
   customerId    Int
