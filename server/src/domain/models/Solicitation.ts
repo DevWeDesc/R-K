@@ -5,6 +5,15 @@ export interface SolicitationModel {
   finishedIn: Date | null;
   observation: string | null;
   veterinariansId: number;
+  veterinarians: {
+    id: number;
+    name: string;
+    crmv: string;
+    email: string;
+    state: string;
+    phone: string;
+    usersLoginId: number;
+  };
   petsId: number;
   pet: {
     id: number;
