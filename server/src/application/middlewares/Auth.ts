@@ -1,9 +1,8 @@
 import { FastifyRequest, FastifyReply, DoneFuncWithErrOrRes } from "fastify";
-import { UniqueCustomerEmailPhoneDTO } from "../DTOs/CustomersDTO/UniqueCustomerEmailPhoneDTO";
 import { VerifyToken } from "../../utils/jwt/VerifyToken";
 
 export const AuthMiddleware = (
-  request: FastifyRequest<{ Querystring: UniqueCustomerEmailPhoneDTO }>,
+  request: FastifyRequest<{ Body: any; Params: any; Querystring: any }>,
   reply: FastifyReply,
   done: DoneFuncWithErrOrRes
 ) => {
