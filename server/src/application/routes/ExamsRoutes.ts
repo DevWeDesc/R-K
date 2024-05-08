@@ -1,9 +1,23 @@
 import { FastifyInstance } from "fastify";
 import { ExamsController } from "../controllers/ExamsController";
+import { AuthWithRoleMiddleware } from "../middlewares/AuthWithRole";
+import { AuthMiddleware } from "../middlewares/Auth";
 
 export async function examsRoutes(app: FastifyInstance) {
-  app.get("/exams", ExamsController.GetExams);
-  app.post("/exams", ExamsController.CreateExams);
-  app.put("/exams/:id", ExamsController.UpdateExams);
-  app.delete("/exams/:id", ExamsController.RemoveExam);
+  app.get("/exams", { preHandler: AuthMiddleware }, ExamsController.GetExams);
+  app.post(
+    "/exams",
+    { preHandler: AuthWithRoleMiddleware },
+    ExamsController.CreateExams
+  );
+  app.put(
+    "/exams/:id",
+    { preHandler: AuthWithRoleMiddleware },
+    ExamsController.UpdateExams
+  );
+  app.delete(
+    "/exams/:id",
+    { preHandler: AuthWithRoleMiddleware },
+    ExamsController.RemoveExam
+  );
 }

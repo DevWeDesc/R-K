@@ -3,7 +3,13 @@ import { CustomersController } from "../controllers/CustomersController";
 import { AuthMiddleware } from "../middlewares/Auth";
 
 export async function customersRoutes(app: FastifyInstance) {
-  app.post("/customers", CustomersController.CreateCustomer);
+  app.post(
+    "/customers",
+    {
+      preHandler: AuthMiddleware,
+    },
+    CustomersController.CreateCustomer
+  );
   app.get(
     "/customers",
     {
@@ -11,7 +17,25 @@ export async function customersRoutes(app: FastifyInstance) {
     },
     CustomersController.GetAllCustomers
   );
-  app.get("/customers/:id", CustomersController.GetCustomerById);
-  app.put("/customers/:id", CustomersController.UpdatedCustomer);
-  app.delete("/customers/:id", CustomersController.DeletedCustomer);
+  app.get(
+    "/customers/:id",
+    {
+      preHandler: AuthMiddleware,
+    },
+    CustomersController.GetCustomerById
+  );
+  app.put(
+    "/customers/:id",
+    {
+      preHandler: AuthMiddleware,
+    },
+    CustomersController.UpdatedCustomer
+  );
+  app.delete(
+    "/customers/:id",
+    {
+      preHandler: AuthMiddleware,
+    },
+    CustomersController.DeletedCustomer
+  );
 }

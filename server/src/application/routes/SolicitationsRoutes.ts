@@ -1,9 +1,26 @@
 import { FastifyInstance } from "fastify";
 import { SolicitationsController } from "../controllers/SolicitationsController";
+import { AuthMiddleware } from "../middlewares/Auth";
 
 export async function solicitationsRoutes(app: FastifyInstance) {
-  app.get("/solicitations", SolicitationsController.GetAllSolicitations);
-  app.post("/solicitations", SolicitationsController.CreateSolicitations);
-  app.get("/solicitations/:id", SolicitationsController.GetSolicitationById);
-  app.patch("/solicitations/:id", SolicitationsController.FinalizeSolicitation);
+  app.get(
+    "/solicitations",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.GetAllSolicitations
+  );
+  app.post(
+    "/solicitations",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.CreateSolicitations
+  );
+  app.get(
+    "/solicitations/:id",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.GetSolicitationById
+  );
+  app.patch(
+    "/solicitations/:id",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.FinalizeSolicitation
+  );
 }
