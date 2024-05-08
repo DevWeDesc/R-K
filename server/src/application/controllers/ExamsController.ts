@@ -10,13 +10,13 @@ import { ExamsRequestDTO } from "../DTOs/ExamsDTO/ExamsRequestDTO";
 export const ExamsController = {
   GetExams: async (
     request: FastifyRequest<{
-      Querystring: { name: string; id: string };
+      Querystring: { name: string; id: string; pageActual: number };
     }>,
     reply: FastifyReply
   ) => {
-    const { name, id } = request.query;
+    const { name, id, pageActual } = request.query;
     try {
-      const res = await getExamsUseCase.execute(name, id);
+      const res = await getExamsUseCase.execute(name, id, pageActual);
 
       return reply.code(200).send(res);
     } catch (err) {
@@ -32,9 +32,8 @@ export const ExamsController = {
   ) => {
     try {
       const { body } = request;
-      const res = await createExamsUseCase.execute(body);
-
-      return reply.code(201).send(res);
+      await createExamsUseCase.execute(body);
+      return reply.code(201).send();
     } catch (err) {
       return reply.code(400).send(err);
     }
