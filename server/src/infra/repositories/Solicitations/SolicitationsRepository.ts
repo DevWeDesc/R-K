@@ -3,6 +3,7 @@ import { SolicitationRequestDTO } from "../../../application/DTOs/SolicitationsD
 import { ISolicitationsRepository } from "./ISolicitationsRepository";
 import { prisma } from "../../../lib/prismaClient";
 import { FinishedSolicitationDTO } from "../../../application/DTOs/SolicitationsDTO/FinishedSolicitationDTO";
+import { SolicitationModel } from "../../../domain/models/Solicitation";
 
 export default class SolicitationsRepository
   implements ISolicitationsRepository
@@ -16,7 +17,9 @@ export default class SolicitationsRepository
       data: entity,
     });
   }
-  public async findById(id: string | number): Promise<Solicitations | null> {
+  public async findById(
+    id: string | number
+  ): Promise<SolicitationModel | null> {
     return await prisma.solicitations.findUnique({
       where: { id: id.toString() },
       include: {

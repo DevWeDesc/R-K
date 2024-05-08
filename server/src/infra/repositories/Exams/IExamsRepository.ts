@@ -5,4 +5,5 @@ import { ExamsRequestDTO } from "../../../application/DTOs/ExamsDTO/ExamsRequest
 export interface IExamsRepository
   extends IGenericRepository<ExamsRequestDTO, Exams> {
   getByName(name: string): Promise<Exams[] | Exams>;
+  countExams(name?: string): Promise<number>;
 }

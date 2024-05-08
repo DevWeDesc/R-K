@@ -6,4 +6,5 @@ export interface ICustomerRepository
   extends IGenericRepository<CustomerRequestDTO, Customers> {
   findByEmail(email: string): Promise<Customers | null>;
   findByPhone(phone: string): Promise<Customers | null>;
+  findByCpf(cpf: string): Promise<Customers | null>;
 }
