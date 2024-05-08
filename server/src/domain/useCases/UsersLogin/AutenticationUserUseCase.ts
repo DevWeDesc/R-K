@@ -1,5 +1,4 @@
 import { UsersLogin } from "@prisma/client";
-
 import { UserLoginRepository } from "../../../infra/repositories/UserLogin/UserLoginRepository";
 import { VeterinarianRepository } from "../../../infra/repositories/Veterinarian/VeterinarianRepository";
 import { compare } from "bcrypt";
@@ -12,11 +11,10 @@ export default class AutenticationUserUseCase {
   ) {}
 
   async execute(crmv: string, email: string, password: string) {
-    const userByCrmv = await this.veterinarianRepository.getByCRMV(crmv);
-    if (!userByCrmv) throw new Error("CRMV inválido!");
-
     const userByEmail = await this.veterinarianRepository.getByEmail(email);
     if (!userByEmail) throw new Error("Usuário ou senha inválido!");
+
+    if (userByEmail.crmv != crmv) throw new Error("CRMV inválido!");
 
     const passwordLoginVet =
       userByEmail.veterinarianLogin && userByEmail.veterinarianLogin.password;
@@ -39,9 +37,21 @@ export default class AutenticationUserUseCase {
 
       const token = await tokenGenerate.execute(userData, userByEmail);
 
+      const user = {
+        id,
+        roleUser,
+        email,
+        crmv,
+      };
+
+      const tokenInformations = {
+        token,
+        user,
+      };
+
       return {
         message: "Usuário logado com sucesso!",
-        token,
+        tokenInformations,
       };
     }
   }
