@@ -5,6 +5,7 @@ import {
   createLoginUseCase,
   deleteLoginUseCase,
   getAllLoginsUseCase,
+  updateUserUseCase,
 } from "../..";
 import VeterinarianRequestDTO from "../DTOs/VeterinarianDTO/VeterinarianRequestDTO";
 
@@ -71,6 +72,30 @@ export const LoginController = {
     try {
       const { id } = request.params;
       await deleteLoginUseCase.execute(parseInt(id));
+      reply.code(204).send();
+    } catch (err) {
+      reply.code(404).send(err);
+    }
+  },
+
+  UpdateUser: async (
+    request: FastifyRequest<{
+      Params: { id: string };
+      Body: {
+        LoginRequestDTO: UsersLogin;
+        VeterinarianRequestDTO: VeterinarianRequestDTO;
+      };
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { LoginRequestDTO, VeterinarianRequestDTO } = request.body;
+      const { id } = request.params;
+      await updateUserUseCase.execute(
+        parseInt(id),
+        VeterinarianRequestDTO,
+        LoginRequestDTO
+      );
       reply.code(204).send();
     } catch (err) {
       reply.code(404).send(err);
