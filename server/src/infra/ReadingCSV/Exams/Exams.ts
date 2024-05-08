@@ -41,17 +41,13 @@ const AddInstructions = async (dataExams: IDataInstructions[]) => {
     const { id, preparing } = exam;
 
     await prisma.exams
-      .update({
-        where: { id, preparing: null },
-        data: { preparing },
-      })
-      .then(() => {
-        console.log(`Instrução cadastrada com sucesso!`);
-      })
-      .catch(() => {
-        console.log(
-          `Erro ao cadastrar instrução para o Exame ${exam.nameExam}`
-        );
+      .findUnique({ where: { id, preparing: null } })
+      .then(async (res) => {
+        if (res)
+          await prisma.exams.update({
+            where: { id, preparing: null },
+            data: { preparing },
+          });
       });
   }
 };
@@ -62,13 +58,11 @@ const PopullateExams = async (dataExams: IDataExams[]) => {
 
     const deadlineFormatted = `${deadline} ${deadlineInDays}`;
 
-    await prisma.exams
-      .create({ data: { name, deadline: deadlineFormatted, value, id } })
-      .then(() => {
-        console.log(`Exame ${name} cadastrado com sucesso!`);
-      })
-      .catch(() => {
-        console.log(`Erro ao cadastrar o Exame ${name}`);
-      });
+    await prisma.exams.findUnique({ where: { id } }).then(async (res) => {
+      if (!res)
+        await prisma.exams.create({
+          data: { name, deadline: deadlineFormatted, value, id },
+        });
+    });
   }
 };
