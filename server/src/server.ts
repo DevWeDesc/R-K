@@ -1,9 +1,10 @@
 import fastify from "fastify";
 import { registerRoutes } from "./application/routes/RegisterRoutes";
+import cors from "@fastify/cors";
 
-const app =
-  fastify();
-  // { logger: true }
+const app = fastify();
+
+app.register(cors, { origin: true });
 
 registerRoutes(app);
 
