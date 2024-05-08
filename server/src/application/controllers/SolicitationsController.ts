@@ -18,12 +18,19 @@ export const SolicitationsController = {
   },
 
   FinalizeSolicitation: async (
-    request: FastifyRequest<{ Params: { id: string } }>,
+    request: FastifyRequest<{
+      Params: { id: string };
+      Body: { emailVeterinarian?: string };
+    }>,
     reply: FastifyReply
   ) => {
     try {
       const { id } = request.params;
-      const res = await finalizeSolicitationUseCase.execute(id);
+      const { emailVeterinarian } = request.body;
+      const res = await finalizeSolicitationUseCase.execute(
+        id,
+        emailVeterinarian
+      );
       return reply.code(200).send(res);
     } catch (err) {
       return reply.code(400).send(err);
