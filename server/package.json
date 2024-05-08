@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.1",
+    "@fastify/cors": "^9.0.1",
     "@prisma/client": "^5.12.1",
     "@prisma/extension-pulse": "^1.0.1",
     "@types/bcrypt": "^5.0.2",
