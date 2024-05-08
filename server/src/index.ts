@@ -28,6 +28,7 @@ import { CreateLoginUseCase } from "./domain/useCases/UsersLogin/CreateLoginUseC
 import DeleteLoginUseCase from "./domain/useCases/UsersLogin/DeleteLoginUseCase";
 import { GetAllLoginsUseCase } from "./domain/useCases/UsersLogin/GetAllUsersUseCase";
 import { GetUniqueUserUseCase } from "./domain/useCases/UsersLogin/GetUniqueUserUseCase";
+import UpdateUserUseCase from "./domain/useCases/UsersLogin/UpdateUserUseCase";
 import CreateVeterinarianUseCase from "./domain/useCases/Veterinarians/CreateVeterinarianUseCase";
 import DeleteVeterinarianUseCase from "./domain/useCases/Veterinarians/DeleteVeterinarianUseCase";
 import GetAllVeterinariansUseCase from "./domain/useCases/Veterinarians/GetAllVeterinariansUseCase";
@@ -91,6 +92,11 @@ export const autenticationUserUseCase = new AutenticationUserUseCase(
 );
 export const deleteLoginUseCase = new DeleteLoginUseCase(
   deleteVeterinarianUseCase
+);
+
+export const updateUserUseCase = new UpdateUserUseCase(
+  userLoginRepository,
+  veterinarianRepository
 );
 
 export const getExamsUseCase = new GetExamsUseCase(examsRepository);
@@ -158,9 +164,9 @@ export const getUniqueSolicitationsUseCase = new GetUniqueSolicitationsUseCase(
 );
 
 export const mailModel = new MailModel(
-  "Hotmail",
-  "testesmpcomvini@hotmail.com",
-  "Vv1n1$23"
+  process.env.MAILSERVICE as string,
+  process.env.MAILADDRESS as string,
+  process.env.MAILPASS as string
 );
 
 export const sendMailUseCase = new SendMailUseCase(mailModel);
