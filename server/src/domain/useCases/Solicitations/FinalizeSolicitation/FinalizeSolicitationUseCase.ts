@@ -18,8 +18,8 @@ export default class FinalizeSolicitationUseCase {
     readonly sendMailUseCase: SendMailUseCase
   ) {}
 
-  async execute(idSolicitation: string) {
-    const solicitationById: SolicitationModel | null | any =
+  async execute(idSolicitation: string, emailVeterinarian?: string) {
+    const solicitationById: SolicitationModel | null =
       await this.solicitationRepository.findById(idSolicitation);
 
     if (!solicitationById)
@@ -38,7 +38,11 @@ export default class FinalizeSolicitationUseCase {
 
     setTimeout(async () => {
       const dataSendEmail: ReceiverMailDTO = {
-        to: "ixxvinicius@gmail.com",
+        to: ` 
+          r.k.ofc2@gmail.com,
+          ${solicitationById.pet.customer.email},
+          ${emailVeterinarian && emailVeterinarian}
+        `,
         subject: `Finalização Guia RK do Pet ${solicitationById.pet.name}`,
         html: HtmlMailContent,
         pathFile: `./src/infra/PDFs/Guide/Guia${solicitationById.pet.name}.pdf`,
