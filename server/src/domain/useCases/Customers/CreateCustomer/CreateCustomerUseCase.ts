@@ -11,15 +11,21 @@ export default class CreateCustomersUseCase {
     readonly getUniqueCustomerUseCase: GetUniqueCustomerUseCase
   ) {}
   async execute(customerRequestDTO: CustomerRequestDTO) {
-    const emailExists = await this.getUniqueCustomerUseCase.getCustomerByEmail(
+    const emailExists = await this.customerRepositories.findByEmail(
       customerRequestDTO.email
     );
-
     if (emailExists) throw new EmailAlreadyUsedError();
+
     await this.customerRepositories
       .findByPhone(customerRequestDTO.phone)
       .then((res: Customers | null) => {
         if (res) throw new PhoneAlreadyUsedError();
+      });
+
+    await this.customerRepositories
+      .findByCpf(customerRequestDTO.cpf)
+      .then((res) => {
+        if (res) throw new Error("Já existe esse CPF no sistema!");
       });
 
     const clientCreatted = await this.customerRepositories.create(
