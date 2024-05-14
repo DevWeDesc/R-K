@@ -89,6 +89,7 @@ model ExamsInPetOnSolicitations {
 
 model Solicitations {
   id              String                      @id @default(uuid())
+  slug            String?
   isFinished      Boolean                     @default(false)
   exams           ExamsInPetOnSolicitations[]
   createdIn       DateTime                    @default(now())
