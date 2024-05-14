@@ -1,9 +1,10 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyRequest, FastifyReply, FastifyPluginAsync } from "fastify";
 import {
   createSolicitationsUseCase,
   finalizeSolicitationUseCase,
   getAllSolicitationsUseCase,
   getUniqueSolicitationsUseCase,
+  pdfPerSolicitationUseCase,
 } from "../..";
 import { SolicitationRequestDTO } from "../DTOs/SolicitationsDTO/SolicitationRequestDTO";
 
@@ -20,16 +21,17 @@ export const SolicitationsController = {
   FinalizeSolicitation: async (
     request: FastifyRequest<{
       Params: { id: string };
-      Body: { emailVeterinarian?: string };
+      Body: { emailVeterinarian?: string; observation?: string };
     }>,
     reply: FastifyReply
   ) => {
     try {
       const { id } = request.params;
-      const { emailVeterinarian } = request.body;
+      const { emailVeterinarian, observation } = request.body;
       const res = await finalizeSolicitationUseCase.execute(
         id,
-        emailVeterinarian
+        emailVeterinarian,
+        observation
       );
       return reply.code(200).send(res);
     } catch (err) {
@@ -60,6 +62,23 @@ export const SolicitationsController = {
       return reply.code(200).send(res);
     } catch (err) {
       return reply.code(400).send(err);
+    }
+  },
+
+  PDFPerSolicitation: async (
+    request: FastifyRequest<{ Params: { idPDf: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { idPDf } = request.params;
+      const res = await pdfPerSolicitationUseCase.execute(idPDf);
+
+      reply.header("Content-Type", "application/pdf");
+      reply.header("Content-Disposition", "inline");
+
+      return reply.send(res);
+    } catch (err) {
+      reply.status(404).send(err);
     }
   },
 };

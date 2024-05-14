@@ -8,6 +8,10 @@ export async function solicitationsRoutes(app: FastifyInstance) {
     { preHandler: AuthMiddleware },
     SolicitationsController.GetAllSolicitations
   );
+  app.get(
+    "/solicitations/pdf/:idPDf",
+    SolicitationsController.PDFPerSolicitation
+  );
   app.post(
     "/solicitations",
     { preHandler: AuthMiddleware },
