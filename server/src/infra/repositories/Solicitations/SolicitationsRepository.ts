@@ -19,7 +19,7 @@ export default class SolicitationsRepository
   }
   public async findById(
     id: string | number
-  ): Promise<SolicitationModel | null> {
+  ): Promise<SolicitationModel | null | any> {
     return await prisma.solicitations.findUnique({
       where: { id: id.toString() },
       include: {
