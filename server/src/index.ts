@@ -23,6 +23,7 @@ import CreateSolicitationsUseCase from "./domain/useCases/Solicitations/CreateSo
 import FinalizeSolicitationUseCase from "./domain/useCases/Solicitations/FinalizeSolicitation/FinalizeSolicitationUseCase";
 import { GetAllSolicitationsUseCase } from "./domain/useCases/Solicitations/GetAllSolicitations/GetAllSolicitationsUseCase";
 import GetUniqueSolicitationsUseCase from "./domain/useCases/Solicitations/GetUniqueSolicitation/GetUniqueSolicitationsUseCase";
+import PDFPerSolicitationUseCase from "./domain/useCases/Solicitations/PDFPerSolicitation/PDFPerSolicitationUseCase";
 import AutenticationUserUseCase from "./domain/useCases/UsersLogin/AutenticationUserUseCase";
 import { CreateLoginUseCase } from "./domain/useCases/UsersLogin/CreateLoginUseCase";
 import DeleteLoginUseCase from "./domain/useCases/UsersLogin/DeleteLoginUseCase";
@@ -177,3 +178,5 @@ export const finalizeSolicitationUseCase = new FinalizeSolicitationUseCase(
 );
 
 export const sendMessageWithWhatsApp = new SendMessageWithWhatsApp();
+
+export const pdfPerSolicitationUseCase = new PDFPerSolicitationUseCase();
