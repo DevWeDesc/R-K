@@ -4,4 +4,3 @@ export default class EmailNotValidError extends Error {
     this.name = "EmailNotValidError";
   }
 }
-module.exports = EmailNotValidError;

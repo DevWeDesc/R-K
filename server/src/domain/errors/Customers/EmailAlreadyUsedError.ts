@@ -4,4 +4,3 @@ export default class EmailAlreadyUsedError extends Error {
     this.name = "EmailAlreadyUsedError";
   }
 }
-module.exports = EmailAlreadyUsedError;

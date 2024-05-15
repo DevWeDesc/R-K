@@ -4,4 +4,3 @@ export default class PhoneAlreadyUsedError extends Error {
     this.name = "PhoneAlreadyUsedError";
   }
 }
-module.exports = PhoneAlreadyUsedError;
