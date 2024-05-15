@@ -15,7 +15,7 @@ export default class TokenGenerate {
       { id, roleUser, email, crmv, name },
       process.env.SECRET as Secret,
       {
-        expiresIn: "7d",
+        expiresIn: "15d",
       }
     );
 
