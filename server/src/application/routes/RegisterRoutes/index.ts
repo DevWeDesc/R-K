@@ -17,4 +17,7 @@ export const registerRoutes = (app: FastifyInstance) => {
   app.register(petsRoutes);
   app.register(solicitationsRoutes);
   app.register(examsInPetOnSolicitationsRoutes);
+  app.get("hello", () => {
+    return "Hello World";
+  });
 };
