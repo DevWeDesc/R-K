@@ -10,6 +10,10 @@ import {
 import VeterinarianRequestDTO from "../DTOs/VeterinarianDTO/VeterinarianRequestDTO";
 
 export const LoginController = {
+  TestRoute: async (request: FastifyRequest, reply: FastifyReply) => {
+    return "Hello World";
+  },
+
   CreateLogin: async (
     request: FastifyRequest<{
       Body: {

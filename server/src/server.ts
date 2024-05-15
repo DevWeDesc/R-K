@@ -9,8 +9,8 @@ app.register(cors, { origin: true });
 registerRoutes(app);
 
 app
-  .listen({ port: 3333 })
+  .listen({ port: 3335 })
   .then(() =>
-    console.log("Servidor iniciado na porta http://localhost:3333 🚀")
+    console.log("Servidor iniciado na porta http://localhost:3335 🚀")
   )
   .catch(() => "Falha ao iniciar o servidor!");

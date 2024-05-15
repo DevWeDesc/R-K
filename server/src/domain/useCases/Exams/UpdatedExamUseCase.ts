@@ -9,9 +9,14 @@ export default class UpdateExamUseCase {
 
     if (!idExamIsValid) throw new Error("Exame inválido!");
 
-    const { groupId, name, value } = examRequest;
+    const { groupId, name, value, deadline } = examRequest;
 
-    await this.examsRepository.update(idExam, { name, value, groupId });
+    await this.examsRepository.update(idExam, {
+      name,
+      value,
+      groupId,
+      deadline,
+    });
     return { message: "Exame atualizado com sucesso!" };
   }
 }
