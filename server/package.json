@@ -5,7 +5,7 @@
   "main": "./src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup --config tsup.config.ts",
+    "build": "tsup --ignore-watch '*.xlxs' src --out-dir build",
     "populate": "tsx src/infra/ReadingCSV/Populate.ts",
     "test": "jest --watch"
   },
