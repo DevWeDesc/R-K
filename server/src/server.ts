@@ -11,7 +11,7 @@ const originsCors = [
   "https://r-k-ten.vercel.app/",
 ];
 
-app.register(cors, { origin: originsCors });
+app.register(cors, { origin: true });
 
 registerRoutes(app);
 
