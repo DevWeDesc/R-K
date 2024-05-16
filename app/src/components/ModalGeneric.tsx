@@ -25,14 +25,16 @@ export function ModalGeneric({
       open={openModal}
       onOpenChange={() => setModalOpen && setModalOpen(true)}
     >
-      <AlertDialogTrigger asChild>
-        <Button
-          className={`text-white font-semibold ${className}`}
-          variant={variantButton}
-        >
-          {textButtonActive}
-        </Button>
-      </AlertDialogTrigger>
+      {variantButton && (
+        <AlertDialogTrigger asChild>
+          <Button
+            className={`text-white font-semibold ${className}`}
+            variant={variantButton}
+          >
+            {textButtonActive}
+          </Button>
+        </AlertDialogTrigger>
+      )}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="relative">

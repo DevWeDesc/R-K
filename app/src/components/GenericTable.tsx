@@ -10,47 +10,69 @@ import {
 import { additionalFieldsTableGenericEnum } from "@/enums/additionalFieldsTableGenericEnum";
 import { Button } from "./ui/button";
 import { CiEdit, CiSearch, CiTrash } from "react-icons/ci";
-// import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { Input } from "./ui/input";
-import { useEffect, useState } from "react";
+import { PriceFormatter } from "@/utils/PriceFormatter";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import CreateExamsInPetRequestDTO from "@/@interfaces/DTOs/ExamsInPetSolicitation/CreateExamsInPetRequestDTO";
+import { CreateExamsInPetSolicitations } from "@/services/ExamsInPetOnSolicitations/CreateExamsInPetSolicitations";
 import { IExams } from "@/@interfaces/IExams";
-import { ExamsByGuideMock } from "@/mocks/ExamsByGuideMock";
+import { useQuery } from "react-query";
+import { GetExams } from "@/services/Exams/GetExams";
+import { useState } from "react";
+
+type IParamsGuide = {
+  id: string;
+};
 
 export const GenericTable = ({
-  data,
+  headerTable,
   additionalFields,
   setGuidIsVisible,
+  setIsLoading,
 }: IGenericTable) => {
-  // const navigate = useNavigate();
-  const [searchExamsValue, setSearchExamsValue] = useState("");
-  const [examsFilteredBySearch, setExamsFilteredBySearch] = useState<IExams[]>(
-    []
-  );
+  const { id } = useParams<IParamsGuide>();
+  const [pageActual, setPageActual] = useState(1);
+  const [examName, setExamName] = useState("");
 
-  useEffect(() => {
-    const examsFiltered = data.exams.filter((exam) =>
-      exam.name
-        .toLocaleLowerCase()
-        .includes(searchExamsValue.toLocaleLowerCase())
-    );
-    setExamsFilteredBySearch(examsFiltered);
-  }, [searchExamsValue]);
+  const handleMutateLoading = () => {
+    setIsLoading && setIsLoading((prev) => (!prev ? true : false));
+  };
 
-  const handleAddNewExamInGuide = (exam: IExams) => {
-    toast.success("Exame adicionado com sucesso!");
-    ExamsByGuideMock.push(exam);
-    setGuidIsVisible && setGuidIsVisible();
-    // navigate("/guide/preview");
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["examsList", pageActual, examName],
+    queryFn: () => GetExams(pageActual, examName),
+  });
+
+  const handleBackPage = () => {
+    setPageActual((prev) => (prev > 1 ? prev - 1 : prev));
+  };
+
+  const handleNextPage = () => {
+    setPageActual((prev) => (prev < data?.data.numberPages ? prev + 1 : prev));
+  };
+
+  const handleAddNewExamInGuide = async (exam: IExams) => {
+    if (id) {
+      const dataRequest: CreateExamsInPetRequestDTO = {
+        examsId: exam.id,
+        solicitationsId: id,
+      };
+      await CreateExamsInPetSolicitations(dataRequest);
+      setGuidIsVisible && setGuidIsVisible();
+      toast.success(`Exame ${exam.name} adicionado com sucesso!`);
+      handleMutateLoading();
+      refetch();
+    }
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 pb-20">
       <div className="relative">
         <CiSearch className="text-2xl left-4 absolute top-1/2 -translate-y-1/2" />
         <Input
-          value={searchExamsValue}
-          onChange={(ev) => setSearchExamsValue(ev.target.value)}
+          onChange={(e) => setExamName(e.target.value)}
+          value={examName}
           className="bg-white border rounded text-sm pl-12 hover:opacity-100"
           placeholder="Digite o Exame que deseja procurar"
         />
@@ -58,7 +80,7 @@ export const GenericTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            {data.headerTable.map((header, index) => (
+            {headerTable?.map((header, index) => (
               <TableHead
                 className="text-center text-white font-bold border bg-redDefault"
                 key={index}
@@ -83,54 +105,68 @@ export const GenericTable = ({
           </TableRow>
         </TableHeader>
         <TableBody className="max-h-3">
-          {examsFilteredBySearch.map((exam) => {
-            const priceFormat = new Intl.NumberFormat("sp-BRen-US", {
-              style: "currency",
-              currency: "BRL",
-            });
-            return (
-              <TableRow className="border" key={exam.id}>
-                <TableCell className="py-4 border">{exam.name}</TableCell>
-                <TableCell className="border font-medium">
-                  {priceFormat.format(exam.price)}
-                </TableCell>
-                {additionalFields === additionalFieldsTableGenericEnum.list ? (
-                  <TableCell className="font-semibold border">
-                    <Button
-                      onClick={() => handleAddNewExamInGuide(exam)}
-                      variant="outline"
-                      className="rounded-full px-5"
-                    >
-                      Incluir Exame na Guia
-                    </Button>
-                  </TableCell>
-                ) : (
-                  <>
-                    <TableCell className="font-semibold border">
-                      <Button
-                        variant="outline"
-                        className="rounded-full px-4 text-sm hover:bg-zinc-800 hover:text-white"
-                      >
-                        <CiEdit className="mr-1 text-lg" />
-                        Editar Exame
-                      </Button>
+          {isLoading ? (
+            <>
+              <TableRow className="border h-[710px]"></TableRow>
+            </>
+          ) : (
+            <>
+              {data?.data.exams.map((exam: IExams) => {
+                return (
+                  <TableRow className="border" key={exam.id}>
+                    <TableCell className="py-4 border">{exam.name}</TableCell>
+                    <TableCell className="border font-medium">
+                      {PriceFormatter.format(exam.value)}
                     </TableCell>
-                    <TableCell className="font-semibold border">
-                      <Button
-                        variant="outline"
-                        className="rounded-full px-4 text-sm hover:text-white hover:bg-red-700 "
-                      >
-                        <CiTrash className="mr-1 text-lg" />
-                        Excluir Exame
-                      </Button>
-                    </TableCell>
-                  </>
-                )}
-              </TableRow>
-            );
-          })}
+                    {additionalFields ===
+                    additionalFieldsTableGenericEnum.list ? (
+                      <TableCell className="font-semibold border">
+                        <Button
+                          onClick={() => handleAddNewExamInGuide(exam)}
+                          variant="outline"
+                          className="rounded-full px-5"
+                        >
+                          Incluir Exame na Guia
+                        </Button>
+                      </TableCell>
+                    ) : (
+                      <>
+                        <TableCell className="font-semibold border">
+                          <Button
+                            variant="outline"
+                            className="rounded-full px-4 text-sm hover:bg-zinc-800 hover:text-white"
+                          >
+                            <CiEdit className="mr-1 text-lg" />
+                            Editar Exame
+                          </Button>
+                        </TableCell>
+                        <TableCell className="font-semibold border">
+                          <Button
+                            variant="outline"
+                            className="rounded-full px-4 text-sm hover:text-white hover:bg-red-700 "
+                          >
+                            <CiTrash className="mr-1 text-lg" />
+                            Excluir Exame
+                          </Button>
+                        </TableCell>
+                      </>
+                    )}
+                  </TableRow>
+                );
+              })}
+            </>
+          )}
         </TableBody>
       </Table>
+      <div className="flex items-center justify-center gap-4">
+        <Button onClick={handleBackPage} className="text-sm px-5 font-medium">
+          Voltar Página
+        </Button>
+        {data?.data.pageActual}
+        <Button onClick={handleNextPage} className="text-sm px-5 font-medium">
+          Próxima anterior
+        </Button>
+      </div>
     </div>
   );
 };
