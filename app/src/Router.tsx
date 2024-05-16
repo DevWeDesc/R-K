@@ -18,9 +18,10 @@ export const Router = () => {
         <Route path="forgotpassword" element={<ForgotPassword />} />
         <Route path="home" element={<Home />} />
         <Route path="exams/admin" element={<AdminExams />} />
+        <Route path="exams/available/:id" element={<ExamsAvailable />} />
         <Route path="exams/available" element={<ExamsAvailable />} />
-        <Route path="guide/preview" element={<GuidePreview />} />
-        <Route path="guide/fill" element={<FillingInTheGuide />} />
+        <Route path="guide/preview/:id" element={<GuidePreview />} />
+        <Route path="guide/fill/:id" element={<FillingInTheGuide />} />
         <Route path="reports" element={<Reports />} />
       </Routes>
     </BrowserRouter>
