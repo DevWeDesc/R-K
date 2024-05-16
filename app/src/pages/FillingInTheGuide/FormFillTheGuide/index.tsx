@@ -3,36 +3,39 @@ import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { useNavigate } from "react-router-dom";
+// import { toast } from "react-toastify";
 
 export const FormFillTheGuide = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     formState: { errors },
   } = useForm<IFormFillTheGuide>();
 
-  const HandleSubmitGuide = handleSubmit((value) => {
-    const { nameClient, namePet, email, phone, dateAt, observations } = value;
+  // const HandleSubmitGuide = handleSubmit((value) => {
+  //   const { nameClient, namePet, email, phone, dateAt, observations } = value;
 
-    const data = {
-      nameClient,
-      namePet,
-      email,
-      phone,
-      dateAt,
-      observations,
-    };
+  //   const data = {
+  //     nameClient,
+  //     namePet,
+  //     email,
+  //     phone,
+  //     dateAt,
+  //     observations,
+  //   };
 
-    navigate("/home");
-    toast.success("Guia criada com sucesso!");
-  });
+  //   navigate("/home");
+  //   toast.success("Guia criada com sucesso!");
+  // });
 
   return (
-    <form onSubmit={HandleSubmitGuide} className="w-full flex flex-col gap-2">
+    <form
+      //  onSubmit={HandleSubmitGuide}
+      className="w-full flex flex-col gap-2"
+    >
       <div className="w-full grid grid-cols-2 gap-2">
         <div>
           <Input

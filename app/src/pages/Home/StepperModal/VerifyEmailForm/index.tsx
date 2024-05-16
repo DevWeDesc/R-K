@@ -21,7 +21,7 @@ export interface IFormStepperModalProps {
 
 export const VerifyEmailForm = ({
   functionPrimaryButton,
-  setCustomerSelected,
+  // setCustomerSelected,
   functionSecondaryButton,
 }: IFormStepperModalProps) => {
   const [isLoading, setIsLoading] = useState(false);

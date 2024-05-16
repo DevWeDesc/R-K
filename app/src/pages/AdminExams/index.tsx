@@ -8,12 +8,12 @@ import { useState } from "react";
 import { CiMedicalClipboard } from "react-icons/ci";
 import { FormOfAddNewExam } from "./FormOfAddNewExam";
 
-interface IModalAdmin {
-  textTitle: string;
-  textDescription: string;
-}
+// interface IModalAdmin {
+//   textTitle: string;
+//   textDescription: string;
+// }
 export const AdminExams = () => {
-  const [modalInformations, setModalInformations] = useState({} as IModalAdmin);
+  // const [modalInformations, setModalInformations] = useState({} as IModalAdmin);
   const [openModal, setOpenModal] = useState(false);
 
   const handleMutateModalOpened = () => {

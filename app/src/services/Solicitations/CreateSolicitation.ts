@@ -1,10 +1,10 @@
-import { SolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/SolicitationRequestDTO";
 import { api } from "@/utils/Api/AxiosInstance";
 import { AxiosResponse } from "axios";
 import { headerRequest } from "../UserLocal";
+import { ISolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/SolicitationRequestDTO";
 
 export const CreateSolicitation = async (
-  solicitationRequest: SolicitationRequestDTO
+  solicitationRequest: ISolicitationRequestDTO
 ): Promise<AxiosResponse> => {
   return await api.post("/solicitations", solicitationRequest, headerRequest);
 };
