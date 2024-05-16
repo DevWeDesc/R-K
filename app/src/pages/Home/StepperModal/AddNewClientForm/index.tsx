@@ -1,17 +1,21 @@
 import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Input } from "@/components/ui/input";
 import { IFormStepperModalProps } from "../VerifyEmailForm";
-import { ClientsMock } from "@/mocks/ClientsMock";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { LuLoader2 } from "react-icons/lu";
+import { CreateCustomer } from "@/services/Customers/CreateCustomer";
+import { AxiosResponse } from "axios";
+import { ICustomer } from "@/@interfaces/ICustomer";
+import Cookies from "js-cookie";
 
 interface ISubmitNewClient {
   name: string;
   email: string;
   phone: string;
+  cpf: string;
 }
 
 export const AddNewClientForm = ({
@@ -26,36 +30,26 @@ export const AddNewClientForm = ({
     formState: { errors },
   } = useForm<ISubmitNewClient>();
 
-  const handleGetEmailByUser = (email: string): Promise<string> => {
-    return new Promise<string>((resolve, reject) => {
-      setTimeout(() => {
-        if (ClientsMock.find((client) => client.email === email)) {
-          setIsLoading(false);
-          reject("Este usuário Já existe no sistema!");
-        } else {
-          setIsLoading(false);
-          resolve("Usuário cadastrado com sucesso!");
-          functionSecondaryButton && functionSecondaryButton();
-        }
-      }, 2000);
-    });
-  };
-
   const handleSubmitNewClient = handleSubmit(async (value) => {
-    const { email, name, phone } = value;
-    const data = {
+    const { email, name, phone, cpf } = value;
+    const dataRequest = {
       email,
       name,
       phone,
+      cpf,
     };
     setIsLoading(true);
-    await handleGetEmailByUser(value.email)
-      .then((res) => {
-        ClientsMock.push(data);
-        toast.success(res);
+    await CreateCustomer(dataRequest)
+      .then((res: AxiosResponse<ICustomer>) => {
+        Cookies.set("customerCreated", `${res.data.id}`, { expires: 60000 });
+        toast.success("Cliente criado com sucesso!");
+        setIsLoading(false);
+        functionSecondaryButton && functionSecondaryButton();
       })
-      .catch((res) => {
-        toast.error(res);
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+        setIsLoading(false);
       });
   });
   return (
@@ -82,6 +76,12 @@ export const AddNewClientForm = ({
       {errors.phone && (
         <InputRequiredError className="pl-4" inputName="Telefone" />
       )}
+      <Input
+        className="w-full"
+        {...register("cpf", { required: true })}
+        placeholder="999.999.999-99"
+      />
+      {errors.cpf && <InputRequiredError className="pl-4" inputName="CPF" />}
       <div className="grid grid-cols-2 gap-2">
         <Button
           variant="outline"

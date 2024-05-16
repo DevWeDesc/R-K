@@ -2,21 +2,17 @@ import { GenericTable } from "@/components/GenericTable";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { additionalFieldsTableGenericEnum } from "@/enums/additionalFieldsTableGenericEnum";
-import { ExamsVailableMock } from "@/mocks/ExamsAvailableMock";
 import Cookies from "js-cookie";
 import { RiAdminLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { GuidePreviewComponent } from "./GuidePreview";
 import { ExamsByGuideMock } from "@/mocks/ExamsByGuideMock";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const ExamsAvailable = () => {
   const navigate = useNavigate();
-  const [guideIsVisible, setGuidIsVisible] = useState(true);
-
-  useEffect(() => {
-    if (guideIsVisible) setGuidIsVisible(false);
-  }, [ExamsByGuideMock, guideIsVisible]);
+  const headerTable = ["Nome do Exame", "Preço do Exame"];
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
@@ -24,7 +20,7 @@ export const ExamsAvailable = () => {
       <div
         className={`grid ${
           ExamsByGuideMock.length > 0 && "lg:grid-cols-2"
-        } lg:gap-10`}
+        } lg:gap-10 px-5`}
       >
         <div className="flex flex-col items-center text-center pt-16 gap-5 w-full mx-auto">
           <p className="text-4xl font-semibold">
@@ -55,16 +51,14 @@ export const ExamsAvailable = () => {
             )}
             <div className="overflow-auto max-h-full">
               <GenericTable
-                data={ExamsVailableMock}
+                headerTable={headerTable}
                 additionalFields={additionalFieldsTableGenericEnum.list}
-                setGuidIsVisible={() => setGuidIsVisible(true)}
+                setIsLoading={setIsLoading}
               />
             </div>
           </div>
         </div>
-        {ExamsByGuideMock.length > 0 && !guideIsVisible && (
-          <GuidePreviewComponent />
-        )}
+        <GuidePreviewComponent isloading={isLoading} />
       </div>
     </>
   );

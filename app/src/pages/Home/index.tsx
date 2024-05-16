@@ -24,11 +24,11 @@ export const Home = () => {
         </div>
         <div
           className={`grid ${
-            Cookies.get("userRole") === "admin" &&
+            Cookies.get("userRole") === "Admin" &&
             `lg:grid-cols-${CardHomeMock.length}`
           } gap-20 md:gap-28 `}
         >
-          {Cookies.get("userRole") === "admin"
+          {Cookies.get("userRole") === "Admin"
             ? CardHomeMock.map((card, index) => (
                 <CardHome
                   key={index}
@@ -39,7 +39,7 @@ export const Home = () => {
                   OpenModal={card.OpenModal}
                 />
               ))
-            : CardHomeMock.filter((card) => card.Role != "admin").map(
+            : CardHomeMock.filter((card) => card.Role != "Admin").map(
                 (card, index) => (
                   <CardHome
                     key={index}

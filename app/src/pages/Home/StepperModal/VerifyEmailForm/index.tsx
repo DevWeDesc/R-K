@@ -1,8 +1,11 @@
 import { ISubmitEmailRequestDTO } from "@/@interfaces/DTOs/ISubmitEmailRequestDTO";
+import { ICustomer } from "@/@interfaces/ICustomer";
 import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ClientsMock } from "@/mocks/ClientsMock";
+import { GetCustomers } from "@/services/Customers/GetCustomers";
+import { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LuLoader2 } from "react-icons/lu";
@@ -12,10 +15,13 @@ export interface IFormStepperModalProps {
   setModalOpen: (ev: boolean) => void;
   functionPrimaryButton: () => void;
   functionSecondaryButton?: () => void;
+  setCustomerSelected?: (ev: ICustomer) => void;
+  customersPets?: ICustomer;
 }
 
 export const VerifyEmailForm = ({
   functionPrimaryButton,
+  setCustomerSelected,
   functionSecondaryButton,
 }: IFormStepperModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,29 +32,22 @@ export const VerifyEmailForm = ({
     formState: { errors },
   } = useForm<ISubmitEmailRequestDTO>();
 
-  const handleGetEmailByUser = (email: string): Promise<string> => {
-    return new Promise<string>((resolve, reject) => {
-      setTimeout(() => {
-        if (ClientsMock.find((client) => client.email === email)) {
-          setIsLoading(false);
-          resolve("Usuário encontrado com sucesso!");
-        } else {
-          setIsLoading(false);
-          reject("Usuário não encontrado!");
-        }
-      }, 2000);
-    });
-  };
-
   const handleSubmitEmailClient = handleSubmit(async (value) => {
     setIsLoading(true);
-    await handleGetEmailByUser(value.email)
-      .then((res) => {
+    const queryGetCustomer = {
+      email: value.email,
+    };
+    await GetCustomers(queryGetCustomer)
+      .then((res: AxiosResponse<ICustomer>) => {
+        Cookies.set("customerCreated", `${res.data.id}`);
+        // setCustomerSelected && setCustomerSelected(res.data);
+        toast.success("Cliente encontrado com sucesso!");
+        setIsLoading(false);
         functionSecondaryButton && functionSecondaryButton();
-        toast.success(res);
       })
       .catch((res) => {
-        toast.error(res);
+        setIsLoading(false);
+        toast.error(res.response.data.message);
       });
   });
 

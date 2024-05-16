@@ -1,43 +1,48 @@
 import { ILoginUser } from "@/@interfaces/ILoginForm";
-import { InputRequiredError } from "@/components/Errors/InputRequiredError";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { UsersMock } from "@/mocks/UsersMock";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { InputRequiredError } from "@/components/Errors/InputRequiredError";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { LoginService } from "@/services/User/LoginService";
+import { ImSpinner8 } from "react-icons/im";
 
 export const FormLogin = () => {
   const navigate = useNavigate();
   const [InputPasswordIsVisible, setInputPasswordIsVisible] = useState(false);
+  const [buttonIsLoading, setButtonIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginUser>();
 
-  const onSubmit = handleSubmit((data) => {
+  const loginSucces = (res: any) => {
+    localStorage.user = JSON.stringify(res.data.tokenInformations);
+    toast.success("Login efetuado com sucesso!");
+    Cookies.set("userRole", `${res.data.tokenInformations.user.roleUser}`, {
+      expires: 7,
+    });
+    navigate("/home");
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
     const handleSubmitUser = {
-      CRMV: data.CRMV,
-      Email: data.Email,
-      Password: data.Password,
+      crmv: data.crmv,
+      email: data.email,
+      password: data.password,
     };
 
-    const { CRMV, Email, Password } = handleSubmitUser;
-    const userIsValid = UsersMock.find(
-      (user) =>
-        user.CRMV === CRMV && user.Email === Email && user.Password === Password
-    );
-    if (userIsValid) {
-      toast.success("Usuário logado com sucesso!");
-      Cookies.set("userRole", `${userIsValid.userRole}`, { expires: 7 });
-      navigate("/home");
-    } else {
-      toast.error("Os dados informados são inválidos!");
-    }
+    await LoginService(handleSubmitUser)
+      .then((res) => loginSucces(res))
+      .catch(() => {
+        toast.error("Erro ao realizar login! Verifique os dados fornecidos!");
+        setButtonIsLoading(false);
+      });
   });
 
   const handleVisibilityPassword = () => {
@@ -49,19 +54,19 @@ export const FormLogin = () => {
       <div className="flex flex-col gap-3">
         <div>
           <Input
-            {...register("CRMV", { required: true })}
-            placeholder="CRMV do veterinário"
+            {...register("crmv", { required: true })}
+            placeholder="Sigla do estado + Nº CRMV (SP-123)"
           />
-          {errors.CRMV && (
+          {errors.crmv && (
             <InputRequiredError className="px-4" inputName="CRMV" />
           )}
         </div>
         <div>
           <Input
-            {...register("Email", { required: true })}
+            {...register("email", { required: true })}
             placeholder="E-mail"
           />
-          {errors.Email && (
+          {errors.email && (
             <InputRequiredError className="px-4" inputName="E-mail" />
           )}
         </div>
@@ -69,7 +74,7 @@ export const FormLogin = () => {
           <div className="relative">
             <Input
               type={!InputPasswordIsVisible ? "password" : "text"}
-              {...register("Password", { required: true })}
+              {...register("password", { required: true })}
               placeholder="Senha"
             />
             {InputPasswordIsVisible ? (
@@ -92,12 +97,18 @@ export const FormLogin = () => {
               </Button>
             )}
           </div>
-          {errors.Password && (
+          {errors.password && (
             <InputRequiredError className="px-4" inputName="Senha" />
           )}
         </div>
       </div>
-      <Button type="submit">Entrar</Button>
+      {buttonIsLoading ? (
+        <Button type="button" variant="outline">
+          <ImSpinner8 className="animate-spin mr-2" /> Carregando
+        </Button>
+      ) : (
+        <Button type="submit">Entrar</Button>
+      )}
     </form>
   );
 };

@@ -1,6 +1,5 @@
 import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Button } from "@/components/ui/button";
-import { ClientsMock } from "@/mocks/ClientsMock";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { LuLoader2 } from "react-icons/lu";
@@ -15,9 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ISolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/SolicitationRequestDTO";
+import { CreateSolicitation } from "@/services/Solicitations/CreateSolicitation";
+import { useQuery } from "react-query";
+import { GetCustomerById } from "@/services/Customers/GetCustomerById";
+import Cookies from "js-cookie";
 
 interface ISubmitPetSelectedRequestDTO {
-  pet: string;
+  petId: string;
 }
 
 export const SelectPetForm = ({
@@ -25,6 +29,8 @@ export const SelectPetForm = ({
 }: IFormStepperModalProps) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const vetLoged = JSON.parse(localStorage.user);
+  const customerId = Cookies.get("customerCreated");
 
   const {
     control,
@@ -32,38 +38,27 @@ export const SelectPetForm = ({
     formState: { errors },
   } = useForm<ISubmitPetSelectedRequestDTO>();
 
-  const handleGetEmailByUser = (
-    email: string,
-    petSelected: string
-  ): Promise<string> => {
-    return new Promise<string>((resolve, reject) => {
-      setTimeout(() => {
-        if (
-          ClientsMock.find(
-            (client) =>
-              client.email === email &&
-              client.pets?.find((pet) => pet === petSelected)
-          )
-        ) {
-          setIsLoading(false);
-          resolve("Pet encontrado com sucesso!");
-          navigate("/exams/available");
-        } else {
-          setIsLoading(false);
-          reject("Pet não encontrado!");
-        }
-      }, 2000);
-    });
-  };
+  const { data } = useQuery({
+    queryFn: () => GetCustomerById(customerId ? customerId : ""),
+  });
 
   const handleSubmitEmailClient = handleSubmit(async (value) => {
+    const { petId } = value;
     setIsLoading(true);
-    await handleGetEmailByUser("cliente@gmail.com", value.pet)
+    const veterinariansId = vetLoged.user.id;
+    const dataRequest: ISolicitationRequestDTO = {
+      petsId: parseInt(petId),
+      veterinariansId,
+    };
+    await CreateSolicitation(dataRequest)
       .then((res) => {
-        toast.success(res);
+        toast.success("Solicitação aberta com sucesso!");
+        setIsLoading(false);
+        navigate(`/exams/available/${res.data.id}`);
       })
       .catch((res) => {
-        toast.error(res);
+        toast.error(res.response.message);
+        setIsLoading(false);
       });
   });
 
@@ -71,7 +66,7 @@ export const SelectPetForm = ({
     <div>
       <form onSubmit={handleSubmitEmailClient}>
         <Controller
-          name="pet"
+          name="petId"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
@@ -85,12 +80,15 @@ export const SelectPetForm = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="Mel">Mel</SelectItem>
-                    <SelectItem value="Luna">Luna</SelectItem>
+                    {data?.data?.pets?.map((pet) => (
+                      <SelectItem key={pet.id} value={pet.id.toString()}>
+                        {pet.name}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              {errors.pet && (
+              {errors.petId && (
                 <InputRequiredError className="px-4" inputName="Pet" />
               )}
             </>

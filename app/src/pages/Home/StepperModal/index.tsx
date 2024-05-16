@@ -6,10 +6,11 @@ import { AddNewClientForm } from "./AddNewClientForm";
 import { AddNewPetForm } from "./AddNewPet";
 import { IModalGeneric } from "@/@interfaces/IModalGeneric";
 import { SelectPetForm } from "./SelectPetForm";
+import { ICustomer } from "@/@interfaces/ICustomer";
 
 export const StepperModal = () => {
   const [openModal, setOpenModal] = useState(false);
-
+  const [customerSelected, setCustomerSelected] = useState({} as ICustomer);
   const [attributesByModal, setAttributesByModal] = useState(
     {} as IModalGeneric
   );
@@ -105,6 +106,7 @@ export const StepperModal = () => {
     >
       {typeForm.verifyEmail && (
         <VerifyEmailForm
+          setCustomerSelected={(ev: ICustomer) => setCustomerSelected(ev)}
           setModalOpen={(ev) => setOpenModal(ev)}
           functionPrimaryButton={() => handleMutateTypeFormForAddNewClient()}
           functionSecondaryButton={() => handleMutateTypeFormForSelectPet()}
@@ -112,6 +114,7 @@ export const StepperModal = () => {
       )}
       {typeForm.addNewClient && (
         <AddNewClientForm
+          setCustomerSelected={(ev: ICustomer) => setCustomerSelected(ev)}
           setModalOpen={(ev) => setOpenModal(ev)}
           functionPrimaryButton={() => handleMutateTypeFormForVerifyEmail()}
           functionSecondaryButton={() => handleMutateTypeFormForAddNewPet()}
@@ -125,6 +128,7 @@ export const StepperModal = () => {
       )}
       {typeForm.selectedPet && (
         <SelectPetForm
+          customersPets={customerSelected}
           setModalOpen={(ev) => setOpenModal(ev)}
           functionPrimaryButton={() => handleMutateTypeFormForAddNewPet()}
         />

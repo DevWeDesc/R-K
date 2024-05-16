@@ -1,11 +1,25 @@
 import { GenericTable } from "@/components/GenericTable";
 import { Header } from "@/components/Header";
+import { ModalGeneric } from "@/components/ModalGeneric";
 import { Button } from "@/components/ui/button";
 import { additionalFieldsTableGenericEnum } from "@/enums/additionalFieldsTableGenericEnum";
 import { ExamsVailableMock } from "@/mocks/ExamsAvailableMock";
+import { useState } from "react";
 import { CiMedicalClipboard } from "react-icons/ci";
+import { FormOfAddNewExam } from "./FormOfAddNewExam";
 
+interface IModalAdmin {
+  textTitle: string;
+  textDescription: string;
+}
 export const AdminExams = () => {
+  const [modalInformations, setModalInformations] = useState({} as IModalAdmin);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleMutateModalOpened = () => {
+    setOpenModal(true);
+  };
+
   return (
     <>
       <Header navIsVisible />
@@ -26,17 +40,25 @@ export const AdminExams = () => {
         </p>
         <div className="relative w-full pt-16">
           <Button
+            onClick={handleMutateModalOpened}
             variant="outline"
             className="px-8 text-sm rounded-full absolute top-0 right-0"
           >
             <CiMedicalClipboard className="mr-1 text-lg" /> Adicionar Exame
           </Button>
-          <div className="overflow-auto max-h-[53.5vh]">
-            <GenericTable
-              data={ExamsVailableMock}
-              additionalFields={additionalFieldsTableGenericEnum.admin}
-            />
-          </div>
+          <GenericTable
+            headerTable={ExamsVailableMock.headerTable}
+            additionalFields={additionalFieldsTableGenericEnum.admin}
+          />
+          <ModalGeneric
+            openModal={openModal}
+            setModalOpen={(ev) => setOpenModal(ev)}
+            className="w-full"
+            textTitle="Adicione um novo exame agora!"
+            textDescription="Para adicionar um novo exame, preencha todos os campos do formulário corretamente!"
+          >
+            <FormOfAddNewExam setModalIsOpen={setOpenModal} />
+          </ModalGeneric>
         </div>
       </div>
     </>

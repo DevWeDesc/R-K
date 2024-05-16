@@ -1,13 +1,11 @@
 import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Input } from "@/components/ui/input";
 import { IFormStepperModalProps } from "../VerifyEmailForm";
-import { ClientsMock } from "@/mocks/ClientsMock";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { LuLoader2 } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
 import {
   Select,
   SelectContent,
@@ -16,19 +14,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Cookies from "js-cookie";
+import { useQuery } from "react-query";
+import { GetCustomerById } from "@/services/Customers/GetCustomerById";
+import { ICreatePetRequestDTO } from "@/@interfaces/DTOs/Pet/CreatePetRequestDTO";
+import { CreatePet } from "@/services/Pets/CreatePet";
+
+type sexType = "Macho" | "Femea";
 
 interface ISubmitNewClient {
   name: string;
   specie: string;
   age: string;
   tutor: string;
+  sex: sexType;
 }
 
 export const AddNewPetForm = ({
   functionPrimaryButton,
 }: IFormStepperModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const customerId = Cookies.get("customerCreated");
 
   const {
     register,
@@ -37,38 +44,33 @@ export const AddNewPetForm = ({
     formState: { errors },
   } = useForm<ISubmitNewClient>();
 
-  const handleGetEmailByUser = (email: string): Promise<string> => {
-    return new Promise<string>((resolve, reject) => {
-      setTimeout(() => {
-        if (ClientsMock.find((client) => client.email === email)) {
-          setIsLoading(false);
-          reject("Este usuário Já existe no sistema!");
-        } else {
-          setIsLoading(false);
-          resolve("Usuário cadastrado com sucesso!");
-        }
-      }, 2000);
-    });
-  };
+  const { data } = useQuery({
+    queryFn: () => GetCustomerById(customerId ? customerId : ""),
+  });
 
   const handleSubmitNewClient = handleSubmit(async (value) => {
-    const { specie, name, age, tutor } = value;
-    const data = {
-      specie,
-      name,
-      age,
-      tutor,
-    };
-    console.log(data);
-    setIsLoading(true);
-    await handleGetEmailByUser(value.name)
-      .then((res) => {
-        toast.success(res);
-        navigate("/exams/available");
-      })
-      .catch((res) => {
-        toast.error(res);
-      });
+    const { specie, name, age, sex } = value;
+    if (customerId) {
+      const dataRequest: ICreatePetRequestDTO = {
+        name,
+        specie,
+        age,
+        sex,
+        customerId: parseInt(customerId),
+      };
+      console.log(dataRequest);
+      await CreatePet(dataRequest)
+        .then(() => {
+          toast.success("Pet Criado com sucesso!");
+          functionPrimaryButton();
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Erro ao cadastrar Pet!");
+          setIsLoading(false);
+        });
+    }
   });
   return (
     <form onSubmit={handleSubmitNewClient} className="space-y-2">
@@ -93,13 +95,36 @@ export const AddNewPetForm = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="Canina">Canina</SelectItem>
+                  <SelectItem value="Canino">Canina</SelectItem>
                   <SelectItem value="Felino">Felino</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
             {errors.specie && (
               <InputRequiredError className="px-4" inputName="Espécie" />
+            )}
+          </>
+        )}
+      />
+      <Controller
+        name="sex"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
+                <SelectValue placeholder="Selecione o Sexo do Pet" {...field} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="Macho">Macho</SelectItem>
+                  <SelectItem value="Femea">Fêmea</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {errors.sex && (
+              <InputRequiredError className="px-4" inputName="Sexo" />
             )}
           </>
         )}
@@ -114,6 +139,7 @@ export const AddNewPetForm = ({
         <InputRequiredError className="pl-4" inputName="Idade do Pet" />
       )}
       <Input
+        value={data?.data?.name}
         className="w-full"
         {...register("tutor", { required: true })}
         placeholder="Tutor"

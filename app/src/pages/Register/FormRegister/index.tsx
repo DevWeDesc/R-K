@@ -1,16 +1,12 @@
 import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UsersMock } from "@/mocks/UsersMock";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { IRegisterForm } from "@/@interfaces/IRegisterForm";
-import { ILoginUser } from "@/@interfaces/ILoginForm";
 import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
-import { userRoleEnum } from "@/enums/UserRoleEnum";
 import {
   Select,
   SelectTrigger,
@@ -19,6 +15,14 @@ import {
   SelectGroup,
   SelectItem,
 } from "@/components/ui/select";
+import { RegisterSchema } from "@/schemas/RegisterSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
+import { CreateUser } from "@/services/User/CreateUser";
+import { IRegisterAccountDTO } from "@/@interfaces/DTOs/User/RegisterAccountDTO";
+import { userRoleEnum } from "@/enums/UserRoleEnum";
+import { ImSpinner8 } from "react-icons/im";
+import { StatesMock } from "@/mocks/StatesMock";
 
 export const FormRegister = () => {
   const navigate = useNavigate();
@@ -26,48 +30,51 @@ export const FormRegister = () => {
     password: false,
     confirmPassword: false,
   } as IInputPasswordIsVisible);
+  const [buttonIsLoading, setButtonIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<IRegisterForm>();
+  } = useForm<IRegisterForm>({ resolver: zodResolver(RegisterSchema) });
 
-  const handleCreateNewUser = handleSubmit((data) => {
-    const handleSubmitUser: IRegisterForm = {
-      Name: data.Name,
-      CRMV: data.CRMV,
-      Email: data.Email.toLocaleLowerCase(),
-      Phone: data.Phone,
-      State: data.State,
-      Password: data.Password,
-      ConfirmationPassword: data.ConfirmationPassword,
+  const handleCreateNewUser = handleSubmit(async (data) => {
+    let { confirmationPassword, password, crmv, email, name, phone, state } =
+      data;
+
+    const acronymState = state.substring(0, 2);
+    const stateCustomer = state.substring(5, state.length);
+
+    crmv = `${acronymState}-${crmv}`;
+
+    if (password != confirmationPassword)
+      return toast.error("As senhas não coincidem!");
+
+    const DataRequest: IRegisterAccountDTO = {
+      LoginRequestDTO: {
+        password,
+        roleUser: userRoleEnum.veterinarian,
+      },
+      VeterinarianRequestDTO: {
+        crmv,
+        email,
+        name,
+        phone,
+        state: stateCustomer,
+      },
     };
-
-    const { CRMV, Email, Password, ConfirmationPassword } = handleSubmitUser;
-
-    if (Password != ConfirmationPassword) {
-      toast.error("A confirmação de senha está diferente da senha!");
-    } else if (
-      UsersMock.find(
-        (user) =>
-          user.CRMV === CRMV &&
-          user.Email === Email &&
-          user.Password === Password
-      )
-    ) {
-      toast.error("Esse Usuário já existe!");
-    } else {
-      const newUser: ILoginUser = {
-        CRMV,
-        Email,
-        Password,
-        userRole: userRoleEnum.veterinarian,
-      };
-      UsersMock.push(newUser);
-      toast.success("Usuário adicionado com sucesso!");
-      navigate("/");
-    }
+    setButtonIsLoading(true);
+    await CreateUser(DataRequest)
+      .then(() => {
+        toast.success("Usuário cadastrado com sucesso!");
+        navigate("/");
+        setButtonIsLoading(false);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        setButtonIsLoading(false);
+      });
   });
 
   const handleVisibilityPassword = () => {
@@ -83,70 +90,78 @@ export const FormRegister = () => {
       confirmPassword: InputPasswordIsVisible.confirmPassword ? false : true,
     });
   };
-  // 1770px
+
   return (
     <form onSubmit={handleCreateNewUser} className="flex flex-col gap-4 w-full">
       <div className="flex flex-col gap-3">
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Input
-              {...register("Name", { required: true })}
-              placeholder="Nome"
-            />
-            {errors.CRMV && (
-              <InputRequiredError className="px-4" inputName="Nome" />
+            <Input {...register("name")} placeholder="Nome" />
+            {errors.name && (
+              <p className="text-xs pl-4 text-red-700">{errors.name.message}</p>
             )}
           </div>
           <div>
             <Input
-              {...register("CRMV", { required: true })}
-              placeholder="CRMV do veterinário"
+              maxLength={5}
+              {...register("crmv")}
+              placeholder="Númeração do CRMV"
             />
-            {errors.CRMV && (
-              <InputRequiredError className="px-4" inputName="CRMV" />
+            {errors.crmv && (
+              <p className="text-xs pl-4 text-red-700">{errors.crmv.message}</p>
             )}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Input
-              {...register("Email", { required: true })}
-              placeholder="E-mail"
-            />
-            {errors.Email && (
-              <InputRequiredError className="px-4" inputName="E-mail" />
+            <Input {...register("email")} placeholder="E-mail" />
+            {errors.email && (
+              <p className="text-xs pl-4 text-red-700">
+                {errors.email.message}
+              </p>
             )}
           </div>
           <div>
-            <Input
-              {...register("Phone", { required: true })}
-              placeholder="Telefone"
-            />
-            {errors.Phone && (
-              <InputRequiredError className="px-4" inputName="Telefone" />
+            <Input {...register("phone")} placeholder="Telefone" />
+            {errors.phone && (
+              <p className="text-xs pl-4 text-red-700">
+                {errors.phone.message}
+              </p>
             )}
           </div>
         </div>
 
         <Controller
-          name="State"
+          name="state"
           control={control}
-          defaultValue="São Paulo"
-          rules={{ required: true }}
+          defaultValue="SP - São Paulo"
           render={({ field }) => (
             <>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue="SP - São Paulo"
+              >
                 <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
-                  <SelectValue placeholder="São Paulo" {...field} />
+                  <SelectValue
+                    defaultValue="SP - São Paulo"
+                    placeholder="São Paulo"
+                    {...field}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="São Paulo">São Paulo</SelectItem>
-                    <SelectItem value="Bahia">Bahia</SelectItem>
+                    {StatesMock.map((state) => (
+                      <SelectItem
+                        key={state.acronym}
+                        value={`${state.acronym} - ${state.state}`}
+                      >
+                        {state.state}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              {errors.State && (
+              {errors.state && (
                 <InputRequiredError className="px-4" inputName="Estado" />
               )}
             </>
@@ -158,7 +173,7 @@ export const FormRegister = () => {
             <div className="relative">
               <Input
                 type={!InputPasswordIsVisible.password ? "password" : "text"}
-                {...register("Password", { required: true })}
+                {...register("password")}
                 placeholder="Senha"
               />
               {InputPasswordIsVisible.password ? (
@@ -181,8 +196,10 @@ export const FormRegister = () => {
                 </Button>
               )}
             </div>
-            {errors.Password && (
-              <InputRequiredError className="px-4" inputName="Senha" />
+            {errors.password && (
+              <p className="text-xs pl-4 text-red-700">
+                {errors.password.message}
+              </p>
             )}
           </div>
           <div>
@@ -191,7 +208,7 @@ export const FormRegister = () => {
                 type={
                   !InputPasswordIsVisible.confirmPassword ? "password" : "text"
                 }
-                {...register("ConfirmationPassword", { required: true })}
+                {...register("confirmationPassword")}
                 placeholder="Confirmar Senha"
               />
               {InputPasswordIsVisible.confirmPassword ? (
@@ -214,16 +231,21 @@ export const FormRegister = () => {
                 </Button>
               )}
             </div>
-            {errors.ConfirmationPassword && (
-              <InputRequiredError
-                className="px-4"
-                inputName="Confirmar Senha"
-              />
+            {errors.confirmationPassword && (
+              <p className="text-xs pl-4 text-red-700">
+                {errors.confirmationPassword.message}
+              </p>
             )}
           </div>
         </div>
       </div>
-      <Button type="submit">Cadastrar</Button>
+      {buttonIsLoading ? (
+        <Button type="button" variant="outline">
+          <ImSpinner8 className="animate-spin mr-2" /> Carregando
+        </Button>
+      ) : (
+        <Button type="submit">Cadastrar</Button>
+      )}
     </form>
   );
 };
