@@ -4,7 +4,11 @@ import cors from "@fastify/cors";
 
 const app = fastify({ logger: true });
 
-app.register(cors, { origin: true });
+const allowedOrigins = [
+  "http://localhost:5173/",
+  "https://r-k-ten.vercel.app/",
+];
+app.register(cors, { origin: allowedOrigins });
 
 registerRoutes(app);
 
