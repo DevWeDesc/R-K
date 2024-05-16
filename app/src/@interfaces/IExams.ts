@@ -1,7 +1,11 @@
 export interface IExams {
   id: number;
   name: string;
-  price: number;
+  value: number;
+  preparing: string;
+  deadline: string;
+  groupsId: null | number;
+  group: null | number;
 }
 
 export interface IListExams {

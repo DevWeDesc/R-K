@@ -1,8 +1,8 @@
 import { additionalFieldsTableGenericEnum } from "@/enums/additionalFieldsTableGenericEnum";
-import { IListExams } from "./IExams";
 
 export interface IGenericTable {
-  data: IListExams;
+  headerTable?: string[];
   additionalFields: additionalFieldsTableGenericEnum;
   setGuidIsVisible?: () => void;
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }

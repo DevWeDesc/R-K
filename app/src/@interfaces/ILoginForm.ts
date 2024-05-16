@@ -1,8 +1,8 @@
 import { userRoleEnum } from "@/enums/UserRoleEnum";
 
 export interface ILoginUser {
-  CRMV: string;
-  Email: string;
-  Password: string;
+  crmv: string;
+  email: string;
+  password: string;
   userRole?: userRoleEnum;
 }
