@@ -15,6 +15,6 @@ export const CardHomeMock: ICardHome[] = [
       "Descubra uma variedade de exames veterinários disponíveis para ajudar a manter a saúde e o bem-estar dos seus animais de estimação. Desde exames de rotina até procedimentos mais especializados, estamos aqui para oferecer suporte completo.",
     LinkButton: "/exams/admin",
     TextButton: "Cadastrar Exames",
-    Role: "admin",
+    Role: "Admin",
   },
 ];
