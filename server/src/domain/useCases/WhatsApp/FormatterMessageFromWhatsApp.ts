@@ -38,6 +38,6 @@ ${solicitationModel.exams
   }
 
 *Guia gerada com sucesso na R&K para o pet ${solicitationModel.pet.name}!*
-Segue o link da Guia: *http://localhost:3333/solicitations/pdf/${pdfName}*
+Segue o link da Guia: *https://rkdiagnostico.cloud/solicitations/pdf/${pdfName}*
 `;
 };
