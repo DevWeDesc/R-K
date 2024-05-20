@@ -7,6 +7,8 @@ import { HtmlMailContent } from "../../../models/mail/templates/HtmlMailContent"
 import SendMailUseCase from "../../Mail/SendMailUseCase";
 import { FormatterMessageFromWhatsApp } from "../../WhatsApp/FormatterMessageFromWhatsApp";
 import { FormatedDate } from "../../../../utils/FormatedDate";
+import createPDFDocument from "../../../../domain/models/pdf/PdfDocument";
+import path from "path";
 
 export default class FinalizeSolicitationUseCase {
   constructor(
@@ -19,7 +21,7 @@ export default class FinalizeSolicitationUseCase {
     emailVeterinarian?: string,
     observation?: string
   ) {
-    const solicitationById: SolicitationModel | null =
+    let solicitationById: SolicitationModel =
       await this.solicitationRepository.findById(idSolicitation);
 
     if (!solicitationById)
@@ -33,29 +35,42 @@ export default class FinalizeSolicitationUseCase {
       .replaceAll(", ", "_")
       .replaceAll(":", "-")}`;
 
-    await this.solicitationRepository.update(idSolicitation, {
-      isFinished: true,
-      finishedIn: dateFinished,
-      slug: slugForSolicitation,
-      observation,
-    });
+    await this.solicitationRepository
+      .update(idSolicitation, {
+        isFinished: true,
+        finishedIn: dateFinished,
+        slug: slugForSolicitation,
+        observation,
+      })
+      .then(async () => {
+        solicitationById = await this.solicitationRepository.findById(
+          idSolicitation
+        );
+      });
 
-    await pdfModel.CreatePDF(
-      "Guide",
-      HtmlFinalizedSolicitation(solicitationById),
-      slugForSolicitation
+    const pathRelative = path.join(
+      __dirname,
+      "../../../../",
+      `infra/PDFs/${slugForSolicitation}.pdf`
     );
+
+    await createPDFDocument(solicitationById);
+
+    // await pdfModel.CreatePDF(
+    //   HtmlFinalizedSolicitation(solicitationById),
+    //   slugForSolicitation
+    // );
 
     setTimeout(async () => {
       const dataSendEmail: ReceiverMailDTO = {
-        to: ` 
+        to: `
           r.k.ofc2@gmail.com,
           ${solicitationById.pet.customer.email},
           ${emailVeterinarian && emailVeterinarian}
         `,
         subject: `Finalização Guia RK do Pet ${solicitationById.pet.name}`,
         html: HtmlMailContent,
-        pathFile: `./src/infra/PDFs/Guide/${slugForSolicitation}.pdf`,
+        pathFile: pathRelative,
       };
 
       await sendMessageWithWhatsApp.execute(
@@ -70,7 +85,7 @@ export default class FinalizeSolicitationUseCase {
       await this.sendMailUseCase.execute(dataSendEmail).catch((err) => {
         throw new Error(err);
       });
-    }, 2000);
+    }, 3000);
 
     return {
       message:

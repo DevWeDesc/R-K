@@ -1,12 +1,16 @@
 import { create } from "html-pdf";
+import path from "path";
 
 export default class PdfModel {
-  public CreatePDF(pathFile: string, contentFile: string, nameFile: string) {
-    create(contentFile, {}).toFile(
-      `./src/infra/PDfs/${pathFile}/${nameFile}.pdf`,
-      (err: any, res: any) => {
-        if (err) console.log("erro ao criar pdf");
-      }
+  public CreatePDF(contentFile: string, nameFile: string) {
+    const pathRelative = path.join(
+      __dirname,
+      "../../../",
+      `infra/PDFs/${nameFile}.pdf`
     );
+
+    create(contentFile, {}).toFile(pathRelative, (err: any, res: any) => {
+      if (err) console.log("erro ao criar pdf");
+    });
   }
 }

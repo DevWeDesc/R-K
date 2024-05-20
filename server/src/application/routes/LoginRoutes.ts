@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
-import { LoginController } from "../controllers/LoginController";
 import { AuthMiddleware } from "../middlewares/Auth";
+import { LoginController } from "../controllers/LoginController";
 
 export async function usersRoutes(app: FastifyInstance) {
   app.get("/hello", LoginController.TestRoute);
