@@ -3,7 +3,7 @@ export interface SolicitationModel {
   slug: string | null;
   createdIn: Date;
   isFinished: boolean;
-  finishedIn: Date | null;
+  finishedIn: Date;
   observation: string | null;
   veterinariansId: number;
   veterinarians: {
