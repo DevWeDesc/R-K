@@ -3,10 +3,7 @@ import { ZodType, z } from "zod";
 
 export const RegisterSchema: ZodType<IRegisterForm> = z.object({
   name: z.string().min(1, { message: "O campo nome é obrigatório" }),
-  crmv: z
-    .string()
-    .min(5, { message: "CRMV inválido" })
-    .max(5, { message: "CRMV inválido" }),
+  crmv: z.string().length(5, { message: "Numeração de CRMV inválida" }),
   email: z.string().email({ message: "E-mail informado é inválido!" }),
   phone: z.string().min(1, { message: "O campo Telefone é obrigatório" }),
   state: z.string().min(1, { message: "O campo Estado é obrigatório" }),
