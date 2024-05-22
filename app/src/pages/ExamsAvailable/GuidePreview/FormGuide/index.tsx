@@ -34,14 +34,14 @@ export const FormGuide = ({
   const onSubmit = async (data: IFormFinalizationGuide) => {
     const { emailVeterinarian } = data;
     setIsLoading(true);
-    id &&
-      (await FinalizeSolicitation(id, emailVeterinarian, observation).then(
+    if (id)
+      await FinalizeSolicitation(id, emailVeterinarian, observation).then(
         () => {
           toast.success("Guia finalizada com sucesso! Enviada pelo email");
           navigate("/home");
           setIsLoading(false);
         }
-      ));
+      );
   };
 
   return (

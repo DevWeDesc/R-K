@@ -98,17 +98,22 @@ export const FormRegister = () => {
           <div>
             <Input {...register("name")} placeholder="Nome" />
             {errors.name && (
-              <p className="text-xs pl-4 text-red-700">{errors.name.message}</p>
+              <p className="text-xs pl-2 text-red-700 font-medium">
+                {errors.name.message}
+              </p>
             )}
           </div>
           <div>
             <Input
+              type="number"
               maxLength={5}
               {...register("crmv")}
               placeholder="Númeração do CRMV"
             />
             {errors.crmv && (
-              <p className="text-xs pl-4 text-red-700">{errors.crmv.message}</p>
+              <p className="text-xs pl-2 text-red-700 font-medium">
+                {errors.crmv.message}
+              </p>
             )}
           </div>
         </div>
@@ -116,7 +121,7 @@ export const FormRegister = () => {
           <div>
             <Input {...register("email")} placeholder="E-mail" />
             {errors.email && (
-              <p className="text-xs pl-4 text-red-700">
+              <p className="text-xs pl-2 text-red-700 font-medium">
                 {errors.email.message}
               </p>
             )}
@@ -124,7 +129,7 @@ export const FormRegister = () => {
           <div>
             <Input {...register("phone")} placeholder="Telefone" />
             {errors.phone && (
-              <p className="text-xs pl-4 text-red-700">
+              <p className="text-xs pl-2 text-red-700 font-medium">
                 {errors.phone.message}
               </p>
             )}
@@ -197,7 +202,7 @@ export const FormRegister = () => {
               )}
             </div>
             {errors.password && (
-              <p className="text-xs pl-4 text-red-700">
+              <p className="text-xs pl-2 text-red-700 font-medium">
                 {errors.password.message}
               </p>
             )}
@@ -232,7 +237,7 @@ export const FormRegister = () => {
               )}
             </div>
             {errors.confirmationPassword && (
-              <p className="text-xs pl-4 text-red-700">
+              <p className="text-xs pl-2 text-red-700 font-medium">
                 {errors.confirmationPassword.message}
               </p>
             )}
