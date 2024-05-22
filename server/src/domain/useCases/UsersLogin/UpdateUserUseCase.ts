@@ -21,7 +21,7 @@ export default class UpdateUserUseCase {
     if (!userbyId) throw new Error("Usuário inserido não é valido!");
 
     const randomSalt = randomInt(10, 16);
-    const passwordHashed = await hash(userbyId.password, randomSalt);
+    const passwordHashed = await hash(LoginRequestDTO.password, randomSalt);
 
     LoginRequestDTO.password = passwordHashed;
 
