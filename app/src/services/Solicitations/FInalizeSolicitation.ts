@@ -5,9 +5,9 @@ import { headerRequest } from "../UserLocal";
 export const FinalizeSolicitation = async (
   idSolicitation: string,
   emailVeterinarian: string,
-  observations: string
+  observation: string
 ): Promise<AxiosResponse> => {
-  const dataRequest = { isFinished: true, emailVeterinarian, observations };
+  const dataRequest = { isFinished: true, emailVeterinarian, observation };
   return await api.patch(
     `/solicitations/${idSolicitation}`,
     dataRequest,
