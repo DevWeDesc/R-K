@@ -1,4 +1,4 @@
-const userLoged = JSON.parse(localStorage?.user);
+const userLoged = localStorage.user ? JSON.parse(localStorage?.user) : null;
 export const headerRequest = {
   headers: {
     Authorization: `Bearer ${userLoged?.token}`,
