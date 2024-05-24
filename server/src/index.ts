@@ -27,6 +27,7 @@ import PDFPerSolicitationUseCase from "./domain/useCases/Solicitations/PDFPerSol
 import AutenticationUserUseCase from "./domain/useCases/UsersLogin/AutenticationUserUseCase";
 import { CreateLoginUseCase } from "./domain/useCases/UsersLogin/CreateLoginUseCase";
 import DeleteLoginUseCase from "./domain/useCases/UsersLogin/DeleteLoginUseCase";
+import { ForgetPasswordUseCase } from "./domain/useCases/UsersLogin/ForgetPasswordUseCase";
 import { GetAllLoginsUseCase } from "./domain/useCases/UsersLogin/GetAllUsersUseCase";
 import { GetUniqueUserUseCase } from "./domain/useCases/UsersLogin/GetUniqueUserUseCase";
 import UpdateUserUseCase from "./domain/useCases/UsersLogin/UpdateUserUseCase";
@@ -42,9 +43,9 @@ import ExamsInPetOnSolicitationsRepository from "./infra/repositories/ExamsInPet
 import GroupRepository from "./infra/repositories/Groups/GroupRepository";
 import PetsRepository from "./infra/repositories/Pets/PetsRepository";
 import SolicitationsRepository from "./infra/repositories/Solicitations/SolicitationsRepository";
-import { UserLoginRepository } from "./infra/repositories/UserLogin/UserLoginRepository";
 import { VeterinarianRepository } from "./infra/repositories/Veterinarian/VeterinarianRepository";
 import TokenGenerate from "./utils/jwt/TokenGenerate";
+import { UserLoginRepository } from "./infra/repositories/UserLogin/UserLoginRepository";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -171,6 +172,11 @@ export const mailModel = new MailModel(
 );
 
 export const sendMailUseCase = new SendMailUseCase(mailModel);
+
+export const forgetPasswordUseCase = new ForgetPasswordUseCase(
+  veterinarianRepository,
+  sendMailUseCase
+);
 
 export const finalizeSolicitationUseCase = new FinalizeSolicitationUseCase(
   solicitationsRepository,
