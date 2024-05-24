@@ -1,11 +1,9 @@
 import { UsersLogin } from "@prisma/client";
 import { prisma } from "../../../lib/prismaClient";
 import { IUserLoginModel } from "../../../domain/models/UserLogin";
-import { IGenericRepository } from "../IGenericRepository";
+import { IUserLoginRepository } from "./IUserLoginRepository";
 
-export class UserLoginRepository
-  implements IGenericRepository<UsersLogin, UsersLogin>
-{
+export class UserLoginRepository implements IUserLoginRepository {
   public async listAll(): Promise<UsersLogin[]> {
     return await prisma.usersLogin.findMany();
   }
