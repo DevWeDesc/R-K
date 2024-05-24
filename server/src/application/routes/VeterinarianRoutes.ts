@@ -8,6 +8,11 @@ export async function veterinarianRoutes(app: FastifyInstance) {
     { preHandler: AuthMiddleware },
     VeterinarianController.GetVeterinarianQuery
   );
+  app.post(
+    "/veterinarian/forgotPassword",
+
+    VeterinarianController.ForgotPassword
+  );
   app.get(
     "/veterinarian/solicitations",
     { preHandler: AuthMiddleware },

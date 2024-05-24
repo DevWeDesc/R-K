@@ -1,11 +1,27 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import {
   deleteVeterinarianUseCase,
+  forgetPasswordUseCase,
   getAllVeterinariansUseCase,
   getSolicitationsByVeterinarian,
 } from "../..";
 
 export const VeterinarianController = {
+  ForgotPassword: async (
+    request: FastifyRequest<{
+      Body: { email: string };
+    }>,
+    reply: FastifyReply
+  ) => {
+    const { email } = request.body;
+    try {
+      const res = await forgetPasswordUseCase.execute(email);
+      return reply.code(201).send(res);
+    } catch (err) {
+      return reply.code(400).send(err);
+    }
+  },
+
   GetVeterinarianQuery: async (
     request: FastifyRequest<{
       Querystring: { email?: string; id?: string; crmv?: string };
