@@ -11,11 +11,16 @@ export const ForgotPassword = () => {
     sendCodeByEmail: true,
   } as ICardDisplayableInForgotPassword);
 
+  const cookieSection = !Cookies.get("forgotPasswordPage")
+    ? Cookies.set("forgotPasswordPage", "")
+    : Cookies.get("forgotPasswordPage");
+
   return (
     <>
       <Header navIsVisible={false} />
       <div className="h-[88dvh] flex justify-center items-center">
-        {Cookies.get("forgotPasswordPage") === "sendCodeByEmail" && (
+        {(cookieSection === "sendCodeByEmail" ||
+          cookieSection?.length === 0) && (
           <FormSendCodeEmail
             cardExible={cardExible}
             setCardExible={(ev) => setCardExible(ev)}
