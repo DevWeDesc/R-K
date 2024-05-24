@@ -10,18 +10,28 @@ export default class SendMailUseCase {
 
     const transporter = await this.mailModel.createTransportMail();
 
-    const sendEmailResponse = await transporter.sendMail({
-      from: this.mailModel.getEmail(),
-      to,
-      subject,
-      text,
-      html,
-      attachments: [
-        {
-          path: pathFile,
-        },
-      ],
-    });
+    let sendEmailResponse;
+    if (pathFile)
+      sendEmailResponse = sendEmailResponse = await transporter.sendMail({
+        from: this.mailModel.getEmail(),
+        to,
+        subject,
+        text,
+        html,
+        attachments: [
+          {
+            path: pathFile,
+          },
+        ],
+      });
+    else
+      sendEmailResponse = sendEmailResponse = await transporter.sendMail({
+        from: this.mailModel.getEmail(),
+        to,
+        subject,
+        text,
+        html,
+      });
 
     return sendEmailResponse;
   }
