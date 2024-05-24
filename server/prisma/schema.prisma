@@ -36,7 +36,6 @@ model Customers {
   name  String
   email String @unique
   phone String @unique
-  cpf   String @unique
   pets  Pets[]
 }
 

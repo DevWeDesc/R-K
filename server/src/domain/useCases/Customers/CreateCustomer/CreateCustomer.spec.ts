@@ -13,7 +13,6 @@ describe("Create Customer Tests", () => {
      *fazendo a validação do cadastro
      */
     const data: CustomerRequestDTO = {
-      cpf: "",
       name: "Vinicius",
       email: "vinicius@example",
       phone: "(11) 99999-9990",
@@ -30,7 +29,6 @@ describe("Create Customer Tests", () => {
      *o erro EmailAlreadyUSed é disparado fazendo a validação do cadastro
      */
     const data: CustomerRequestDTO = {
-      cpf: "",
       name: "Vinicius",
       email: "vinicius@gmail.com",
       phone: "(11) 90000-0000",
@@ -47,7 +45,6 @@ describe("Create Customer Tests", () => {
      *o erro PhoneAlreadyUsed é disparado fazendo a validação do cadastro
      */
     const data: CustomerRequestDTO = {
-      cpf: "",
       name: "Exists Phone",
       email: "existsPhone@gmail.com",
       phone: "(11) 99999-9999",

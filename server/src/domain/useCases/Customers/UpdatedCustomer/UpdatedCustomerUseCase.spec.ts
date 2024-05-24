@@ -5,7 +5,6 @@ import EmailAlreadyUsedError from "../../../errors/Customers/EmailAlreadyUsedErr
 describe("UpdatedCustomer Test", () => {
   test("Validation Email Exists", async () => {
     const data: CustomerRequestDTO = {
-      cpf: "",
       name: "Dr. Daniel",
       email: "draniel@gmail.com",
       phone: "(11) 99999-9998",

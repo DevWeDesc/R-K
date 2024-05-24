@@ -22,12 +22,6 @@ export default class CreateCustomersUseCase {
         if (res) throw new PhoneAlreadyUsedError();
       });
 
-    await this.customerRepositories
-      .findByCpf(customerRequestDTO.cpf)
-      .then((res) => {
-        if (res) throw new Error("Já existe esse CPF no sistema!");
-      });
-
     const clientCreatted = await this.customerRepositories.create(
       customerRequestDTO
     );

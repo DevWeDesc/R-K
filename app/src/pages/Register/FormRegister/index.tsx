@@ -40,13 +40,22 @@ export const FormRegister = () => {
   } = useForm<IRegisterForm>({ resolver: zodResolver(RegisterSchema) });
 
   const handleCreateNewUser = handleSubmit(async (data) => {
-    let { confirmationPassword, password, crmv, email, name, phone, state } =
-      data;
+    let {
+      confirmationPassword,
+      password,
+      crmv,
+      email,
+      name,
+      lastname,
+      phone,
+      state,
+    } = data;
 
     const acronymState = state.substring(0, 2);
     const stateCustomer = state.substring(5, state.length);
 
     crmv = `${acronymState}-${crmv}`;
+    name = `${name} ${lastname}`;
 
     if (password != confirmationPassword)
       return toast.error("As senhas não coincidem!");
@@ -104,6 +113,51 @@ export const FormRegister = () => {
             )}
           </div>
           <div>
+            <Input {...register("lastname")} placeholder="Sobrenome" />
+            {errors.lastname && (
+              <p className="text-xs pl-2 text-red-700 font-medium">
+                {errors.lastname.message}
+              </p>
+            )}
+          </div>
+          <Controller
+            name="state"
+            control={control}
+            defaultValue="SP - São Paulo"
+            render={({ field }) => (
+              <>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue="SP - São Paulo"
+                >
+                  <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
+                    <SelectValue
+                      defaultValue="SP - São Paulo"
+                      placeholder="São Paulo"
+                      {...field}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {StatesMock.map((state) => (
+                        <SelectItem
+                          key={state.acronym}
+                          value={`${state.acronym} - ${state.state}`}
+                        >
+                          {state.state}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {errors.state && (
+                  <InputRequiredError className="px-4" inputName="Estado" />
+                )}
+              </>
+            )}
+          />
+
+          <div>
             <Input
               type="number"
               maxLength={5}
@@ -135,43 +189,6 @@ export const FormRegister = () => {
             )}
           </div>
         </div>
-
-        <Controller
-          name="state"
-          control={control}
-          defaultValue="SP - São Paulo"
-          render={({ field }) => (
-            <>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue="SP - São Paulo"
-              >
-                <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
-                  <SelectValue
-                    defaultValue="SP - São Paulo"
-                    placeholder="São Paulo"
-                    {...field}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {StatesMock.map((state) => (
-                      <SelectItem
-                        key={state.acronym}
-                        value={`${state.acronym} - ${state.state}`}
-                      >
-                        {state.state}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              {errors.state && (
-                <InputRequiredError className="px-4" inputName="Estado" />
-              )}
-            </>
-          )}
-        />
 
         <div className="grid grid-cols-2 gap-2">
           <div>

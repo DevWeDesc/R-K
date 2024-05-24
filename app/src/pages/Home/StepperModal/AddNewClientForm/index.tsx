@@ -15,7 +15,7 @@ interface ISubmitNewClient {
   name: string;
   email: string;
   phone: string;
-  cpf: string;
+  // cpf: string;
 }
 
 export const AddNewClientForm = ({
@@ -31,12 +31,11 @@ export const AddNewClientForm = ({
   } = useForm<ISubmitNewClient>();
 
   const handleSubmitNewClient = handleSubmit(async (value) => {
-    const { email, name, phone, cpf } = value;
+    const { email, name, phone } = value;
     const dataRequest = {
       email,
       name,
       phone,
-      cpf,
     };
     setIsLoading(true);
     await CreateCustomer(dataRequest)
@@ -76,12 +75,6 @@ export const AddNewClientForm = ({
       {errors.phone && (
         <InputRequiredError className="pl-4" inputName="Telefone" />
       )}
-      <Input
-        className="w-full"
-        {...register("cpf", { required: true })}
-        placeholder="999.999.999-99"
-      />
-      {errors.cpf && <InputRequiredError className="pl-4" inputName="CPF" />}
       <div className="grid grid-cols-2 gap-2">
         <Button
           variant="outline"

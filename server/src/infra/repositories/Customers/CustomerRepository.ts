@@ -4,18 +4,6 @@ import { CustomerRequestDTO } from "../../../application/DTOs/CustomersDTO/Custo
 import { ICustomerRepository } from "./ICustomerRepository";
 
 export default class CustomerRepository implements ICustomerRepository {
-  public async findByCpf(
-    cpf: string
-  ): Promise<{
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-    cpf: string;
-  } | null> {
-    return await prisma.customers.findUnique({ where: { cpf } });
-  }
-
   public async findByEmail(email: string): Promise<Customers | null> {
     return await prisma.customers.findUnique({
       where: { email },
