@@ -19,6 +19,9 @@ import { useQuery } from "react-query";
 import { GetCustomerById } from "@/services/Customers/GetCustomerById";
 import { ICreatePetRequestDTO } from "@/@interfaces/DTOs/Pet/CreatePetRequestDTO";
 import { CreatePet } from "@/services/Pets/CreatePet";
+import { CreateSolicitation } from "@/services/Solicitations/CreateSolicitation";
+import { ISolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/SolicitationRequestDTO";
+import { useNavigate } from "react-router-dom";
 
 type sexType = "Macho" | "Femea";
 
@@ -34,8 +37,9 @@ export const AddNewPetForm = ({
   functionPrimaryButton,
 }: IFormStepperModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const customerId = Cookies.get("customerCreated");
+  const vetLoged = JSON.parse(localStorage.user);
 
   const {
     register,
@@ -48,6 +52,43 @@ export const AddNewPetForm = ({
     queryFn: () => GetCustomerById(customerId ? customerId : ""),
   });
 
+  const handleCreateNewSolicitation = async (
+    dataRequest: ISolicitationRequestDTO
+  ) => {
+    await CreateSolicitation(dataRequest)
+      .then((res) => {
+        toast.success("Solicitação aberta com sucesso!");
+        setIsLoading(false);
+        navigate(`/exams/available/${res.data.id}`);
+      })
+      .catch((res) => {
+        toast.error(res.response.message);
+        setIsLoading(false);
+      });
+    functionPrimaryButton();
+    setIsLoading(false);
+  };
+
+  const handleCreatePet = async (
+    dataRequest: ICreatePetRequestDTO
+  ): Promise<ISolicitationRequestDTO | void> => {
+    await CreatePet(dataRequest)
+      .then(async (res) => {
+        toast.success("Pet Criado com sucesso!");
+
+        const veterinariansId = vetLoged.user.id;
+        const dataRequest: ISolicitationRequestDTO = {
+          petsId: parseInt(res.data.id.toString()),
+          veterinariansId,
+        };
+        await handleCreateNewSolicitation(dataRequest);
+      })
+      .catch(() => {
+        toast.error("Erro ao cadastrar Pet!");
+        setIsLoading(false);
+      });
+  };
+
   const handleSubmitNewClient = handleSubmit(async (value) => {
     const { specie, name, age, sex } = value;
     if (customerId) {
@@ -58,18 +99,8 @@ export const AddNewPetForm = ({
         sex,
         customerId: parseInt(customerId),
       };
-      console.log(dataRequest);
-      await CreatePet(dataRequest)
-        .then(() => {
-          toast.success("Pet Criado com sucesso!");
-          functionPrimaryButton();
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Erro ao cadastrar Pet!");
-          setIsLoading(false);
-        });
+
+      await handleCreatePet(dataRequest);
     }
   });
   return (
