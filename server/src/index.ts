@@ -27,7 +27,6 @@ import PDFPerSolicitationUseCase from "./domain/useCases/Solicitations/PDFPerSol
 import AutenticationUserUseCase from "./domain/useCases/UsersLogin/AutenticationUserUseCase";
 import { CreateLoginUseCase } from "./domain/useCases/UsersLogin/CreateLoginUseCase";
 import DeleteLoginUseCase from "./domain/useCases/UsersLogin/DeleteLoginUseCase";
-import { ForgetPasswordUseCase } from "./domain/useCases/UsersLogin/ForgetPasswordUseCase";
 import { GetAllLoginsUseCase } from "./domain/useCases/UsersLogin/GetAllUsersUseCase";
 import { GetUniqueUserUseCase } from "./domain/useCases/UsersLogin/GetUniqueUserUseCase";
 import UpdateUserUseCase from "./domain/useCases/UsersLogin/UpdateUserUseCase";
@@ -46,6 +45,9 @@ import SolicitationsRepository from "./infra/repositories/Solicitations/Solicita
 import { VeterinarianRepository } from "./infra/repositories/Veterinarian/VeterinarianRepository";
 import TokenGenerate from "./utils/jwt/TokenGenerate";
 import { UserLoginRepository } from "./infra/repositories/UserLogin/UserLoginRepository";
+import { ForgetPasswordUseCase } from "./domain/useCases/Veterinarians/ForgetPassword/ForgetPasswordUseCase";
+import VerifyCodeUseCase from "./domain/useCases/Veterinarians/ForgetPassword/VerifyCodeUseCase";
+import EditPasswordUseCase from "./domain/useCases/Veterinarians/ForgetPassword/EditPasswordUseCase";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -176,6 +178,14 @@ export const sendMailUseCase = new SendMailUseCase(mailModel);
 export const forgetPasswordUseCase = new ForgetPasswordUseCase(
   veterinarianRepository,
   sendMailUseCase
+);
+
+export const verifyCodeUseCase = new VerifyCodeUseCase(forgetPasswordUseCase);
+
+export const editPasswordUseCase = new EditPasswordUseCase(
+  forgetPasswordUseCase,
+  veterinarianRepository,
+  userLoginRepository
 );
 
 export const finalizeSolicitationUseCase = new FinalizeSolicitationUseCase(
