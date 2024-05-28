@@ -1,9 +1,11 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import {
   deleteVeterinarianUseCase,
+  editPasswordUseCase,
   forgetPasswordUseCase,
   getAllVeterinariansUseCase,
   getSolicitationsByVeterinarian,
+  verifyCodeUseCase,
 } from "../..";
 
 export const VeterinarianController = {
@@ -16,6 +18,36 @@ export const VeterinarianController = {
     const { email } = request.body;
     try {
       const res = await forgetPasswordUseCase.execute(email);
+      return reply.code(201).send(res);
+    } catch (err) {
+      return reply.code(400).send(err);
+    }
+  },
+
+  VerifyCode: async (
+    request: FastifyRequest<{
+      Body: { code: string };
+    }>,
+    reply: FastifyReply
+  ) => {
+    const { code } = request.body;
+    try {
+      const res = await verifyCodeUseCase.execute(code);
+      return reply.code(201).send(res);
+    } catch (err) {
+      return reply.code(400).send(err);
+    }
+  },
+
+  EditPassword: async (
+    request: FastifyRequest<{
+      Body: { password: string };
+    }>,
+    reply: FastifyReply
+  ) => {
+    const { password } = request.body;
+    try {
+      const res = await editPasswordUseCase.execute(password);
       return reply.code(201).send(res);
     } catch (err) {
       return reply.code(400).send(err);

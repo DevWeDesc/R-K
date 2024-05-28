@@ -10,9 +10,10 @@ export async function veterinarianRoutes(app: FastifyInstance) {
   );
   app.post(
     "/veterinarian/forgotPassword",
-
     VeterinarianController.ForgotPassword
   );
+  app.post("/veterinarian/verifyCode", VeterinarianController.VerifyCode);
+  app.patch("/veterinarian/editPassword", VeterinarianController.EditPassword);
   app.get(
     "/veterinarian/solicitations",
     { preHandler: AuthMiddleware },
