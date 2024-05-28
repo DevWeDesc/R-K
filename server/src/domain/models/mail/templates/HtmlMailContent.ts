@@ -11,8 +11,7 @@ export const HtmlMailContent = `
     <div>
     <h3>Os procedimentos foram realizados com sucesso!</h3>
     <br>
-    <p>Mandamos dois pdfs para esse E-mail, um pdf contendo os dados da guia que contém: Data de Realização, dados do animal, observações e dados do Veterinário.</p>
-    <p>O segundo pdf contém o preparo para os exames, os preparos devem ser seguidos para realizarmos os exames da melhor maneira possivel com os melhores resultados!</p>
+    <p>Mandamos o PDF para esse E-mail, contendo os dados da guia que contém: Dados do tutor, data de Realização, dados do animal, listagem de exames com preparo, observações e dados do veterinário.</p>
   </div>
 </body>
 `;

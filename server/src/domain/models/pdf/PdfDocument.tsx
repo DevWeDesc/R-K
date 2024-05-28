@@ -97,10 +97,6 @@ const PDF = ({ data }: PDFProps) => {
               </View>
             </View>
             <View style={styles.containerChild}>
-              <Text style={styles.paragraphBold}>CPF: </Text>
-              <Text style={styles.paragraph}>{data.pet.customer.cpf}</Text>
-            </View>
-            <View style={styles.containerChild}>
               <Text style={styles.paragraphBold}>E-mail: </Text>
               <Text style={styles.paragraph}>{data.pet.customer.email}</Text>
             </View>

@@ -8,7 +8,6 @@ export const FormatterMessageFromWhatsApp = (
   return `
 *Nome do Tutor*: ${solicitationModel.pet.customer.name}
 *Data e Hora*: ${FormatedDate(new Date(), "short", "medium")}
-*CPF*: ${solicitationModel.pet.customer.cpf}
 *E-mail*: ${solicitationModel.pet.customer.email}
 
 *Dados do Pet*
