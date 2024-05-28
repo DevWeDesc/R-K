@@ -1,4 +1,3 @@
-import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TfiKey } from "react-icons/tfi";
@@ -8,6 +7,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { IFormForgetPasswordProps } from "@/@interfaces/ForgotPasword/FormForgetPassword";
 import Cookies from "js-cookie";
+import { VerifyCodeServices } from "@/services/User/ForgotPassword/VerifyCodeServices";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { VerifyCodeSchema } from "@/schemas/VerifyCodeSchema";
 
 export const FormVerifyCode = ({
   cardExible,
@@ -17,16 +19,24 @@ export const FormVerifyCode = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IForgotPassword>();
-  const handleVerifyCode = handleSubmit((data) => {
+  } = useForm<IForgotPassword>({ resolver: zodResolver(VerifyCodeSchema) });
+
+  const handleVerifyCode = handleSubmit(async (data) => {
+    const { code } = data;
+    if (!code) return toast.error("Não foi informado nenhum código!");
+
     const handleSubmitVerifyCode = {
-      code: data.code,
+      code,
     };
-    console.log(handleSubmitVerifyCode);
-    Cookies.set("forgotPasswordPage", "EditPassword");
-    toast.success(`Verificação executada com sucesso!`);
-    setCardExible({ ...cardExible, VerifyCode: false, EditPassword: true });
+    await VerifyCodeServices(handleSubmitVerifyCode)
+      .then(() => {
+        Cookies.set("forgotPasswordPage", "EditPassword");
+        toast.success(`Verificação executada com sucesso!`);
+        setCardExible({ ...cardExible, VerifyCode: false, EditPassword: true });
+      })
+      .catch(() => toast.error("Erro ao enviar código"));
   });
+
   return (
     <CardForgotPassword
       icon={<TfiKey size={81} />}
@@ -41,10 +51,14 @@ export const FormVerifyCode = ({
         <div className="flex flex-col gap-4 w-full">
           <Input
             className="w-full"
-            {...register("code", { required: true })}
+            {...register("code")}
             placeholder="Código de Verificação"
           />
-          {errors.code && <InputRequiredError inputName="E-mail" />}
+          {errors.code && (
+            <p className="pl-2 text-xs text-red-700 font-medium">
+              {errors.code.message}
+            </p>
+          )}
         </div>
         <Button type="submit" className="w-full">
           Verificar Código

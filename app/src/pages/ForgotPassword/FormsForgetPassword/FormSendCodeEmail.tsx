@@ -1,4 +1,3 @@
-import { InputRequiredError } from "@/components/Errors/InputRequiredError";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CiLock } from "react-icons/ci";
@@ -8,6 +7,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { IFormForgetPasswordProps } from "@/@interfaces/ForgotPasword/FormForgetPassword";
 import Cookies from "js-cookie";
+import { SendCodeForEmailService } from "@/services/User/ForgotPassword/SendCodeForEmailService";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SendCodeForEmailSchema } from "@/schemas/SendCodeForEmailSchema";
 
 export const FormSendCodeEmail = ({
   cardExible,
@@ -17,19 +20,31 @@ export const FormSendCodeEmail = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IForgotPassword>();
+  } = useForm<IForgotPassword>({
+    resolver: zodResolver(SendCodeForEmailSchema),
+  });
 
   Cookies.set("forgotPasswordPage", "sendCodeByEmail");
 
-  const handleSendCodeForEmail = handleSubmit((data) => {
+  const handleSendCodeForEmail = handleSubmit(async (data) => {
+    const { email } = data;
+
+    if (!email) return toast.error("Não foi informado nenhum email!");
+
     const handleSubmitCode = {
-      Email: data.email,
+      email,
     };
-    console.log(handleSubmitCode);
-    Cookies.set("forgotPasswordPage", "VerifyCode");
-    toast.success(`Código enviado com sucesso para o E-mail ${data.email}`);
-    setCardExible({ ...cardExible, sendCodeByEmail: false, VerifyCode: true });
+    await SendCodeForEmailService(handleSubmitCode).then(() => {
+      Cookies.set("forgotPasswordPage", "VerifyCode");
+      toast.success(`Código enviado com sucesso para o E-mail ${data.email}`);
+      setCardExible({
+        ...cardExible,
+        sendCodeByEmail: false,
+        VerifyCode: true,
+      });
+    });
   });
+
   return (
     <CardForgotPassword
       icon={<CiLock size={81} />}
@@ -41,13 +56,17 @@ export const FormSendCodeEmail = ({
         onSubmit={handleSendCodeForEmail}
         className="flex flex-col items-center gap-4 w-full"
       >
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col gap-2 w-full">
           <Input
             className="w-full"
-            {...register("email", { required: true })}
+            {...register("email")}
             placeholder="E-mail"
           />
-          {errors.email && <InputRequiredError inputName="E-mail" />}
+          {errors.email && (
+            <p className="text-xs pl-2 text-red-700 font-medium">
+              {errors.email.message}
+            </p>
+          )}
         </div>
         <Button type="submit" className="w-full">
           Enviar Código

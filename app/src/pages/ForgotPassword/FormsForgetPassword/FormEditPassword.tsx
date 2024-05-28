@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
 import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
+import { EditPasswordService } from "@/services/User/ForgotPassword/EditPasswordService";
 
 export const FormEditPassword = ({
   cardExible,
@@ -30,25 +31,31 @@ export const FormEditPassword = ({
     formState: { errors },
   } = useForm<IForgotPassword>();
 
-  const handleEditPassword = handleSubmit((data) => {
-    const handleSubmitVerifyCode = {
-      password: data.password,
+  const handleEditPassword = handleSubmit(async (data) => {
+    const { confirmPassword, password } = data;
+
+    if (!password || !confirmPassword)
+      return toast.error("É obrigatório preencher todos os campos!");
+
+    if (password != confirmPassword)
+      return toast.error(`As senhas não coincidem!`);
+
+    const handleSubmitPassword = {
+      password,
     };
 
-    console.log(handleSubmitVerifyCode);
-
-    if (data.password != data.confirmPassword) {
-      toast.error(`As senhas não coincidem!`);
-    } else {
-      toast.success(`Sua senha foi alterada com sucesso!`);
-      navigate("/");
-      Cookies.set("forgotPasswordPage", "sendCodeByEmail");
-      setCardExible({
-        ...cardExible,
-        EditPassword: false,
-        sendCodeByEmail: true,
-      });
-    }
+    await EditPasswordService(handleSubmitPassword)
+      .then(() => {
+        toast.success(`Sua senha foi alterada com sucesso!`);
+        navigate("/");
+        Cookies.set("forgotPasswordPage", "sendCodeByEmail");
+        setCardExible({
+          ...cardExible,
+          EditPassword: false,
+          sendCodeByEmail: true,
+        });
+      })
+      .catch(() => toast.error("Erro ao editar a senha!"));
   });
 
   const handleVisibilityPassword = () => {
