@@ -5,8 +5,11 @@ import { ExamsRequestDTO } from "../../../application/DTOs/ExamsDTO/ExamsRequest
 
 export default class ExamsRepository implements IExamsRepository {
   public async getByName(name: string, pageActual?: number): Promise<Exams[]> {
+    const firstLetterSearch = name.substring(0, 1).toUpperCase();
+    const nameSearch = firstLetterSearch.concat(name.substring(1, name.length));
+
     return await prisma.exams.findMany({
-      where: { name: { contains: name } },
+      where: { name: { contains: nameSearch } },
       skip: pageActual ? (pageActual - 1) * 10 : 0,
       take: 10,
     });

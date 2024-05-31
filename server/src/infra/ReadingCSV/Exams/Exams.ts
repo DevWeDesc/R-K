@@ -55,13 +55,18 @@ const AddInstructions = async (dataExams: IDataInstructions[]) => {
 const PopullateExams = async (dataExams: IDataExams[]) => {
   for (const exam of dataExams) {
     const { deadline, deadlineInDays, name, value, id } = exam;
+    const primaryLetter = name.substring(0, 1).toUpperCase();
+
+    const nameFormatted = primaryLetter.concat(
+      name.substring(1, name.length).toLocaleLowerCase()
+    );
 
     const deadlineFormatted = `${deadline} ${deadlineInDays}`;
 
     await prisma.exams.findUnique({ where: { id } }).then(async (res) => {
       if (!res)
         await prisma.exams.create({
-          data: { name, deadline: deadlineFormatted, value, id },
+          data: { name: nameFormatted, deadline: deadlineFormatted, value, id },
         });
     });
   }
