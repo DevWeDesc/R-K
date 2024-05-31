@@ -133,8 +133,8 @@ const PDF = ({ data }: PDFProps) => {
           >
             <View>
               <Text style={styles.heading}>Exames Solicitados</Text>
-              {data.exams.map((exam) => (
-                <View style={{ marginTop: 10 }}>
+              {data.exams.map((exam, index) => (
+                <View key={index} style={{ marginTop: 10 }}>
                   <Text style={styles.paragraph}>- {exam.Exams.name}</Text>
                   <View style={styles.containerChild}>
                     <Text style={styles.paragraphBold}>Preparo: </Text>
