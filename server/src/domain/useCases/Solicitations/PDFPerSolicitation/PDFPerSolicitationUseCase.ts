@@ -7,7 +7,7 @@ export default class PDFPerSolicitationUseCase {
   public async execute(namePdf: string) {
     const pathFile = path.join(
       __dirname,
-      "../../../",
+      "../../../../../",
       `src/infra/PDFs/${namePdf}.pdf`
     );
 
