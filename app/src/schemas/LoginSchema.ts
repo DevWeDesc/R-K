@@ -3,7 +3,7 @@ import { ZodType, z } from "zod";
 
 export const LoginSchema: ZodType<ILoginUser> = z.object({
   state: z.string().min(1, { message: "O campo senha é obrigatório!" }),
-  crmv: z.string().length(5, { message: "Numeração de CRMV inválida" }),
+  crmv: z.string().length(6, { message: "Numeração de CRMV inválida" }),
   email: z
     .string()
     .email({ message: "O E-mail informado é inválido!" })
