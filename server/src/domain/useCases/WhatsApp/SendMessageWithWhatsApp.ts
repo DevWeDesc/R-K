@@ -1,3 +1,5 @@
+import { FormatterPhone } from "../../../utils/FormatterPhone";
+
 const twilioClient = require("twilio")(
   process.env.ACCOUNTSIDWHATS as string,
   process.env.AUTHTOKENWHATS as string
@@ -9,7 +11,7 @@ export default class SendMessageWithWhatsApp {
     numberReceiver: string,
     pathMedia?: string
   ) {
-    numberReceiver = numberReceiver.replace(/[()\s]/g, "").replace(" ", "");
+    numberReceiver = FormatterPhone(numberReceiver);
 
     await twilioClient.messages
       .create({
