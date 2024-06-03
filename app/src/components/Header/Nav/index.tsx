@@ -29,6 +29,7 @@ export const Nav = ({ menuOpen }: INavProp) => {
 
   const handleCloseSessionUser = () => {
     Cookies.remove("userRole");
+    localStorage.user = null;
     toast.success("Sessão encerrada com sucesso!");
     navigate("/");
   };

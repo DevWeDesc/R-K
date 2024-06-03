@@ -36,7 +36,7 @@ export const FormOfAddNewExam = ({ setModalIsOpen }: IFormOfAddNewExam) => {
     const { deadline, name, preparing, value } = valueForm;
     const dataRequest: ICreateExamRequestDTO = {
       name,
-      value: parseInt(value),
+      value: parseFloat(value),
       preparing,
       deadline,
     };
