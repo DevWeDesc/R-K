@@ -32,8 +32,8 @@ export const ExamsController = {
   ) => {
     try {
       const { body } = request;
-      await createExamsUseCase.execute(body);
-      return reply.code(201).send();
+      const res = await createExamsUseCase.execute(body);
+      return reply.code(201).send(res);
     } catch (err) {
       return reply.code(400).send(err);
     }
