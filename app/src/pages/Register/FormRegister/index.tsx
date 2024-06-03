@@ -23,6 +23,8 @@ import { IRegisterAccountDTO } from "@/@interfaces/DTOs/User/RegisterAccountDTO"
 import { userRoleEnum } from "@/enums/UserRoleEnum";
 import { ImSpinner8 } from "react-icons/im";
 import { StatesMock } from "@/mocks/StatesMock";
+import { PhoneMask } from "@/utils/Masks/PhoneMask";
+import { CRMVMask } from "@/utils/Masks/CRMVMask";
 
 export const FormRegister = () => {
   const navigate = useNavigate();
@@ -36,6 +38,8 @@ export const FormRegister = () => {
     register,
     handleSubmit,
     control,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<IRegisterForm>({ resolver: zodResolver(RegisterSchema) });
 
@@ -100,6 +104,14 @@ export const FormRegister = () => {
     });
   };
 
+  const handleChangePhone = (phone: string) => {
+    setValue("phone", PhoneMask(phone));
+  };
+
+  const handleChangeCRMV = (crmv: string) => {
+    setValue("crmv", CRMVMask(crmv));
+  };
+
   return (
     <form onSubmit={handleCreateNewUser} className="flex flex-col gap-4 w-full">
       <div className="flex flex-col gap-3">
@@ -159,10 +171,10 @@ export const FormRegister = () => {
 
           <div>
             <Input
-              type="number"
-              maxLength={5}
               {...register("crmv")}
               placeholder="Númeração do CRMV"
+              onChange={(ev) => handleChangeCRMV(ev.target.value)}
+              value={getValues("crmv")}
             />
             {errors.crmv && (
               <p className="text-xs pl-2 text-red-700 font-medium">
@@ -181,7 +193,12 @@ export const FormRegister = () => {
             )}
           </div>
           <div>
-            <Input {...register("phone")} placeholder="Telefone" />
+            <Input
+              {...register("phone")}
+              placeholder="Telefone"
+              value={getValues("phone")}
+              onChange={(ev) => handleChangePhone(ev.target.value)}
+            />
             {errors.phone && (
               <p className="text-xs pl-2 text-red-700 font-medium">
                 {errors.phone.message}

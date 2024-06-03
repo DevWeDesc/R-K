@@ -20,6 +20,7 @@ import {
 import { StatesMock } from "@/mocks/StatesMock";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/schemas/LoginSchema";
+import { CRMVMask } from "@/utils/Masks/CRMVMask";
 
 export const FormLogin = () => {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ export const FormLogin = () => {
     register,
     control,
     handleSubmit,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<ILoginUser>({ resolver: zodResolver(LoginSchema) });
 
@@ -65,6 +68,10 @@ export const FormLogin = () => {
     setInputPasswordIsVisible((prev) => (prev ? false : true));
   };
 
+  const handleChangeCRMV = (crmv: string) => {
+    setValue("crmv", CRMVMask(crmv));
+  };
+
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4 w-full">
       <div className="flex flex-col gap-3">
@@ -99,8 +106,9 @@ export const FormLogin = () => {
           />
           <Input
             {...register("crmv")}
-            type="number"
             placeholder="Numeração do CRMV"
+            onChange={(ev) => handleChangeCRMV(ev.target.value)}
+            value={getValues("crmv")}
           />
           {errors.crmv && (
             <div className="col-start-2">

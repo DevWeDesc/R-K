@@ -10,6 +10,7 @@ import { CreateCustomer } from "@/services/Customers/CreateCustomer";
 import { AxiosResponse } from "axios";
 import { ICustomer } from "@/@interfaces/ICustomer";
 import Cookies from "js-cookie";
+import { PhoneMask } from "@/utils/Masks/PhoneMask";
 
 interface ISubmitNewClient {
   name: string;
@@ -27,6 +28,7 @@ export const AddNewClientForm = ({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ISubmitNewClient>();
 
@@ -51,6 +53,11 @@ export const AddNewClientForm = ({
         setIsLoading(false);
       });
   });
+
+  const handleChangePhone = (phone: string) => {
+    setValue("phone", PhoneMask(phone));
+  };
+
   return (
     <form onSubmit={handleSubmitNewClient} className="space-y-2">
       <Input
@@ -71,6 +78,7 @@ export const AddNewClientForm = ({
         className="w-full"
         {...register("phone", { required: true })}
         placeholder="(11) 99999-9999"
+        onChange={(ev) => handleChangePhone(ev.target.value)}
       />
       {errors.phone && (
         <InputRequiredError className="pl-4" inputName="Telefone" />
