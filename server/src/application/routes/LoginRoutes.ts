@@ -5,7 +5,11 @@ import { LoginController } from "../controllers/LoginController";
 export async function usersRoutes(app: FastifyInstance) {
   app.get("/hello", LoginController.TestRoute);
   app.post("/login", LoginController.CreateLogin);
-  app.get("/login", LoginController.GetAllUsers);
+  app.get(
+    "/login",
+    { preHandler: AuthMiddleware },
+    LoginController.GetAllUsers
+  );
   // app.get("/getuniqueuser", LoginController.GetUnique);
   app.post("/login/authenticate", LoginController.Authenticate);
   app.delete(
