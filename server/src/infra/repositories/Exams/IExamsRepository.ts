@@ -6,4 +6,5 @@ export interface IExamsRepository
   extends IGenericRepository<ExamsRequestDTO, Exams> {
   getByName(name: string): Promise<Exams[] | Exams>;
   countExams(name?: string): Promise<number>;
+  findByName(name: string): Promise<Exams | null>;
 }

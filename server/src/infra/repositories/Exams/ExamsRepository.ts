@@ -4,6 +4,10 @@ import { IExamsRepository } from "./IExamsRepository";
 import { ExamsRequestDTO } from "../../../application/DTOs/ExamsDTO/ExamsRequestDTO";
 
 export default class ExamsRepository implements IExamsRepository {
+  public async findByName(name: string): Promise<Exams | null> {
+    return await prisma.exams.findUnique({ where: { name } });
+  }
+
   public async getByName(name: string, pageActual?: number): Promise<Exams[]> {
     const firstLetterSearch = name.substring(0, 1).toUpperCase();
     const nameSearch = firstLetterSearch.concat(name.substring(1, name.length));
@@ -14,6 +18,7 @@ export default class ExamsRepository implements IExamsRepository {
       take: 10,
     });
   }
+
   public async findById(id: string | number): Promise<Exams | null> {
     return await prisma.exams.findUnique({
       where: { id: parseInt(id.toString()) },
