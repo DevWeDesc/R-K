@@ -4,7 +4,6 @@ import { ICardDisplayableInForgotPassword } from "@/@interfaces/ForgotPasword/IC
 import { FormEditPassword } from "./FormsForgetPassword/FormEditPassword";
 import { FormSendCodeEmail } from "./FormsForgetPassword/FormSendCodeEmail";
 import { FormVerifyCode } from "./FormsForgetPassword/FormVerifyCode";
-import Cookies from "js-cookie";
 import { cookieSection } from "@/services/UserLocal";
 
 export const ForgotPassword = () => {
@@ -16,21 +15,20 @@ export const ForgotPassword = () => {
     <>
       <Header navIsVisible={false} />
       <div className="h-[88dvh] flex justify-center items-center">
-        {(cookieSection === "sendCodeByEmail" ||
-          cookieSection?.length === 0) && (
+        {(cookieSection === "sendCodeByEmail" || cookieSection === "") && (
           <FormSendCodeEmail
             cardExible={cardExible}
             setCardExible={(ev) => setCardExible(ev)}
           />
         )}
-        {Cookies.get("forgotPasswordPage") === "VerifyCode" && (
+        {cookieSection === "VerifyCode" && (
           <FormVerifyCode
             cardExible={cardExible}
             setCardExible={(ev) => setCardExible(ev)}
           />
         )}
 
-        {Cookies.get("forgotPasswordPage") === "EditPassword" && (
+        {cookieSection === "EditPassword" && (
           <FormEditPassword
             cardExible={cardExible}
             setCardExible={(ev) => setCardExible(ev)}
