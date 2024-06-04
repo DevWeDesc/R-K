@@ -5,15 +5,12 @@ import { FormEditPassword } from "./FormsForgetPassword/FormEditPassword";
 import { FormSendCodeEmail } from "./FormsForgetPassword/FormSendCodeEmail";
 import { FormVerifyCode } from "./FormsForgetPassword/FormVerifyCode";
 import Cookies from "js-cookie";
+import { cookieSection } from "@/services/UserLocal";
 
 export const ForgotPassword = () => {
   const [cardExible, setCardExible] = useState({
     sendCodeByEmail: true,
   } as ICardDisplayableInForgotPassword);
-
-  const cookieSection = !Cookies.get("forgotPasswordPage")
-    ? Cookies.set("forgotPasswordPage", "")
-    : Cookies.get("forgotPasswordPage");
 
   return (
     <>
