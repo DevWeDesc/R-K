@@ -39,7 +39,6 @@ export const FormRegister = () => {
     handleSubmit,
     control,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<IRegisterForm>({ resolver: zodResolver(RegisterSchema) });
 
@@ -174,7 +173,6 @@ export const FormRegister = () => {
               {...register("crmv")}
               placeholder="Númeração do CRMV"
               onChange={(ev) => handleChangeCRMV(ev.target.value)}
-              value={getValues("crmv")}
             />
             {errors.crmv && (
               <p className="text-xs pl-2 text-red-700 font-medium">
@@ -196,7 +194,6 @@ export const FormRegister = () => {
             <Input
               {...register("phone")}
               placeholder="Telefone"
-              value={getValues("phone")}
               onChange={(ev) => handleChangePhone(ev.target.value)}
             />
             {errors.phone && (

@@ -31,7 +31,6 @@ export const FormLogin = () => {
     control,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<ILoginUser>({ resolver: zodResolver(LoginSchema) });
 
@@ -108,7 +107,6 @@ export const FormLogin = () => {
             {...register("crmv")}
             placeholder="Numeração do CRMV"
             onChange={(ev) => handleChangeCRMV(ev.target.value)}
-            value={getValues("crmv")}
           />
           {errors.crmv && (
             <div className="col-start-2">
