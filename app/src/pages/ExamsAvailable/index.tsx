@@ -7,12 +7,16 @@ import { RiAdminLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { GuidePreviewComponent } from "./GuidePreview";
 import { ExamsByGuideMock } from "@/mocks/ExamsByGuideMock";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export const ExamsAvailable = () => {
   const navigate = useNavigate();
   const headerTable = ["Nome do Exame", "Preço do Exame"];
   const [isLoading, setIsLoading] = useState(false);
+  const guideRef = useRef<HTMLDivElement>(null);
+
+  const scrollToGuidePreview = () =>
+    guideRef.current && guideRef.current.scrollIntoView({ behavior: "smooth" });
 
   return (
     <>
@@ -54,11 +58,12 @@ export const ExamsAvailable = () => {
                 headerTable={headerTable}
                 additionalFields={additionalFieldsTableGenericEnum.list}
                 setIsLoading={setIsLoading}
+                scrollForGuide={scrollToGuidePreview}
               />
             </div>
           </div>
         </div>
-        <GuidePreviewComponent isloading={isLoading} />
+        <GuidePreviewComponent ref={guideRef} isloading={isLoading} />
       </div>
     </>
   );
