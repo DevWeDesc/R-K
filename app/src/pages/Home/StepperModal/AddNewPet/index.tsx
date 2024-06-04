@@ -169,15 +169,21 @@ export const AddNewPetForm = ({
       {errors.specie && (
         <InputRequiredError className="pl-4" inputName="Idade do Pet" />
       )}
-      <Input
-        value={data?.data?.name}
-        className="w-full"
-        {...register("tutor", { required: true })}
-        placeholder="Tutor"
-      />
-      {errors.tutor && (
-        <InputRequiredError className="pl-4" inputName="Tutor" />
-      )}
+      <div>
+        <label htmlFor="tutorName" className="text-sm pl-4 font-medium">
+          Nome do Tutor
+        </label>
+        <Input
+          id="tutorName"
+          value={data?.data?.name}
+          className="w-full"
+          {...register("tutor", { required: true })}
+          placeholder="Tutor"
+        />
+        {errors.tutor && (
+          <InputRequiredError className="pl-4" inputName="Tutor" />
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-2">
         <Button
           variant="outline"
