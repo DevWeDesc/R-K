@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { IFormForgetPasswordProps } from "@/@interfaces/ForgotPasword/FormForgetPassword";
 import { useNavigate } from "react-router-dom";
 import { PiShieldCheck } from "react-icons/pi";
-import Cookies from "js-cookie";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
 import { IInputPasswordIsVisible } from "@/@interfaces/IInputPasswordIsVisible";
@@ -48,7 +47,6 @@ export const FormEditPassword = ({
       .then(() => {
         toast.success(`Sua senha foi alterada com sucesso!`);
         navigate("/");
-        Cookies.set("forgotPasswordPage", "sendCodeByEmail");
         setCardExible({
           ...cardExible,
           EditPassword: false,

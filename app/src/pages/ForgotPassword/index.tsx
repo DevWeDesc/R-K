@@ -4,7 +4,6 @@ import { ICardDisplayableInForgotPassword } from "@/@interfaces/ForgotPasword/IC
 import { FormEditPassword } from "./FormsForgetPassword/FormEditPassword";
 import { FormSendCodeEmail } from "./FormsForgetPassword/FormSendCodeEmail";
 import { FormVerifyCode } from "./FormsForgetPassword/FormVerifyCode";
-import { cookieSection } from "@/services/UserLocal";
 
 export const ForgotPassword = () => {
   const [cardExible, setCardExible] = useState({
@@ -15,20 +14,20 @@ export const ForgotPassword = () => {
     <>
       <Header navIsVisible={false} />
       <div className="h-[88dvh] flex justify-center items-center">
-        {(cookieSection === "sendCodeByEmail" || cookieSection === "") && (
+        {cardExible.sendCodeByEmail && (
           <FormSendCodeEmail
             cardExible={cardExible}
             setCardExible={(ev) => setCardExible(ev)}
           />
         )}
-        {cookieSection === "VerifyCode" && (
+        {cardExible.VerifyCode && (
           <FormVerifyCode
             cardExible={cardExible}
             setCardExible={(ev) => setCardExible(ev)}
           />
         )}
 
-        {cookieSection === "EditPassword" && (
+        {cardExible.EditPassword && (
           <FormEditPassword
             cardExible={cardExible}
             setCardExible={(ev) => setCardExible(ev)}

@@ -6,7 +6,7 @@ import { IForgotPassword } from "@/@interfaces/ForgotPasword";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { IFormForgetPasswordProps } from "@/@interfaces/ForgotPasword/FormForgetPassword";
-import Cookies from "js-cookie";
+
 import { VerifyCodeServices } from "@/services/User/ForgotPassword/VerifyCodeServices";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { VerifyCodeSchema } from "@/schemas/VerifyCodeSchema";
@@ -30,7 +30,6 @@ export const FormVerifyCode = ({
     };
     await VerifyCodeServices(handleSubmitVerifyCode)
       .then(() => {
-        Cookies.set("forgotPasswordPage", "EditPassword");
         toast.success(`Verificação executada com sucesso!`);
         setCardExible({ ...cardExible, VerifyCode: false, EditPassword: true });
       })

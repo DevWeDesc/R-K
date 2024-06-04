@@ -6,7 +6,6 @@ import { IForgotPassword } from "@/@interfaces/ForgotPasword";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { IFormForgetPasswordProps } from "@/@interfaces/ForgotPasword/FormForgetPassword";
-import Cookies from "js-cookie";
 import { SendCodeForEmailService } from "@/services/User/ForgotPassword/SendCodeForEmailService";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,8 +23,6 @@ export const FormSendCodeEmail = ({
     resolver: zodResolver(SendCodeForEmailSchema),
   });
 
-  Cookies.set("forgotPasswordPage", "sendCodeByEmail");
-
   const handleSendCodeForEmail = handleSubmit(async (data) => {
     const { email } = data;
 
@@ -35,7 +32,6 @@ export const FormSendCodeEmail = ({
       email,
     };
     await SendCodeForEmailService(handleSubmitCode).then(() => {
-      Cookies.set("forgotPasswordPage", "VerifyCode");
       toast.success(`Código enviado com sucesso para o E-mail ${data.email}`);
       setCardExible({
         ...cardExible,
