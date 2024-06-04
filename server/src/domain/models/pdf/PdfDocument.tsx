@@ -41,6 +41,13 @@ const styles = StyleSheet.create({
     color: "#2e2e2e",
     lineHeight: 1.67,
   },
+  paragraphPreparing: {
+    fontSize: 12,
+    color: "#2e2e2e",
+    lineHeight: 1.67,
+    whiteSpace: "wrap",
+    width: "100%",
+  },
   paragraphBold: {
     fontWeight: 700,
     fontSize: 12,
@@ -137,16 +144,24 @@ const PDF = ({ data }: PDFProps) => {
                 <View key={index} style={{ marginTop: 10 }}>
                   <Text style={styles.paragraph}>- {exam.Exams.name}</Text>
                   <View style={styles.containerChild}>
-                    <Text style={styles.paragraphBold}>Preparo: </Text>
-                    <Text style={styles.paragraph}>{exam.Exams.preparing}</Text>
+                    <Text style={styles.paragraphBold}>
+                      Preparo:{" "}
+                      <Text style={styles.paragraphPreparing}>
+                        {exam.Exams.preparing}
+                      </Text>
+                    </Text>
                   </View>
                 </View>
               ))}
               <View style={{ marginTop: 10 }}>
                 <View style={styles.containerChild}>
-                  <Text style={styles.paragraphBold}>Observações: </Text>
-                  <Text style={styles.paragraph}>
-                    {!data.observation ? "Sem observações!" : data.observation}
+                  <Text style={styles.paragraphBold}>
+                    Observações:{" "}
+                    <Text style={styles.paragraphPreparing}>
+                      {!data.observation
+                        ? "Sem observações!"
+                        : data.observation}
+                    </Text>
                   </Text>
                 </View>
               </View>
