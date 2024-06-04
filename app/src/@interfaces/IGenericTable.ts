@@ -1,6 +1,7 @@
 import { additionalFieldsTableGenericEnum } from "@/enums/additionalFieldsTableGenericEnum";
 
 export interface IGenericTable {
+  scrollForGuide?: () => void;
   headerTable?: string[];
   additionalFields: additionalFieldsTableGenericEnum;
   setGuidIsVisible?: () => void;

@@ -30,6 +30,7 @@ export const GenericTable = ({
   additionalFields,
   setGuidIsVisible,
   setIsLoading,
+  scrollForGuide,
 }: IGenericTable) => {
   const { id } = useParams<IParamsGuide>();
   const [pageActual, setPageActual] = useState(1);
@@ -61,6 +62,7 @@ export const GenericTable = ({
       await CreateExamsInPetSolicitations(dataRequest);
       setGuidIsVisible && setGuidIsVisible();
       toast.success(`Exame ${exam.name} adicionado com sucesso!`);
+      scrollForGuide && scrollForGuide();
       handleMutateLoading();
       refetch();
     }
