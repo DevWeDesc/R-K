@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  dbRK:
+    image: postgres
+    container_name: dbRK
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - rk_data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    networks:
+      - rk_network
+
+volumes:
+  rk_data:
+
+networks:
+  rk_network:
