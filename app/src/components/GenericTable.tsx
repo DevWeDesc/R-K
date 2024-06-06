@@ -20,10 +20,19 @@ import { IExams } from "@/@interfaces/IExams";
 import { useQuery } from "react-query";
 import { GetExams } from "@/services/Exams/GetExams";
 import { useState } from "react";
+import { DeleteExamService } from "@/services/Exams/DeleteExamService";
+import { ModalGeneric } from "./ModalGeneric";
+import { FormOfAddNewExam } from "@/pages/AdminExams/FormOfAddNewExam";
 
 type IParamsGuide = {
   id: string;
 };
+
+interface IModalInformations {
+  modalDeleteIsOpened: boolean;
+  modalEditIsOpened: boolean;
+  exam: IExams | null;
+}
 
 export const GenericTable = ({
   headerTable,
@@ -35,13 +44,19 @@ export const GenericTable = ({
   const { id } = useParams<IParamsGuide>();
   const [pageActual, setPageActual] = useState(1);
   const [examName, setExamName] = useState("");
+  const [modalInformations, setModalInformations] =
+    useState<IModalInformations>({
+      modalDeleteIsOpened: false,
+      modalEditIsOpened: false,
+      exam: null,
+    });
 
   const handleMutateLoading = () => {
     setIsLoading && setIsLoading((prev) => (!prev ? true : false));
   };
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["examsList", pageActual, examName],
+    queryKey: ["examsList", pageActual, examName, modalInformations],
     queryFn: () => GetExams(pageActual, examName),
   });
 
@@ -66,6 +81,21 @@ export const GenericTable = ({
       handleMutateLoading();
       refetch();
     }
+  };
+
+  const handleDeleteExam = async (examId: number) => {
+    await DeleteExamService(examId)
+      .then(() => {
+        toast.success("Exame excluido com sucesso!");
+        setModalInformations({
+          ...modalInformations,
+          modalDeleteIsOpened: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      });
   };
 
   return (
@@ -135,6 +165,13 @@ export const GenericTable = ({
                       <>
                         <TableCell className="font-semibold border">
                           <Button
+                            onClick={() =>
+                              setModalInformations({
+                                ...modalInformations,
+                                exam: exam,
+                                modalEditIsOpened: true,
+                              })
+                            }
                             variant="outline"
                             className="rounded-full px-4 text-sm hover:bg-zinc-800 hover:text-white"
                           >
@@ -144,6 +181,13 @@ export const GenericTable = ({
                         </TableCell>
                         <TableCell className="font-semibold border">
                           <Button
+                            onClick={() =>
+                              setModalInformations({
+                                ...modalInformations,
+                                modalDeleteIsOpened: true,
+                                exam: exam,
+                              })
+                            }
                             variant="outline"
                             className="rounded-full px-4 text-sm hover:text-white hover:bg-red-700 "
                           >
@@ -169,6 +213,67 @@ export const GenericTable = ({
           Próxima anterior
         </Button>
       </div>
+      <ModalGeneric
+        openModal={modalInformations.modalDeleteIsOpened}
+        setModalOpen={() =>
+          setModalInformations({
+            ...modalInformations,
+            modalDeleteIsOpened: false,
+          })
+        }
+        className="w-full"
+        textTitle={`Deseja realmente excluir o exame ${modalInformations.exam?.name}?`}
+        textDescription="A exclusão de um exame é irreversivel, confirme para realizar a exclusão!"
+      >
+        <div className="w-full flex justify-end gap-5">
+          <Button
+            onClick={() =>
+              modalInformations.exam &&
+              handleDeleteExam(modalInformations.exam.id)
+            }
+            variant={"destructive"}
+            className="px-8 text-sm"
+          >
+            Deletar
+          </Button>
+          <Button
+            onClick={() =>
+              setModalInformations({
+                ...modalInformations,
+                modalDeleteIsOpened: false,
+              })
+            }
+            variant={"outline"}
+            className="px-8 text-sm"
+          >
+            Cancelar
+          </Button>
+        </div>
+      </ModalGeneric>
+      <ModalGeneric
+        openModal={modalInformations.modalEditIsOpened}
+        setModalOpen={() =>
+          setModalInformations({
+            ...modalInformations,
+            modalEditIsOpened: false,
+          })
+        }
+        className="w-full"
+        textTitle="Edite um novo exame agora!"
+        textDescription="Para adicionar um novo exame, preencha todos os campos do formulário corretamente!"
+      >
+        {modalInformations.exam && (
+          <FormOfAddNewExam
+            exam={modalInformations.exam}
+            setModalIsOpen={() =>
+              setModalInformations({
+                ...modalInformations,
+                modalEditIsOpened: false,
+              })
+            }
+          />
+        )}
+      </ModalGeneric>
     </div>
   );
 };
