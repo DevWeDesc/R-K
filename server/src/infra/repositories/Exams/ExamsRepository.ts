@@ -49,14 +49,17 @@ export default class ExamsRepository implements IExamsRepository {
     });
   }
 
-  public async delete(id: string | number): Promise<boolean> {
+  public async delete(id: string | number): Promise<any> {
     try {
-      await prisma.exams.delete({
+      const examIsValid = await this.findById(id);
+
+      if (!examIsValid) throw new Error("O exame informado não existe!");
+
+      return await prisma.exams.delete({
         where: { id: parseInt(id.toString()) },
       });
-      return true;
     } catch (error) {
-      throw new Error(`${error}`);
+      return error;
     }
   }
 }
