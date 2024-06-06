@@ -1,9 +1,9 @@
 import { Input } from "./ui/input";
 import { UseFormRegister, FieldError } from "react-hook-form";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { HTMLInputTypeAttribute, useState } from "react";
+import React, { HTMLInputTypeAttribute, useState } from "react";
 
-export type FormFieldProps = {
+export interface FormFieldProps extends React.InputHTMLAttributes<any> {
   type: string;
   placeholder: string;
   name: any;
@@ -12,7 +12,7 @@ export type FormFieldProps = {
   valueAsNumber?: boolean;
   isPassword?: boolean;
   id?: string;
-};
+}
 
 export const FormField = ({
   register,
@@ -23,6 +23,7 @@ export const FormField = ({
   valueAsNumber,
   isPassword,
   id,
+  ...props
 }: FormFieldProps) => {
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
 
@@ -44,6 +45,7 @@ export const FormField = ({
       {isPassword ? (
         <div className="relative">
           <Input
+            {...props}
             id={id}
             placeholder={placeholder}
             type={typeInput()}
@@ -63,6 +65,7 @@ export const FormField = ({
         </div>
       ) : (
         <Input
+          {...props}
           id={id}
           placeholder={placeholder}
           type={type}
