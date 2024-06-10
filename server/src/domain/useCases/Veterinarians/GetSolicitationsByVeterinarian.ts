@@ -3,6 +3,6 @@ import { VeterinarianRepository } from "../../../infra/repositories/Veterinarian
 export default class GetSolicitationsByVeterinarian {
   constructor(readonly veterinarianRepository: VeterinarianRepository) {}
   async execute() {
-    return this.veterinarianRepository.getSolicitationsByVeterinarian();
+    return await this.veterinarianRepository.getSolicitationsByVeterinarian();
   }
 }
