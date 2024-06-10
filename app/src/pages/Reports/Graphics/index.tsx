@@ -11,24 +11,18 @@ export const Graphic = ({
 
   if (typeChart === "pie" || typeChart === "donut") {
     chartOptions = {
-      series: seriesData ? seriesData : [20, 10, 5],
-      labels: dataDescriptions
-        ? dataDescriptions
-        : ["Daniel", "Felipe", "Adriano"],
+      series: seriesData,
+      labels: dataDescriptions,
     };
   } else {
     chartOptions = {
       options: {
-        colors: ["#000"],
+        colors: ["#BD2A2E"],
         xaxis: {
-          categories: dataDescriptions
-            ? dataDescriptions
-            : ["Daniel", "Felipe", "Adriano"],
+          categories: dataDescriptions,
         },
       },
-      series: [
-        { name: "Qtd. Exames", data: seriesData ? seriesData : [20, 10, 5] },
-      ],
+      series: [{ name: "Qtd. Exames", data: seriesData }],
     };
   }
 
