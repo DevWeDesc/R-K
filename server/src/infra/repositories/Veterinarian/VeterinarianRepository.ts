@@ -6,12 +6,12 @@ import { prisma } from "../../../lib/prismaClient";
 export class VeterinarianRepository implements IVeterinarianRepository {
   public async getSolicitationsByVeterinarian(): Promise<IVeterinarianModel[]> {
     return await prisma.veterinarians.findMany({
-      where: {
-        solicitations: { none: { isFinished: false } },
-      },
       include: {
-        solicitations: { include: { pet: { include: { customer: true } } } },
-        _count: true,
+        solicitations: {
+          where: { isFinished: true },
+          include: { pet: { include: { customer: true } } },
+        },
+        _count: { select: { solicitations: { where: { isFinished: true } } } },
       },
     });
   }
