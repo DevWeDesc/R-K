@@ -21,6 +21,12 @@ export const Graphic = ({
         xaxis: {
           categories: dataDescriptions,
         },
+        fill: {
+          type: "gradient",
+          gradient: {
+            gradientToColors: ["#F55555", "#6078ea", "#6094ea"],
+          },
+        },
       },
       series: [{ name: "Qtd. Exames", data: seriesData }],
     };
