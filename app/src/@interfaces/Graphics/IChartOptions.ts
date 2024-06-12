@@ -6,5 +6,11 @@ export interface IChartOptions {
     xaxis: {
       categories: string[];
     };
+    fill: {
+      type: string;
+      gradient: {
+        gradientToColors: string[];
+      };
+    };
   };
 }
