@@ -70,11 +70,18 @@ export const VeterinarianController = {
   },
 
   GetQuantitySolicitationsPerVeterinarian: async (
-    request: FastifyRequest,
+    request: FastifyRequest<{
+      Querystring: { initialDate?: string; finalDate?: string; name?: string };
+    }>,
     reply: FastifyReply
   ) => {
     try {
-      const res = await getSolicitationsByVeterinarian.execute();
+      const { initialDate, finalDate, name } = request.query;
+      const res = await getSolicitationsByVeterinarian.execute(
+        initialDate,
+        finalDate,
+        name
+      );
       reply.status(200).send(res);
     } catch (err) {
       reply.status(404).send(err);

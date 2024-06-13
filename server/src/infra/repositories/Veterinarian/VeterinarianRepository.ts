@@ -1,17 +1,60 @@
 import { Veterinarians } from "@prisma/client";
 import { IVeterinarianRepository } from "./IVeterinarianRepository";
-import { IVeterinarianModel } from "../../../domain/models/Veterinarian";
 import { prisma } from "../../../lib/prismaClient";
+import { SolicitationByVeterinarian } from "../../../domain/models/SolicitationByVeterinarian";
+import { IVeterinarianModel } from "../../../domain/models/Veterinarian copy";
 
 export class VeterinarianRepository implements IVeterinarianRepository {
-  public async getSolicitationsByVeterinarian(): Promise<IVeterinarianModel[]> {
+  public async getSolicitationsByVeterinarian(
+    initialDate?: string,
+    finalDate?: string,
+    name?: string
+  ): Promise<SolicitationByVeterinarian[] | any> {
     return await prisma.veterinarians.findMany({
+      where: {
+        OR: [
+          {
+            name: { contains: name },
+            solicitations: {
+              some: {
+                pet: {
+                  OR: [
+                    {
+                      name: { contains: name },
+                      customer: { name: { contains: name } },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
       include: {
         solicitations: {
-          where: { isFinished: true },
-          include: { pet: { include: { customer: true } } },
+          where: {
+            isFinished: true,
+            createdIn: { gte: initialDate, lte: finalDate },
+          },
+          include: {
+            exams: {
+              include: {
+                Exams: { select: { id: true, name: true, value: true } },
+              },
+            },
+            pet: { include: { customer: true } },
+          },
         },
-        _count: { select: { solicitations: { where: { isFinished: true } } } },
+        _count: {
+          select: {
+            solicitations: {
+              where: {
+                isFinished: true,
+                createdIn: { gte: initialDate, lte: finalDate },
+              },
+            },
+          },
+        },
       },
     });
   }
