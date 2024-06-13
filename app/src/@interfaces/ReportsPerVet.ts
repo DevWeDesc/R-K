@@ -16,6 +16,18 @@ export interface IReportPerVet {
       observation: string;
       veterinariansId: number;
       petsId: number;
+      exams: [
+        {
+          id: number;
+          examsId: number;
+          solicitationsId: string;
+          Exams: {
+            id: number;
+            name: string;
+            value: number;
+          };
+        }
+      ];
       pet: {
         id: number;
         name: string;
