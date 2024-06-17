@@ -1,17 +1,39 @@
 import { Header } from "@/components/Header";
 import { Graphic } from "./Graphics";
 import { useQuery } from "react-query";
-import { SolicitationsPerVet } from "@/services/Solicitations/SolicitationsPerVet";
+import {
+  ParamsSolicitationsPerVet,
+  SolicitationsPerVet,
+} from "@/services/Solicitations/SolicitationsPerVet";
 import { ImSpinner8 } from "react-icons/im";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoSearchOutline } from "react-icons/io5";
 import { ExhibitionReport } from "./ExhibitionReport";
+import { useState } from "react";
 
 export const Reports = () => {
+  const [params, setParams] = useState({
+    initialDate: null,
+    finalDate: null,
+    name: null,
+  } as ParamsSolicitationsPerVet);
+
+  const handleMutateNameByParams = (name: string) => {
+    setParams({ ...params, name });
+  };
+
+  const handleMutateInitialDateByParams = (initialDate: string) => {
+    setParams({ ...params, initialDate });
+  };
+
+  const handleMutateFinalDateByParams = (finalDate: string) => {
+    setParams({ ...params, finalDate });
+  };
+
   const { data: reports, isLoading } = useQuery({
-    queryKey: ["reports"],
-    queryFn: async () => SolicitationsPerVet(),
+    queryKey: ["reports", params],
+    queryFn: async () => SolicitationsPerVet(params),
   });
 
   const reportSeries: number[] | undefined = reports?.data.map(
@@ -32,11 +54,34 @@ export const Reports = () => {
           </p>
           <form action="" className="grid grid-cols-4">
             <div className="grid grid-cols-2">
-              <Input type="date" className="rounded-sm bg-white border" />
-              <Input type="date" className="rounded-sm bg-white border" />
+              <Input
+                type="date"
+                className="rounded-sm bg-white border"
+                onChange={(ev) => {
+                  let dateInit = new Date(ev.target.value);
+                  dateInit.setDate(dateInit.getDate() - 1);
+
+                  handleMutateInitialDateByParams(
+                    dateInit.toISOString().replace(/:/g, "%3A")
+                  );
+                }}
+              />
+              <Input
+                type="date"
+                className="rounded-sm bg-white border"
+                onChange={(ev) => {
+                  let dateFinished = new Date(ev.target.value);
+                  dateFinished.setDate(dateFinished.getDate() + 1);
+
+                  handleMutateFinalDateByParams(
+                    dateFinished.toISOString().replace(/:/g, "%3A")
+                  );
+                }}
+              />
             </div>
             <div className="grid grid-cols-3 col-span-3">
               <Input
+                onChange={(ev) => handleMutateNameByParams(ev.target.value)}
                 placeholder="Nome do Cliente, Pet ou Vet:"
                 className="rounded-sm bg-white border col-span-2"
               />
