@@ -34,7 +34,8 @@ export class VeterinarianRepository implements IVeterinarianRepository {
         solicitations: {
           where: {
             isFinished: true,
-            createdIn: { gte: initialDate, lte: finalDate },
+            createdIn: { gt: initialDate },
+            finishedIn: { lt: finalDate },
           },
           include: {
             exams: {
