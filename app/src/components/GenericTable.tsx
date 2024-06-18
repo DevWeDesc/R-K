@@ -23,6 +23,16 @@ import { useState } from "react";
 import { DeleteExamService } from "@/services/Exams/DeleteExamService";
 import { ModalGeneric } from "./ModalGeneric";
 import { FormOfAddNewExam } from "@/pages/AdminExams/FormOfAddNewExam";
+import { CiFilter } from "react-icons/ci";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type IParamsGuide = {
   id: string;
@@ -44,6 +54,7 @@ export const GenericTable = ({
   const { id } = useParams<IParamsGuide>();
   const [pageActual, setPageActual] = useState(1);
   const [examName, setExamName] = useState("");
+  const [filterOptions, setFilterOptions] = useState("");
   const [modalInformations, setModalInformations] =
     useState<IModalInformations>({
       modalDeleteIsOpened: false,
@@ -57,7 +68,7 @@ export const GenericTable = ({
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["examsList", pageActual, examName, modalInformations],
-    queryFn: () => GetExams(pageActual, examName),
+    queryFn: () => GetExams(pageActual, examName, filterOptions),
   });
 
   const handleBackPage = () => {
@@ -100,14 +111,31 @@ export const GenericTable = ({
 
   return (
     <div className="flex flex-col gap-2 pb-20">
-      <div className="relative">
-        <CiSearch className="text-2xl left-4 absolute top-1/2 -translate-y-1/2" />
-        <Input
-          onChange={(e) => setExamName(e.target.value)}
-          value={examName}
-          className="bg-white border rounded text-sm pl-12 hover:opacity-100"
-          placeholder="Digite o Exame que deseja procurar"
-        />
+      <div className="grid grid-cols-4">
+        <div className="relative col-span-3">
+          <CiSearch className="text-2xl left-4 absolute top-1/2 -translate-y-1/2" />
+          <Input
+            onChange={(e) => setExamName(e.target.value)}
+            value={examName}
+            className="bg-white border rounded text-sm pl-12 hover:opacity-100"
+            placeholder="Digite o Exame que deseja procurar"
+          />
+        </div>
+        <Select onValueChange={(value) => setFilterOptions(value)}>
+          <div className="relative">
+            <SelectTrigger className="w-full h-full outline-none ">
+              <CiFilter className="right-0 top-6 text-xl" />
+              <SelectValue placeholder="Filtros" />
+            </SelectTrigger>
+          </div>
+          <SelectContent defaultValue="highlights">
+            <SelectGroup>
+              <SelectItem value="highlights">Mais selecionados</SelectItem>
+              <SelectItem value="valueasc">Valor crescente</SelectItem>
+              <SelectItem value="valuedesc">Valor decrescente</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
       <Table>
         <TableHeader>
