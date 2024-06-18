@@ -3,37 +3,39 @@ import { IVeterinarianRepository } from "./IVeterinarianRepository";
 import { prisma } from "../../../lib/prismaClient";
 import { SolicitationByVeterinarian } from "../../../domain/models/SolicitationByVeterinarian";
 import { IVeterinarianModel } from "../../../domain/models/Veterinarian copy";
+import { IQuerySolicitationsPerVet } from "../../../domain/useCases/Veterinarians/GetSolicitationsByVeterinarian";
 
 export class VeterinarianRepository implements IVeterinarianRepository {
   public async getSolicitationsByVeterinarian(
-    initialDate?: string,
-    finalDate?: string,
-    name?: string
+    query: IQuerySolicitationsPerVet
   ): Promise<SolicitationByVeterinarian[] | any> {
-    return await prisma.veterinarians.findMany({
+    const { finalDate, initialDate, nameCustomer, namePet, nameVeterinarian } =
+      query;
+
+    const solicitationsByVet = await prisma.veterinarians.findMany({
       where: {
-        OR: [
-          {
-            name: { contains: name },
-            solicitations: {
-              some: {
-                pet: {
-                  OR: [
-                    {
-                      name: { contains: name },
-                      customer: { name: { contains: name } },
-                    },
-                  ],
-                },
+        solicitations: {
+          some: {
+            pet: {
+              name: { contains: namePet, mode: "insensitive" },
+              customer: {
+                name: { contains: nameCustomer, mode: "insensitive" },
               },
             },
+            createdIn: { gt: initialDate },
+            finishedIn: { lt: finalDate },
           },
-        ],
+        },
       },
       include: {
         solicitations: {
           where: {
-            isFinished: true,
+            pet: {
+              name: { contains: namePet, mode: "insensitive" },
+              customer: {
+                name: { contains: nameCustomer, mode: "insensitive" },
+              },
+            },
             createdIn: { gt: initialDate },
             finishedIn: { lt: finalDate },
           },
@@ -50,14 +52,22 @@ export class VeterinarianRepository implements IVeterinarianRepository {
           select: {
             solicitations: {
               where: {
-                isFinished: true,
-                createdIn: { gte: initialDate, lte: finalDate },
+                pet: {
+                  name: { contains: namePet, mode: "insensitive" },
+                  customer: {
+                    name: { contains: nameCustomer, mode: "insensitive" },
+                  },
+                },
+                createdIn: { gt: initialDate },
+                finishedIn: { lt: finalDate },
               },
             },
           },
         },
       },
     });
+
+    return solicitationsByVet;
   }
 
   public async listAll(): Promise<Veterinarians[]> {
