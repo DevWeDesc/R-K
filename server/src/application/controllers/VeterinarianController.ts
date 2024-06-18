@@ -7,6 +7,7 @@ import {
   getSolicitationsByVeterinarian,
   verifyCodeUseCase,
 } from "../..";
+import { IQuerySolicitationsPerVet } from "../../domain/useCases/Veterinarians/GetSolicitationsByVeterinarian";
 
 export const VeterinarianController = {
   ForgotPassword: async (
@@ -71,17 +72,12 @@ export const VeterinarianController = {
 
   GetQuantitySolicitationsPerVeterinarian: async (
     request: FastifyRequest<{
-      Querystring: { initialDate?: string; finalDate?: string; name?: string };
+      Querystring: IQuerySolicitationsPerVet;
     }>,
     reply: FastifyReply
   ) => {
     try {
-      const { initialDate, finalDate, name } = request.query;
-      const res = await getSolicitationsByVeterinarian.execute(
-        initialDate,
-        finalDate,
-        name
-      );
+      const res = await getSolicitationsByVeterinarian.execute(request.query);
       reply.status(200).send(res);
     } catch (err) {
       reply.status(404).send(err);
