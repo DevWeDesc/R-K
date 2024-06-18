@@ -11,16 +11,43 @@ import { Button } from "@/components/ui/button";
 import { IoSearchOutline } from "react-icons/io5";
 import { ExhibitionReport } from "./ExhibitionReport";
 import { useState } from "react";
+import { FormatDateIsoStringForQuery } from "@/utils/FormatDateIsoStringForQuery";
 
 export const Reports = () => {
+  const handleGenerateInitialDate = (
+    ev: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    let dateInit = new Date(ev.target.value);
+    // dateInit.setDate(dateInit.getDate() - 1);
+
+    handleMutateInitialDateByParams(
+      dateInit.toISOString().replace(/:/g, "%3A")
+    );
+  };
+
+  const handleGenerateFinalDate = (dateFinal?: string) => {
+    const dateFinished = dateFinal ? new Date(dateFinal) : new Date();
+    // dateFinished.setDate(dateFinished.getDate() + 1);
+    return FormatDateIsoStringForQuery(dateFinished.toISOString());
+  };
+
   const [params, setParams] = useState({
     initialDate: null,
-    finalDate: null,
-    name: null,
+    finalDate: handleGenerateFinalDate(),
+    nameVeterinarian: null,
+    nameCustomer: null,
+    namePet: null,
   } as ParamsSolicitationsPerVet);
 
-  const handleMutateNameByParams = (name: string) => {
-    setParams({ ...params, name });
+  const handleMutateNameVeterinarianByParams = (nameVeterinarian: string) => {
+    setParams({ ...params, nameVeterinarian });
+  };
+
+  const handleMutateNameCustomerByParams = (nameCustomer: string) => {
+    setParams({ ...params, nameCustomer });
+  };
+  const handleMutateNamePetByParams = (namePet: string) => {
+    setParams({ ...params, namePet });
   };
 
   const handleMutateInitialDateByParams = (initialDate: string) => {
@@ -31,10 +58,16 @@ export const Reports = () => {
     setParams({ ...params, finalDate });
   };
 
-  const { data: reports, isLoading } = useQuery({
-    queryKey: ["reports", params],
+  const {
+    data: reports,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["reports"],
     queryFn: async () => SolicitationsPerVet(params),
   });
+
+  console.log(reports);
 
   const reportSeries: number[] | undefined = reports?.data.map(
     (report) => report._count.solicitations
@@ -54,39 +87,79 @@ export const Reports = () => {
           </p>
           <form action="" className="grid grid-cols-4">
             <div className="grid grid-cols-2">
-              <Input
-                type="date"
-                className="rounded-sm bg-white border"
-                onChange={(ev) => {
-                  let dateInit = new Date(ev.target.value);
-                  dateInit.setDate(dateInit.getDate() - 1);
-
-                  handleMutateInitialDateByParams(
-                    dateInit.toISOString().replace(/:/g, "%3A")
-                  );
-                }}
-              />
-              <Input
-                type="date"
-                className="rounded-sm bg-white border"
-                onChange={(ev) => {
-                  let dateFinished = new Date(ev.target.value);
-                  dateFinished.setDate(dateFinished.getDate() + 1);
-
-                  handleMutateFinalDateByParams(
-                    dateFinished.toISOString().replace(/:/g, "%3A")
-                  );
-                }}
-              />
+              <div>
+                <label htmlFor="dateInitial" className="text-sm">
+                  Data inicial
+                </label>
+                <Input
+                  id="dateInitial"
+                  type="date"
+                  className="rounded-sm bg-white border"
+                  onChange={handleGenerateInitialDate}
+                />
+              </div>
+              <div>
+                <label htmlFor="dateFinal" className="text-sm">
+                  Data final
+                </label>
+                <Input
+                  id="dateFinal"
+                  type="date"
+                  className="rounded-sm bg-white border"
+                  onChange={(ev) => {
+                    handleMutateFinalDateByParams(
+                      FormatDateIsoStringForQuery(
+                        handleGenerateFinalDate(ev.target.value)
+                      )
+                    );
+                  }}
+                />
+              </div>
             </div>
             <div className="grid grid-cols-3 col-span-3">
-              <Input
-                onChange={(ev) => handleMutateNameByParams(ev.target.value)}
-                placeholder="Nome do Cliente, Pet ou Vet:"
-                className="rounded-sm bg-white border col-span-2"
-              />
+              <div>
+                <label htmlFor="nameCustomer" className="text-sm">
+                  Nome do cliente
+                </label>
+                <Input
+                  id="nameCustomer"
+                  onChange={(ev) =>
+                    handleMutateNameCustomerByParams(ev.target.value)
+                  }
+                  placeholder="Nome do Cliente"
+                  className="rounded-sm bg-white border col-span-1"
+                />
+              </div>
+              <div>
+                <label htmlFor="namePet" className="text-sm">
+                  Nome do Pet
+                </label>
+                <Input
+                  id="namePet"
+                  onChange={(ev) =>
+                    handleMutateNamePetByParams(ev.target.value)
+                  }
+                  placeholder="Nome do Pet"
+                  className="rounded-sm bg-white border col-span-1"
+                />
+              </div>
+              <div>
+                <label htmlFor="nameVet" className="text-sm">
+                  Nome do Veterinário
+                </label>
+                <Input
+                  id="nameVet"
+                  onChange={(ev) =>
+                    handleMutateNameVeterinarianByParams(ev.target.value)
+                  }
+                  placeholder="Nome do Veterinário"
+                  className="rounded-sm bg-white border col-span-1"
+                />
+              </div>
               <Button
-                className="rounded-sm bg-white border flex gap-2"
+                type="button"
+                onClick={() => refetch()}
+                className="rounded-sm bg-white border flex gap-2 col-span-2"
                 variant="outline"
               >
                 <IoSearchOutline className="text-xl" /> Procurar
