@@ -6,7 +6,9 @@ import { IReportPerVet } from "@/@interfaces/ReportsPerVet";
 export interface ParamsSolicitationsPerVet {
   initialDate?: string | null;
   finalDate?: string | null;
-  name?: string | null;
+  nameVeterinarian?: string | null;
+  namePet?: string | null;
+  nameCustomer?: string | null;
 }
 
 export const SolicitationsPerVet = async (
@@ -14,13 +16,25 @@ export const SolicitationsPerVet = async (
 ): Promise<AxiosResponse<IReportPerVet[]>> => {
   return await api.get(
     `/veterinarian/solicitations?${
-      paramsSolicitationsPerVet.name && `name=${paramsSolicitationsPerVet.name}`
+      paramsSolicitationsPerVet.nameVeterinarian
+        ? `nameVeterinarian=${paramsSolicitationsPerVet.nameVeterinarian}`
+        : ""
     }${
-      paramsSolicitationsPerVet.initialDate &&
-      `&initialDate=${paramsSolicitationsPerVet.initialDate}`
+      paramsSolicitationsPerVet.namePet
+        ? `&namePet=${paramsSolicitationsPerVet.namePet}`
+        : ""
     }${
-      paramsSolicitationsPerVet.initialDate &&
-      `&finalDate=${paramsSolicitationsPerVet.finalDate}`
+      paramsSolicitationsPerVet.nameCustomer
+        ? `&nameCustomer=${paramsSolicitationsPerVet.nameCustomer}`
+        : ""
+    }${
+      paramsSolicitationsPerVet.initialDate
+        ? `&initialDate=${paramsSolicitationsPerVet.initialDate}`
+        : ""
+    }${
+      paramsSolicitationsPerVet.initialDate
+        ? `&finalDate=${paramsSolicitationsPerVet.finalDate}`
+        : ""
     }`,
     headerRequest
   );
