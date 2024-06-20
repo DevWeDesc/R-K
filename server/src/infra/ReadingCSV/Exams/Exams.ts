@@ -52,6 +52,11 @@ const AddInstructions = async (dataExams: IDataInstructions[]) => {
             },
           });
       });
+
+    await prisma.exams.updateMany({
+      where: { preparing: null },
+      data: { preparing: "Sem preparo." },
+    });
   }
 };
 
