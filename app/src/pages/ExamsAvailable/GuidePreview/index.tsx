@@ -119,7 +119,9 @@ export const GuidePreviewComponent = forwardRef<HTMLDivElement, IGuidePreview>(
                       <p>- {exams.Exams.name}</p>
                       <p>
                         <strong>Preparo: </strong>
-                        {exams.Exams.preparing}
+                        {exams.Exams.preparing
+                          ? exams.Exams.preparing
+                          : "Sem preparo."}
                       </p>
                     </div>
                   )
