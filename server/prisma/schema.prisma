@@ -63,10 +63,14 @@ model Pets {
 
 model Exams {
   id                        Int                         @id @default(autoincrement())
+  idOld                     Int                         @unique
   name                      String                      @unique
   value                     Float
+  valueWithRate             Float
+  isHighligth               Boolean
   preparing                 String?
   deadline                  String
+  specie                    String
   ExamsInPetOnSolicitations ExamsInPetOnSolicitations[]
   group                     Groups?                     @relation(fields: [groupsId], references: [id])
   groupsId                  Int?
