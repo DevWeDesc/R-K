@@ -63,11 +63,11 @@ model Pets {
 
 model Exams {
   id                        Int                         @id @default(autoincrement())
-  idOld                     Int                         @unique
+  idOld                     Int?                        @unique
   name                      String                      @unique
   value                     Float
-  valueWithRate             Float
-  isHighligth               Boolean
+  valueWithRate             Float?
+  isHighligth               Boolean                     @default(false)
   preparing                 String?
   deadline                  String
   specie                    String
