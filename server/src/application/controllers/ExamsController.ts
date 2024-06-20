@@ -6,17 +6,17 @@ import {
   updateExamUseCase,
 } from "../..";
 import { ExamsRequestDTO } from "../DTOs/ExamsDTO/ExamsRequestDTO";
+import { QueryParamsListAllExams } from "../DTOs/ExamsDTO/QueryParamsListAllExams";
 
 export const ExamsController = {
   GetExams: async (
     request: FastifyRequest<{
-      Querystring: { name: string; id: string; pageActual: number };
+      Querystring: QueryParamsListAllExams & { id?: string };
     }>,
     reply: FastifyReply
   ) => {
-    const { name, id, pageActual } = request.query;
     try {
-      const res = await getExamsUseCase.execute(name, id, pageActual);
+      const res = await getExamsUseCase.execute(request.query);
 
       return reply.code(200).send(res);
     } catch (err) {
