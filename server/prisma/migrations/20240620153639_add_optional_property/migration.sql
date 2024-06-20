@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Exams" ALTER COLUMN "isHighligth" SET DEFAULT false,
+ALTER COLUMN "valueWithRate" DROP NOT NULL,
+ALTER COLUMN "idOld" DROP NOT NULL;
