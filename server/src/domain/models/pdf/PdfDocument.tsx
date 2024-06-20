@@ -165,6 +165,12 @@ const PDF = ({ data }: PDFProps) => {
                   </Text>
                 </View>
               </View>
+              <View style={{ marginTop: 10 }}>
+                <Text style={styles.paragraphSM}>
+                  Assinado digitalmente por: {data.veterinarians.name} CRMV:{" "}
+                  {data.veterinarians.crmv}
+                </Text>
+              </View>
             </View>
           </View>
           <View style={{ marginTop: 30 }}>
@@ -189,10 +195,6 @@ const PDF = ({ data }: PDFProps) => {
                   Campo - SP, 09726-300
                 </Text>
                 <Text style={styles.paragraphSM}>Telefone: (11) 4122-3733</Text>
-                <Text style={styles.paragraphSM}>
-                  Assinado digitalmente por: {data.veterinarians.name} CRMV:{" "}
-                  {data.veterinarians.crmv}
-                </Text>
               </View>
             </View>
           </View>
