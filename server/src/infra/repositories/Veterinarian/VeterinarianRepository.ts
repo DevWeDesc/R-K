@@ -14,6 +14,7 @@ export class VeterinarianRepository implements IVeterinarianRepository {
 
     const solicitationsByVet = await prisma.veterinarians.findMany({
       where: {
+        name: { contains: nameVeterinarian, mode: "insensitive" },
         solicitations: {
           some: {
             pet: {
