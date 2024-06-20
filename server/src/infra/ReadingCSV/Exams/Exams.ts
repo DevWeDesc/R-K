@@ -38,23 +38,25 @@ export const readFileExams = async (
 };
 
 const AddInstructions = async (dataExams: IDataInstructions[]) => {
-  dataExams.map(async (exam) => {
-    const { id, preparing, nameExam } = exam;
+  for (const exam of dataExams) {
+    const { id, preparing } = exam;
 
     await prisma.exams
-      .findUnique({ where: { idOld: id, preparing: null, name: nameExam } })
+      .findUnique({ where: { idOld: id } })
       .then(async (res) => {
         if (res)
           await prisma.exams.update({
-            where: { idOld: id, preparing: null },
-            data: { preparing },
+            where: { idOld: id },
+            data: {
+              preparing,
+            },
           });
       });
-  });
+  }
 };
 
 const PopullateExams = async (dataExams: IDataExams[]) => {
-  dataExams.map(async (exam) => {
+  for (const exam of dataExams) {
     const {
       deadline,
       deadlineInDays,
@@ -90,5 +92,5 @@ const PopullateExams = async (dataExams: IDataExams[]) => {
             },
           });
       });
-  });
+  }
 };
