@@ -2,6 +2,7 @@ import { Exams } from "@prisma/client";
 import { prisma } from "../../../lib/prismaClient";
 import { IExamsRepository } from "./IExamsRepository";
 import { ExamsRequestDTO } from "../../../application/DTOs/ExamsDTO/ExamsRequestDTO";
+import { QueryParamsListAllExams } from "../../../application/DTOs/ExamsDTO/QueryParamsListAllExams";
 
 export default class ExamsRepository implements IExamsRepository {
   public async findByName(name: string): Promise<Exams | null> {
@@ -24,19 +25,31 @@ export default class ExamsRepository implements IExamsRepository {
       where: { id: parseInt(id.toString()) },
     });
   }
-  public async listAll(pageActual?: number): Promise<Exams[] | null> {
+
+  public async listAll(
+    queryParams: QueryParamsListAllExams
+  ): Promise<Exams[] | null> {
     return await prisma.exams.findMany({
+      where: { name: { contains: queryParams.name, mode: "insensitive" } },
       include: { group: true },
-      skip: pageActual && (pageActual - 1) * 10,
+      orderBy: [{ isHighligth: "desc" }, { value: queryParams.filterByValue }],
+      skip: queryParams.pageActual && (queryParams.pageActual - 1) * 10,
       take: 10,
     });
   }
   public async countExams(name?: string): Promise<number> {
-    return await prisma.exams.count({ where: { name: { contains: name } } });
+    return await prisma.exams.count({
+      where: { name: { contains: name } },
+    });
   }
 
   public async create(entity: ExamsRequestDTO): Promise<Exams> {
-    return await prisma.exams.create({ data: entity });
+    return await prisma.exams.create({
+      data: {
+        ...entity,
+        specie: entity.specie ? entity.specie : "Canino / Felino",
+      },
+    });
   }
 
   public async update(
