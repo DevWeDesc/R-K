@@ -5,11 +5,12 @@ interface IDataExams {
   id: number;
   name: string;
   value: number;
-  valueWithRate: number;
+  valueWithRate: string;
   specie: string;
   group: string;
   deadline: number;
   deadlineInDays: string;
+  isHighligth: string;
 }
 
 interface IDataInstructions {
@@ -37,37 +38,57 @@ export const readFileExams = async (
 };
 
 const AddInstructions = async (dataExams: IDataInstructions[]) => {
-  for (const exam of dataExams) {
-    const { id, preparing } = exam;
+  dataExams.map(async (exam) => {
+    const { id, preparing, nameExam } = exam;
 
     await prisma.exams
-      .findUnique({ where: { id, preparing: null } })
+      .findUnique({ where: { idOld: id, preparing: null, name: nameExam } })
       .then(async (res) => {
         if (res)
           await prisma.exams.update({
-            where: { id, preparing: null },
+            where: { idOld: id, preparing: null },
             data: { preparing },
           });
       });
-  }
+  });
 };
 
 const PopullateExams = async (dataExams: IDataExams[]) => {
-  for (const exam of dataExams) {
-    const { deadline, deadlineInDays, name, value, id } = exam;
-    const primaryLetter = name.substring(0, 1).toUpperCase();
+  dataExams.map(async (exam) => {
+    const {
+      deadline,
+      deadlineInDays,
+      name,
+      value,
+      id,
+      isHighligth,
+      valueWithRate,
+      specie,
+    } = exam;
 
+    const primaryLetter = name.substring(0, 1).toUpperCase();
     const nameFormatted = primaryLetter.concat(
       name.substring(1, name.length).toLocaleLowerCase()
     );
-
     const deadlineFormatted = `${deadline} ${deadlineInDays}`;
 
-    await prisma.exams.findUnique({ where: { id } }).then(async (res) => {
-      if (!res)
-        await prisma.exams.create({
-          data: { name: nameFormatted, deadline: deadlineFormatted, value, id },
-        });
-    });
-  }
+    await prisma.exams
+      .findUnique({
+        where: { name: nameFormatted, idOld: id },
+      })
+      .then(async (res) => {
+        if (!res)
+          await prisma.exams.create({
+            data: {
+              idOld: id,
+              value,
+              name: nameFormatted,
+              deadline: deadlineFormatted,
+              valueWithRate: parseFloat(valueWithRate),
+              isHighligth: isHighligth === "false" ? false : true,
+              specie: specie ? specie : "",
+            },
+          });
+      });
+  });
 };
