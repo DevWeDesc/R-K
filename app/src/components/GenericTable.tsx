@@ -67,7 +67,13 @@ export const GenericTable = ({
   };
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["examsList", pageActual, examName, modalInformations],
+    queryKey: [
+      "examsList",
+      pageActual,
+      examName,
+      modalInformations,
+      filterOptions,
+    ],
     queryFn: () => GetExams(pageActual, examName, filterOptions),
   });
 
@@ -130,9 +136,8 @@ export const GenericTable = ({
           </div>
           <SelectContent defaultValue="highlights">
             <SelectGroup>
-              <SelectItem value="highlights">Mais selecionados</SelectItem>
-              <SelectItem value="valueasc">Valor crescente</SelectItem>
-              <SelectItem value="valuedesc">Valor decrescente</SelectItem>
+              <SelectItem value="asc">Valor crescente</SelectItem>
+              <SelectItem value="desc">Valor decrescente</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
