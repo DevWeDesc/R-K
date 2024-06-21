@@ -26,7 +26,12 @@ import { StatesMock } from "@/mocks/StatesMock";
 import { PhoneMask } from "@/utils/Masks/PhoneMask";
 import { CRMVMask } from "@/utils/Masks/CRMVMask";
 
-export const FormRegister = () => {
+interface IFormRegister {
+  isAdmin?: boolean;
+  closeModal?: () => void;
+}
+
+export const FormRegister = ({ isAdmin, closeModal }: IFormRegister) => {
   const navigate = useNavigate();
   const [InputPasswordIsVisible, setInputPasswordIsVisible] = useState({
     password: false,
@@ -66,7 +71,7 @@ export const FormRegister = () => {
     const DataRequest: IRegisterAccountDTO = {
       LoginRequestDTO: {
         password,
-        roleUser: userRoleEnum.veterinarian,
+        roleUser: !isAdmin ? userRoleEnum.veterinarian : userRoleEnum.admin,
       },
       VeterinarianRequestDTO: {
         crmv,
@@ -82,6 +87,7 @@ export const FormRegister = () => {
         toast.success("Usuário cadastrado com sucesso!");
         navigate("/");
         setButtonIsLoading(false);
+        closeModal && closeModal();
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -280,7 +286,22 @@ export const FormRegister = () => {
           <ImSpinner8 className="animate-spin mr-2" /> Carregando
         </Button>
       ) : (
-        <Button type="submit">Cadastrar</Button>
+        <>
+          {isAdmin ? (
+            <div className="grid grid-cols-2 gap-2">
+              <Button type="submit" className="rounded-sm">
+                Cadastrar
+              </Button>
+              <Button type="button" variant="outline" onClick={closeModal}>
+                Cancelar
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button type="submit">Cadastrar</Button>
+            </>
+          )}
+        </>
       )}
     </form>
   );
