@@ -66,7 +66,9 @@ export const ExhibitionReport = ({ reports }: IExhibitionReport) => {
                   <TableCell className="text-right">
                     <a
                       target="_blank"
-                      href={`http://localhost:3335/solicitations/pdf/${namePDFSolicitation}`}
+                      href={`${
+                        import.meta.env.VITE_DevelopHost
+                      }/solicitations/pdf/${namePDFSolicitation}`}
                     >
                       <Button variant="outline" className="px-5">
                         <TbListDetails className="text-xl mr-2" /> Visualizar
