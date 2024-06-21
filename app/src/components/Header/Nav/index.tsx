@@ -2,6 +2,7 @@ import { ModalGeneric } from "@/components/ModalGeneric";
 import { Button } from "@/components/ui/button";
 import { userRoleEnum } from "@/enums/UserRoleEnum";
 import { VariantsButtonEnum } from "@/enums/VariantsButtonEnum";
+import { FormRegister } from "@/pages/Register/FormRegister";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +26,12 @@ interface INavProp {
 
 export const Nav = ({ menuOpen }: INavProp) => {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
+  // const [openModalCreateAdmin, setOpenModalCreateAdmin] = useState(false);
+  const [openModals, setOpenModals] = useState({
+    newAdmin: false,
+    session: false,
+  });
 
   const handleCloseSessionUser = () => {
     Cookies.remove("userRole");
@@ -34,8 +40,20 @@ export const Nav = ({ menuOpen }: INavProp) => {
     navigate("/");
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseModalSession = () => {
+    setOpenModals({ ...openModals, session: false });
+  };
+
+  const handleStateModalSession = (value: boolean) => {
+    setOpenModals({ ...openModals, session: value });
+  };
+
+  const handleCloseModalNewAdmin = () => {
+    setOpenModals({ ...openModals, newAdmin: false });
+  };
+
+  const handleStateModalNewAdmin = (value: boolean) => {
+    setOpenModals({ ...openModals, newAdmin: value });
   };
 
   return (
@@ -44,8 +62,34 @@ export const Nav = ({ menuOpen }: INavProp) => {
         menuOpen ? "flex flex-col" : "hidden"
       } md:flex`}
     >
-      {Cookies.get("userRole") === userRoleEnum.admin
-        ? navData.map((nav, index) => (
+      {Cookies.get("userRole") === userRoleEnum.admin ? (
+        <>
+          <ModalGeneric
+            variantButton={VariantsButtonEnum.link}
+            textButtonActive="Adicionar Admin"
+            textTitle="Adicione usuário administrador"
+            textDescription="Adicione um usuário administrador para a execução de funcionalidades como admin"
+            openModal={openModals.newAdmin}
+            setModalOpen={(ev) => handleStateModalNewAdmin(ev)}
+          >
+            <>
+              <FormRegister closeModal={handleCloseModalNewAdmin} isAdmin />
+            </>
+          </ModalGeneric>
+          {navData.map((nav, index) => (
+            <span
+              key={index}
+              className="cursor-pointer font-semibold"
+              onClick={() => navigate(`${nav.Href}`)}
+            >
+              {nav.Name}
+            </span>
+          ))}
+        </>
+      ) : (
+        navData
+          .filter((nav) => !nav.requiredAdmin)
+          .map((nav, index) => (
             <span
               key={index}
               className="cursor-pointer font-semibold"
@@ -54,28 +98,18 @@ export const Nav = ({ menuOpen }: INavProp) => {
               {nav.Name}
             </span>
           ))
-        : navData
-            .filter((nav) => !nav.requiredAdmin)
-            .map((nav, index) => (
-              <span
-                key={index}
-                className="cursor-pointer font-semibold"
-                onClick={() => navigate(`${nav.Href}`)}
-              >
-                {nav.Name}
-              </span>
-            ))}
+      )}
       <ModalGeneric
         variantButton={VariantsButtonEnum.link}
         textButtonActive="Encerrar Sessão"
         textTitle="Tem certeza que deseja encerrar a sessão?"
         textDescription="Após encerrar a sessão você vai sair da sua conta, deseja confirmar?"
-        openModal={openModal}
-        setModalOpen={(ev) => setOpenModal(ev)}
+        openModal={openModals.session}
+        setModalOpen={(ev) => handleStateModalSession(ev)}
       >
         <div className="grid grid-cols-2 gap-2">
           <Button
-            onClick={handleCloseModal}
+            onClick={handleCloseModalSession}
             variant="outline"
             className="rounded-full"
           >
