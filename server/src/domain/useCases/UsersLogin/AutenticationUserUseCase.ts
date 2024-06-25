@@ -39,6 +39,7 @@ export default class AutenticationUserUseCase {
 
       const user = {
         id,
+        name,
         roleUser,
         email,
         crmv,
