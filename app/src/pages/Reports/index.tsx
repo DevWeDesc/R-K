@@ -12,6 +12,8 @@ import { IoSearchOutline } from "react-icons/io5";
 import { ExhibitionReport } from "./ExhibitionReport";
 import { useState } from "react";
 import { FormatDateIsoStringForQuery } from "@/utils/FormatDateIsoStringForQuery";
+import { userLoged } from "@/services/UserLocal";
+import { userRoleEnum } from "@/enums/UserRoleEnum";
 
 export const Reports = () => {
   const handleGenerateInitialDate = (
@@ -32,11 +34,12 @@ export const Reports = () => {
   };
 
   const [params, setParams] = useState({
-    initialDate: null,
+    initialDate: "",
     finalDate: handleGenerateFinalDate(),
-    nameVeterinarian: null,
-    nameCustomer: null,
-    namePet: null,
+    nameVeterinarian:
+      userLoged.user.roleUser !== userRoleEnum.admin ? userLoged.user.name : "",
+    nameCustomer: "",
+    namePet: "",
   } as ParamsSolicitationsPerVet);
 
   const handleMutateNameVeterinarianByParams = (nameVeterinarian: string) => {
@@ -143,19 +146,27 @@ export const Reports = () => {
                   className="rounded-sm bg-white border col-span-1"
                 />
               </div>
+
               <div>
                 <label htmlFor="nameVet" className="text-sm">
                   Nome do Veterinário
                 </label>
                 <Input
                   id="nameVet"
+                  disabled={
+                    userLoged.user.roleUser === userRoleEnum.admin
+                      ? false
+                      : true
+                  }
                   onChange={(ev) =>
                     handleMutateNameVeterinarianByParams(ev.target.value)
                   }
+                  value={params.nameVeterinarian}
                   placeholder="Nome do Veterinário"
                   className="rounded-sm bg-white border col-span-1"
                 />
               </div>
+
               <Button
                 type="button"
                 onClick={() => refetch()}
@@ -173,58 +184,62 @@ export const Reports = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-y-10">
-            {reportSeries && reportSeries[0] === 0 ? (
+            {reports?.data.length == 0 ? (
               <p className="text-center col-span-2">
                 Atualmente, não há dados disponíveis para exibição nesta sessão
                 de relatórios. Este espaço será atualizado assim que for
                 realizado o cadastro de uma guia!
               </p>
             ) : (
-              <div className="grid grid-cols-2 col-span-2 grid-rows-2 ">
-                <Graphic
-                  seriesData={reportSeries}
-                  dataDescriptions={reports?.data.map(
-                    (report) =>
-                      `${report.name} - Qtd Exames: ${report._count.solicitations}`
-                  )}
-                  typeChart="pie"
-                />
-                <Graphic
-                  seriesData={reports?.data.map(
-                    (report) => report._count.solicitations
-                  )}
-                  dataDescriptions={reports?.data.map(
-                    (report) =>
-                      `${report.name} - Qtd Exames: ${report._count.solicitations}`
-                  )}
-                  typeChart="donut"
-                />
+              <>
+                <div className="grid grid-cols-2 col-span-2 grid-rows-2 ">
+                  <Graphic
+                    seriesData={reportSeries}
+                    dataDescriptions={reports?.data.map(
+                      (report) =>
+                        `${report.name} - Qtd Exames: ${report._count.solicitations}`
+                    )}
+                    typeChart="pie"
+                  />
+                  <Graphic
+                    seriesData={reports?.data.map(
+                      (report) => report._count.solicitations
+                    )}
+                    dataDescriptions={reports?.data.map(
+                      (report) =>
+                        `${report.name} - Qtd Exames: ${report._count.solicitations}`
+                    )}
+                    typeChart="donut"
+                  />
 
-                <Graphic
-                  seriesData={reports?.data.map(
-                    (report) => report._count.solicitations
-                  )}
-                  typeChart="bar"
-                  dataDescriptions={reports?.data.map(
-                    (report) =>
-                      `${report.name} - Qtd Exames: ${report._count.solicitations}`
-                  )}
-                />
-                <Graphic
-                  seriesData={reports?.data.map(
-                    (report) => report._count.solicitations
-                  )}
-                  typeChart="area"
-                  dataDescriptions={reports?.data.map(
-                    (report) =>
-                      `${report.name} - Qtd Exames: ${report._count.solicitations}`
-                  )}
-                />
-              </div>
+                  <Graphic
+                    seriesData={reports?.data.map(
+                      (report) => report._count.solicitations
+                    )}
+                    typeChart="bar"
+                    dataDescriptions={reports?.data.map(
+                      (report) =>
+                        `${report.name} - Qtd Exames: ${report._count.solicitations}`
+                    )}
+                  />
+                  <Graphic
+                    seriesData={reports?.data.map(
+                      (report) => report._count.solicitations
+                    )}
+                    typeChart="area"
+                    dataDescriptions={reports?.data.map(
+                      (report) =>
+                        `${report.name} - Qtd Exames: ${report._count.solicitations}`
+                    )}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <ExhibitionReport reports={reports?.data} />
+                </div>
+              </>
             )}
           </div>
         )}
-        <ExhibitionReport reports={reports?.data} />
       </div>
     </>
   );

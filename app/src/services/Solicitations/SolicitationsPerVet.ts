@@ -1,38 +1,41 @@
 import { api } from "@/utils/Api/AxiosInstance";
 import { AxiosResponse } from "axios";
-import { headerRequest } from "../UserLocal";
+import { headerRequest, userLoged } from "../UserLocal";
 import { IReportPerVet } from "@/@interfaces/ReportsPerVet";
+import { userRoleEnum } from "@/enums/UserRoleEnum";
 
 export interface ParamsSolicitationsPerVet {
-  initialDate?: string | null;
-  finalDate?: string | null;
-  nameVeterinarian?: string | null;
-  namePet?: string | null;
-  nameCustomer?: string | null;
+  initialDate?: string;
+  finalDate?: string;
+  nameVeterinarian?: string;
+  namePet?: string;
+  nameCustomer?: string;
 }
 
 export const SolicitationsPerVet = async (
   paramsSolicitationsPerVet: ParamsSolicitationsPerVet
 ): Promise<AxiosResponse<IReportPerVet[]>> => {
+  const nameVeterinarian =
+    userLoged.user.roleUser !== userRoleEnum.admin
+      ? userLoged.user.name.replaceAll(" ", "%20")
+      : paramsSolicitationsPerVet.nameVeterinarian;
   return await api.get(
     `/veterinarian/solicitations?${
-      paramsSolicitationsPerVet.nameVeterinarian
-        ? `nameVeterinarian=${paramsSolicitationsPerVet.nameVeterinarian}`
-        : ""
+      nameVeterinarian ? `nameVeterinarian=${nameVeterinarian}` : ""
     }${
-      paramsSolicitationsPerVet.namePet
+      paramsSolicitationsPerVet.namePet != ""
         ? `&namePet=${paramsSolicitationsPerVet.namePet}`
         : ""
     }${
-      paramsSolicitationsPerVet.nameCustomer
+      paramsSolicitationsPerVet.nameCustomer != ""
         ? `&nameCustomer=${paramsSolicitationsPerVet.nameCustomer}`
         : ""
     }${
-      paramsSolicitationsPerVet.initialDate
+      paramsSolicitationsPerVet.initialDate != ""
         ? `&initialDate=${paramsSolicitationsPerVet.initialDate}`
         : ""
     }${
-      paramsSolicitationsPerVet.initialDate
+      paramsSolicitationsPerVet.initialDate != ""
         ? `&finalDate=${paramsSolicitationsPerVet.finalDate}`
         : ""
     }`,
