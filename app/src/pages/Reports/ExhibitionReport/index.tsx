@@ -33,13 +33,11 @@ export const ExhibitionReport = ({ reports }: IExhibitionReport) => {
         <TableBody>
           {reports?.map((veterinarian) =>
             veterinarian.solicitations.map((solicitations) => {
+              const dateActual = new Date(solicitations.finishedIn);
+              dateActual.setHours(dateActual.getHours() + 3);
               const namePDFSolicitation = `Guia-${
                 solicitations.pet.name
-              }-${FormatDate(
-                new Date(solicitations.finishedIn),
-                "short",
-                "medium"
-              )
+              }-${FormatDate(dateActual, "short", "medium")
                 .replace(/[:/]/g, "-")
                 .replace(",", "_")
                 .replace(" ", "")}`;
