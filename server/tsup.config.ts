@@ -2,7 +2,8 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["src"],
-  outDir: "build",
+  outDir: "dist",
+  format: "esm",
   ignoreWatch: ["*.xlsx", "*.pdf"],
   esbuildOptions(options) {
     options.loader = {
