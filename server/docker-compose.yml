@@ -1,7 +1,15 @@
-version: "3.8"
-
 services:
-  dbRK:
+  api:
+    container_name: apiRK
+    build: .
+    ports:
+      - "3335:3335"
+    depends_on:
+      - db
+    networks:
+      - rk_network
+
+  db:
     image: postgres
     container_name: dbRK
     environment:
@@ -19,3 +27,4 @@ volumes:
 
 networks:
   rk_network:
+    driver: bridge
