@@ -62,6 +62,20 @@ model Pets {
   Solicitations Solicitations[]
 }
 
+enum ExamTypeEnum {
+  HEMATOLOGIA
+  BIOQUIMICA_CLINICA
+  IMUNOLOGIA
+  URINA
+  FEZES
+  MICROBIOLOGIA
+  HORMONIOS
+  PATOLOGIA
+  BIOLOGIA_MOLECULAR
+  CARDIOLOGIA
+  ULTRASSONOGRAFIA
+}
+
 model Exams {
   id                        Int                         @id @default(autoincrement())
   idOld                     Int?                        @unique
@@ -72,9 +86,25 @@ model Exams {
   preparing                 String?
   deadline                  String
   specie                    String
+  typeExam                  ExamTypeEnum
   ExamsInPetOnSolicitations ExamsInPetOnSolicitations[]
+  ExamsInExamProfile        ExamsInExamProfile[]
   group                     Groups?                     @relation(fields: [groupsId], references: [id])
   groupsId                  Int?
+}
+
+model ExamsInExamProfile {
+  id             Int          @id @default(autoincrement())
+  examsId        Int          @unique
+  Exams          Exams        @relation(fields: [examsId], references: [id])
+  examsProfileId Int
+  ExamsProfile   ExamsProfile @relation(fields: [examsProfileId], references: [id])
+}
+
+model ExamsProfile {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  examsInExamProfile ExamsInExamProfile[]
 }
 
 model Groups {
