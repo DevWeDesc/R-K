@@ -3,8 +3,15 @@ import { prisma } from "../../../lib/prismaClient";
 import { IExamsRepository } from "./IExamsRepository";
 import { ExamsRequestDTO } from "../../../application/DTOs/ExamsDTO/ExamsRequestDTO";
 import { QueryParamsListAllExams } from "../../../application/DTOs/ExamsDTO/QueryParamsListAllExams";
+import { ExamTypeEnum } from "../../../domain/enums/ExamTypeEnum";
 
 export default class ExamsRepository implements IExamsRepository {
+  public async findByTypeExam(
+    typeExam: ExamTypeEnum
+  ): Promise<Exams[] | Exams> {
+    return await prisma.exams.findMany({ where: { typeExam } });
+  }
+
   public async findByName(name: string): Promise<Exams | null> {
     return await prisma.exams.findUnique({ where: { name } });
   }
