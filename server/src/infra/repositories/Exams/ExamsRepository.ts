@@ -50,7 +50,25 @@ export default class ExamsRepository implements IExamsRepository {
     });
   }
 
+  // public async create(entity: ExamsRequestDTO): Promise<Exams> {
+  //   return await prisma.exams.create({
+  //     data: {
+  //       ...entity,
+  //       name: entity.name,
+  //       specie: entity.specie ? entity.specie : "Canino / Felino",
+  //     },
+  //   });
+  // }
+
   public async create(entity: ExamsRequestDTO): Promise<Exams> {
+    const existingExam = await prisma.exams.findUnique({
+      where: { name: entity.name },
+    });
+
+    if (existingExam) {
+      throw new Error(`Exame com o nome ${entity.name} já existe.`);
+    }
+
     return await prisma.exams.create({
       data: {
         ...entity,

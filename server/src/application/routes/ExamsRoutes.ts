@@ -5,6 +5,11 @@ import { AuthMiddleware } from "../middlewares/Auth";
 
 export async function examsRoutes(app: FastifyInstance) {
   app.get("/exams", { preHandler: AuthMiddleware }, ExamsController.GetExams);
+  app.get(
+    "/exams/type",
+    { preHandler: AuthMiddleware },
+    ExamsController.GetExamsPerType
+  );
   app.post(
     "/exams",
     { preHandler: AuthWithRoleMiddleware },
