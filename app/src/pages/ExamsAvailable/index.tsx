@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { GuidePreviewComponent } from "./GuidePreview";
 import { ExamsByGuideMock } from "@/mocks/ExamsByGuideMock";
 import { useRef, useState } from "react";
+import { PDFBasedGuide } from "./PDFBasedGuide";
 
 export const ExamsAvailable = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const ExamsAvailable = () => {
   return (
     <>
       <Header navIsVisible />
-      <div
+      {/* <div
         className={`grid ${
           ExamsByGuideMock.length > 0 && "lg:grid-cols-2"
         } lg:gap-10 px-5`}
@@ -64,7 +65,8 @@ export const ExamsAvailable = () => {
           </div>
         </div>
         <GuidePreviewComponent ref={guideRef} isloading={isLoading} />
-      </div>
+      </div> */}
+      <PDFBasedGuide />
     </>
   );
 };

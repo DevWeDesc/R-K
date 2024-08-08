@@ -1,3 +1,5 @@
+import { ExamTypeEnum } from "../../../domain/enums/ExamTypeEnum";
+
 export interface ExamsRequestDTO {
   id?: number;
   name: string;
@@ -8,4 +10,5 @@ export interface ExamsRequestDTO {
   groupId?: number;
   deadline: string;
   preparing?: string;
+  typeExam: ExamTypeEnum;
 }

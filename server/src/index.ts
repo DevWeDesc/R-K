@@ -48,6 +48,17 @@ import { UserLoginRepository } from "./infra/repositories/UserLogin/UserLoginRep
 import { ForgetPasswordUseCase } from "./domain/useCases/Veterinarians/ForgetPassword/ForgetPasswordUseCase";
 import VerifyCodeUseCase from "./domain/useCases/Veterinarians/ForgetPassword/VerifyCodeUseCase";
 import EditPasswordUseCase from "./domain/useCases/Veterinarians/ForgetPassword/EditPasswordUseCase";
+import GetExamsPerTypeUseCaseImpl from "./domain/useCases/Exams/GetExamsPerTypeUseCase";
+import CreateExamsProfileUseCase from "./domain/useCases/ExamsProfile/CreateExamsProfileUseCase";
+import DeleteExamProfileUseCase from "./domain/useCases/ExamsProfile/DeleteExamProfileUseCase";
+import UpdateExamProfileUseCase from "./domain/useCases/ExamsProfile/UpdatedExamProfileUseCase";
+import GetExamsProfileUseCase from "./domain/useCases/ExamsProfile/GetExamsProfileUseCase";
+import ExamsProfileRepository from "./infra/repositories/ExamsProfile/ExamsProfileRepository";
+import ExamsInExamProfileRepository from "./infra/repositories/ExamsInExamProfile/ExamsInExamProfileRepository";
+import UpdateExamInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/UpdatedExamInExamProfileUseCase";
+import GetExamsInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/GetExamsInExamProfileUseCase";
+import DeleteExamInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/DeleteExamInExamProfileUseCase";
+import CreateExamsInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/CreateExamsInExamProfileUseCase";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -59,6 +70,8 @@ export const petsRepository = new PetsRepository();
 export const solicitationsRepository = new SolicitationsRepository();
 export const examsInPetOnSolicitationsRepository =
   new ExamsInPetOnSolicitationsRepository();
+const examsProfileRepository = new ExamsProfileRepository();
+export const examsInExamProfileRepository = new ExamsInExamProfileRepository();
 
 //Model
 export const pdfModel = new PdfModel();
@@ -107,6 +120,36 @@ export const getExamsUseCase = new GetExamsUseCase(examsRepository);
 export const createExamsUseCase = new CreateExamsUseCase(examsRepository);
 export const deleteExamUseCase = new DeleteExamUseCase(examsRepository);
 export const updateExamUseCase = new UpdateExamUseCase(examsRepository);
+export const getExamsPerTypeUseCaseImpl = new GetExamsPerTypeUseCaseImpl(
+  examsRepository
+);
+
+export const createExamsProfileUseCase = new CreateExamsProfileUseCase(
+  examsProfileRepository
+);
+export const getExamsProfileUseCase = new GetExamsProfileUseCase(
+  examsProfileRepository
+);
+export const deleteExamProfileUseCase = new DeleteExamProfileUseCase(
+  examsProfileRepository
+);
+export const updateExamProfileUseCase = new UpdateExamProfileUseCase(
+  examsProfileRepository
+);
+
+export const getExamsInExamProfileUseCase = new GetExamsInExamProfileUseCase(
+  examsInExamProfileRepository
+);
+export const createExamsInExamProfileUseCase =
+  new CreateExamsInExamProfileUseCase(
+    examsInExamProfileRepository,
+    examsProfileRepository,
+    examsRepository
+  );
+export const updateExamInExamProfileUseCase =
+  new UpdateExamInExamProfileUseCase(examsInExamProfileRepository);
+export const deleteExamInExamProfileUseCase =
+  new DeleteExamInExamProfileUseCase(examsInExamProfileRepository);
 
 export const createGroupUseCase = new CreateGroupUseCase(groupRepository);
 export const getGroupsUseCase = new GetGroupsUseCase(groupRepository);
