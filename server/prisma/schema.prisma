@@ -94,15 +94,17 @@ model Exams {
 }
 
 model ExamsInExamProfile {
-  id             Int          @id @default(autoincrement())
-  examsId        Int          @unique
-  Exams          Exams        @relation(fields: [examsId], references: [id])
-  examsProfileId Int
-  ExamsProfile   ExamsProfile @relation(fields: [examsProfileId], references: [id])
+  id             String        @id @default(uuid())
+  examsId        Int?
+  Exams          Exams?        @relation(fields: [examsId], references: [id])
+  examsProfileId String?
+  ExamsProfile   ExamsProfile? @relation(fields: [examsProfileId], references: [id])
+
+  @@unique([examsId, examsProfileId])
 }
 
 model ExamsProfile {
-  id                 Int                  @id @default(autoincrement())
+  id                 String               @id @default(uuid())
   name               String               @unique
   examsInExamProfile ExamsInExamProfile[]
 }
