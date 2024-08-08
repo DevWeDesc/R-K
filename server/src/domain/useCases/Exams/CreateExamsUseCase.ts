@@ -5,7 +5,7 @@ export default class CreateExamsUseCase {
   constructor(private readonly examsRepository: IExamsRepository) {}
 
   async execute(examRequest: ExamsRequestDTO) {
-    const { deadline, name, value } = examRequest;
+    const { deadline, name, value, typeExam } = examRequest;
 
     const validationName = await this.examsRepository.findByName(name);
 
@@ -15,6 +15,7 @@ export default class CreateExamsUseCase {
       deadline,
       name,
       value,
+      typeExam,
     });
 
     return examCreated;
