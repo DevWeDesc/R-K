@@ -1,3 +1,4 @@
+import { ExamTypeEnum } from "../../../domain/enums/ExamTypeEnum";
 import { prisma } from "../../../lib/prismaClient";
 import XLSX from "xlsx";
 
@@ -79,23 +80,33 @@ const PopullateExams = async (dataExams: IDataExams[]) => {
     );
     const deadlineFormatted = `${deadline} ${deadlineInDays}`;
 
-    await prisma.exams
-      .findUnique({
-        where: { name: nameFormatted, idOld: id },
-      })
-      .then(async (res) => {
-        if (!res)
-          await prisma.exams.create({
-            data: {
-              idOld: id,
-              value,
-              name: nameFormatted,
-              deadline: deadlineFormatted,
-              valueWithRate: parseFloat(valueWithRate),
-              isHighligth: isHighligth === "false" ? false : true,
-              specie: specie ? specie : "",
-            },
-          });
-      });
+    const typeExam = exam.group
+      .toLocaleUpperCase()
+      .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, "_");
+
+    if (Object.values(ExamTypeEnum).includes(typeExam as ExamTypeEnum)) {
+      const examType = { typeExam: typeExam as ExamTypeEnum };
+
+      await prisma.exams
+        .findUnique({
+          where: { name: nameFormatted, idOld: id },
+        })
+        .then(async (res) => {
+          if (!res)
+            await prisma.exams.create({
+              data: {
+                idOld: id,
+                value,
+                name: nameFormatted,
+                deadline: deadlineFormatted,
+                valueWithRate: parseFloat(valueWithRate),
+                isHighligth: isHighligth === "false" ? false : true,
+                specie: specie ? specie : "",
+                typeExam: examType.typeExam,
+              },
+            });
+        });
+    }
   }
 };
