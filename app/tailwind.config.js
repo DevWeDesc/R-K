@@ -22,6 +22,7 @@ module.exports = {
         timesNew: "Times New Roman",
       },
       colors: {
+        grayTypeExams: "#E0E1E1",
         input: "#F1F1F1",
         redDefault: "#DC2D36",
         subTextColor: "#333333",
