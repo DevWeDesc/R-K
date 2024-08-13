@@ -1,3 +1,4 @@
+import { AllExamsWithType } from "./AllExamsWithType";
 import { CombinedExams } from "./CombinedExams";
 import { HeaderGuide } from "./HeaderGuide";
 import { InformationsGuide } from "./InformationsGuide";
@@ -8,6 +9,7 @@ export const PDFBasedGuide = () => {
       <HeaderGuide />
       <InformationsGuide />
       <CombinedExams />
+      <AllExamsWithType />
     </div>
   );
 };
