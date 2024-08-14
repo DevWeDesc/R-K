@@ -1,5 +1,5 @@
 import { AllExamsWithType } from "./AllExamsWithType";
-import { CombinedExams } from "./CombinedExams";
+import { CombinedExams } from "./CombinedExams/CombinedExams";
 import { HeaderGuide } from "./HeaderGuide";
 import { InformationsGuide } from "./InformationsGuide";
 
