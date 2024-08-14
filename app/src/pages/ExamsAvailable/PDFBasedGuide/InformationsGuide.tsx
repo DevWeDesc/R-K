@@ -1,8 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Table, TableRow, TableBody, TableCell } from "@/components/ui/table";
 import { SolicitationById } from "@/services/Solicitations/SolicitationById";
-import { FormatDate } from "@/utils/FormatDate";
-import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
@@ -26,7 +24,7 @@ export const InformationsGuide = () => {
           <div className="absolute bottom-0 w-full h-1 bg-red-700 rounded-xl" />
         </div>
         <Table>
-          <TableBody className="text-xs">
+          <TableBody className="text-sm">
             <TableRow>
               <TableCell>
                 Pet: {data?.data.solicitationsDetails.pet.name}
@@ -60,7 +58,7 @@ export const InformationsGuide = () => {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <p>Sexo: </p>
-                  <div className="flex">
+                  <div className="flex gap-1">
                     <Input
                       defaultChecked
                       id="sexMale"
@@ -71,7 +69,7 @@ export const InformationsGuide = () => {
                     />
                     <label htmlFor="sexMale">Macho</label>
                   </div>
-                  <div className="flex">
+                  <div className="flex gap-1">
                     <Input
                       id="sexFemale"
                       type="radio"
