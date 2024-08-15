@@ -3,8 +3,9 @@ import { GetAllExamsWithTypeService } from "@/services/Exams/GetAllExamsWithType
 import { useQuery } from "react-query";
 import iconFeces from "@/../public/assets/Iconfeces.png";
 import iconUrine from "@/../public/assets/iconUrine.png";
-import imageBodyAnimal from "@/../public/assets/ImageBodyAnimal.png";
+// import imageBodyAnimal from "@/../public/assets/ImageBodyAnimal.png";
 import { Input } from "@/components/ui/input";
+import { KonvaComp } from "./CanvasComponent";
 
 export const AllExamsWithType = () => {
   const { data: examsWithType } = useQuery({
@@ -173,7 +174,8 @@ export const AllExamsWithType = () => {
             </div>
           </div>
           <div>
-            <img src={imageBodyAnimal} className="" alt="" />
+            {/* <img src={imageBodyAnimal} className="" alt="" /> */}
+            <KonvaComp />
           </div>
           <div className="col-span-2 flex flex-col gap-2 pl-2 text-sm">
             <div className="flex items-center w-full gap-2">
