@@ -1,4 +1,4 @@
-import { ExamsInExamProfile } from "@prisma/client";
+import { Exams, ExamsInExamProfile } from "@prisma/client";
 import { prisma } from "../../../lib/prismaClient";
 import { IExamsInExamProfileRepository } from "./IExamsInExamProfileRepository";
 import { ExamsInExamProfileRequestDTO } from "../../../application/DTOs/ExamsInExamProfile/ExamsInExamProfileRequestDTO";
@@ -6,6 +6,15 @@ import { ExamsInExamProfileRequestDTO } from "../../../application/DTOs/ExamsInE
 export default class ExamsInExamProfileRepository
   implements IExamsInExamProfileRepository
 {
+  public async findByProfileId(
+    idProfile: string
+  ): Promise<ExamsInExamProfile[]> {
+    return await prisma.examsInExamProfile.findMany({
+      where: { examsProfileId: idProfile },
+      include: { Exams: true },
+    });
+  }
+
   public async findById(
     id: string | number
   ): Promise<ExamsInExamProfile | null> {
@@ -16,7 +25,7 @@ export default class ExamsInExamProfileRepository
 
   public async listAll(): Promise<ExamsInExamProfile[] | null> {
     return await prisma.examsInExamProfile.findMany({
-      include: { ExamsProfile: true },
+      include: { ExamsProfile: true, Exams: true },
     });
   }
 
