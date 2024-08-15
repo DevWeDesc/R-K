@@ -1,3 +1,4 @@
+import { IExamsInExamProfileRepository } from "../../../infra/repositories/ExamsInExamProfile/IExamsInExamProfileRepository";
 import { IExamsProfileRepository } from "../../../infra/repositories/ExamsProfile/IExamsProfileRepository";
 
 export default class GetExamsProfileUseCase {
