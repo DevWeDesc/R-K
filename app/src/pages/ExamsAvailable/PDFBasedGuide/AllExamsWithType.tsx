@@ -5,7 +5,7 @@ import iconFeces from "@/../public/assets/Iconfeces.png";
 import iconUrine from "@/../public/assets/iconUrine.png";
 // import imageBodyAnimal from "@/../public/assets/ImageBodyAnimal.png";
 import { Input } from "@/components/ui/input";
-import { KonvaComp } from "./CanvasComponent";
+import { KonvaComp } from "./KonvaComp";
 
 export const AllExamsWithType = () => {
   const { data: examsWithType } = useQuery({
