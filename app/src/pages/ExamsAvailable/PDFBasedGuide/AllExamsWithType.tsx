@@ -39,21 +39,23 @@ export const AllExamsWithType = () => {
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>BIOQUÍMICOS</p> <div className="size-4 bg-red-700 rounded-sm" />
         </div>
-        {examsWithType?.data.biochemistry.map((examsBiochemistry) => (
-          <div className="flex items-center ml-2 w-full gap-1">
-            <TabGenericInput
-              id={examsBiochemistry.id.toString()}
-              type="checkbox"
-            />
-            <label
-              htmlFor={examsBiochemistry.id.toString()}
-              className="text-sm"
-              key={examsBiochemistry.id}
-            >
-              {examsBiochemistry.name}
-            </label>
-          </div>
-        ))}
+        <div className="grid grid-cols-3 ml-2 w-full gap-1">
+          {examsWithType?.data.biochemistry.map((examsBiochemistry) => (
+            <div className="flex items-center ml-2 w-full gap-1">
+              <TabGenericInput
+                id={examsBiochemistry.id.toString()}
+                type="checkbox"
+              />
+              <label
+                htmlFor={examsBiochemistry.id.toString()}
+                className="text-sm"
+                key={examsBiochemistry.id}
+              >
+                {examsBiochemistry.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
       <div>
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
@@ -114,38 +116,45 @@ export const AllExamsWithType = () => {
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>DERMATOLOGIA</p>
         </div>
-        {examsWithType?.data.dermatology.map((examsDermatology) => (
-          <div className="flex items-center ml-2 w-full gap-1">
-            <TabGenericInput
-              id={examsDermatology.id.toString()}
-              type="checkbox"
-            />
-            <label
-              htmlFor={examsDermatology.id.toString()}
-              className="text-sm"
-              key={examsDermatology.id}
-            >
-              {examsDermatology.name}
-            </label>
-          </div>
-        ))}
+        <div className="grid grid-cols-2 gap-5">
+          {examsWithType?.data.dermatology.map((examsDermatology) => (
+            <div className="flex items-center ml-2 w-full gap-1">
+              <TabGenericInput
+                id={examsDermatology.id.toString()}
+                type="checkbox"
+              />
+              <label
+                htmlFor={examsDermatology.id.toString()}
+                className="text-sm"
+                key={examsDermatology.id}
+              >
+                {examsDermatology.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="col-span-3">
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>HORMÔNIOS</p>
         </div>
-        {examsWithType?.data.hormones.map((examsHormones) => (
-          <div className="flex items-center ml-2 w-full gap-1">
-            <TabGenericInput id={examsHormones.id.toString()} type="checkbox" />
-            <label
-              htmlFor={examsHormones.id.toString()}
-              className="text-sm"
-              key={examsHormones.id}
-            >
-              {examsHormones.name}
-            </label>
-          </div>
-        ))}
+        <div className="grid grid-cols-3 gap-5">
+          {examsWithType?.data.hormones.map((examsHormones) => (
+            <div className="flex items-center ml-2 w-full gap-1">
+              <TabGenericInput
+                id={examsHormones.id.toString()}
+                type="checkbox"
+              />
+              <label
+                htmlFor={examsHormones.id.toString()}
+                className="text-sm"
+                key={examsHormones.id}
+              >
+                {examsHormones.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="col-span-3 mb-5">
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
