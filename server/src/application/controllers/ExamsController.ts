@@ -6,6 +6,7 @@ import {
   deleteExamInExamProfileUseCase,
   deleteExamProfileUseCase,
   deleteExamUseCase,
+  getAllExamsWithTypeUseCase,
   getExamsInExamProfileUseCase,
   getExamsPerTypeUseCaseImpl,
   getExamsProfileUseCase,
@@ -37,16 +38,9 @@ export const ExamsController = {
     }
   },
 
-  GetExamsPerType: async (
-    request: FastifyRequest<{
-      Querystring: { typeExam: ExamTypeEnum };
-    }>,
-    reply: FastifyReply
-  ) => {
+  GetExamsPerType: async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const res = await getExamsPerTypeUseCaseImpl.execute(
-        request.query.typeExam
-      );
+      const res = await getAllExamsWithTypeUseCase.execute();
 
       return reply.code(200).send(res);
     } catch (err) {
