@@ -45,7 +45,7 @@ export const KonvaComp = () => {
   return (
     <div>
       <Stage
-        className="w-full h-full"
+        className="flex items-center justify-center w-full h-full cursor-pincel"
         width={400}
         height={150}
         onMouseDown={handleMouseDown}
@@ -54,7 +54,7 @@ export const KonvaComp = () => {
         ref={stageRef}
       >
         <Layer>
-          <Image image={image} />
+          <Image height={140} width={400} image={image} />
           {lines.map((line: any, index: any) => (
             <Line
               key={index}
