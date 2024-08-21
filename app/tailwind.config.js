@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      cursor: {
+        pincel: "url(/assets/pen-svgrepo-com.svg), auto",
+      },
       fontFamily: {
         sans: "Roboto",
         timesNew: "Times New Roman",
