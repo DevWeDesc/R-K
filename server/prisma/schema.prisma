@@ -71,6 +71,7 @@ enum ExamTypeEnum {
   MICROBIOLOGIA
   HORMONIOS
   PATOLOGIA
+  PATOLOGIA_SEGUNDA_PARTE
   BIOLOGIA_MOLECULAR
   CARDIOLOGIA
   ULTRASSONOGRAFIA
@@ -127,6 +128,7 @@ model ExamsInPetOnSolicitations {
 model Solicitations {
   id              String                      @id @default(uuid())
   slug            String?
+  bodyAnimalImage String?                     @default("")
   isFinished      Boolean                     @default(false)
   exams           ExamsInPetOnSolicitations[]
   createdIn       DateTime                    @default(now())
