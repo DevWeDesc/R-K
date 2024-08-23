@@ -18,7 +18,10 @@ export const CombinedExams = () => {
         {profiles?.data
           .filter((profile) => profile.examsInExamProfile.length > 0)
           .map((profile) => (
-            <div className="flex items-center ml-2 w-full gap-1">
+            <div
+              key={profile.id}
+              className="flex items-center ml-2 w-full gap-1"
+            >
               <TabGenericInput id={profile.id.toString()} type="checkbox" />
               <label
                 htmlFor={profile.id.toString()}
