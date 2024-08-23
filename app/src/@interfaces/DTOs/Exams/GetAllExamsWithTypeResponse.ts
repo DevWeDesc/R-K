@@ -9,6 +9,7 @@ export interface GetAllExamsWithTypeResponse {
   dermatology: IExams[];
   hormones: IExams[];
   pathology: IExams[];
+  pathologySecondPart: IExams[];
   immunology: IExams[];
   molecularBiology: IExams[];
   cardiology: IExams[];
