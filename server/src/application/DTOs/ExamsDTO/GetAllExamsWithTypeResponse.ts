@@ -9,6 +9,7 @@ export interface GetAllExamsWithTypeResponse {
   dermatology: Exams[] | Exams;
   hormones: Exams[] | Exams;
   pathology: Exams[] | Exams;
+  pathologySecondPart: Exams[] | Exams;
   immunology: Exams[] | Exams;
   molecularBiology: Exams[] | Exams;
   cardiology: Exams[] | Exams;
