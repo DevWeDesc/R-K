@@ -24,10 +24,10 @@ export const NameExamsInExamProfile = ({
       <p className="pl-1">
         {examNames}
         {typeExams.includes("HEMATOLOGIA") && (
-          <span className="size-4 rounded-sm brightness-50">🟪</span>
+          <span className="size-4 rounded-sm brightness-75">🟪</span>
         )}
         {typeExams.includes("BIOQUIMICA_CLINICA") && (
-          <span className="size-4 rounded-sm brightness-50">🟥</span>
+          <span className="size-4 rounded-sm brightness-75">🟥</span>
         )}
         {typeExams.includes("URINA") && (
           <span>
