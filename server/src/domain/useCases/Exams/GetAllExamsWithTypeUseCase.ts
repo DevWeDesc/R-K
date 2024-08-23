@@ -31,6 +31,9 @@ export default class GetAllExamsWithTypeUseCase {
       const pathology = await this.examsRepository.findByTypeExam(
         ExamTypeEnum.PATOLOGIA
       );
+      const pathologySecondPart = await this.examsRepository.findByTypeExam(
+        ExamTypeEnum.PATOLOGIA_SEGUNDA_PARTE
+      );
       const immunology = await this.examsRepository.findByTypeExam(
         ExamTypeEnum.IMUNOLOGIA
       );
@@ -53,6 +56,7 @@ export default class GetAllExamsWithTypeUseCase {
         dermatology,
         hormones,
         pathology,
+        pathologySecondPart,
         immunology,
         molecularBiology,
         cardiology,

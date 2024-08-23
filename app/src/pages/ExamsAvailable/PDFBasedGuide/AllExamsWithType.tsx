@@ -7,6 +7,23 @@ import iconUrine from "@/../public/assets/iconUrine.png";
 import { Input } from "@/components/ui/input";
 import { KonvaComp } from "./KonvaComp";
 import { RadiologyExams } from "./RadiologyExams";
+import { useForm } from "react-hook-form";
+import { IExams } from "@/@interfaces/IExams";
+import { Button } from "@/components/ui/button";
+
+interface IFormSolicitation {
+  examsHematology: IExams[];
+  examsBiochemistry: IExams[];
+  examsUrine: IExams[];
+  examsFeces: IExams[];
+  examsMicrobiology: IExams[];
+  examsDermatology: IExams[];
+  examsHormones: IExams[];
+  examsPathology: IExams[];
+  examPathologySecondPart: IExams[];
+  examsImmunology: IExams[];
+  examsMolecularBiology: IExams[];
+}
 
 export const AllExamsWithType = () => {
   const { data: examsWithType } = useQuery({
@@ -14,44 +31,68 @@ export const AllExamsWithType = () => {
     queryFn: () => GetAllExamsWithTypeService(),
   });
 
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormSolicitation>();
+
+  const onSubmitForm = (values: IFormSolicitation) => {
+    console.log(values);
+  };
+
   return (
-    <div className="w-full grid grid-cols-3 gap-2 mt-5">
+    <form
+      onSubmit={handleSubmit(onSubmitForm)}
+      className="w-full grid grid-cols-3 gap-2 mt-5"
+    >
       <div className="flex flex-col w-full">
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>
-            HEMATOLOGIA <span className="brightness-50">🟪</span>
+            HEMATOLOGIA <span className="brightness-75">🟪</span>
           </p>
-          {/* <div className="size-4 bg-purple-800 rounded-sm" /> */}
         </div>
-        {examsWithType?.data.hematology.map((examsHematology) => (
-          <div className="flex items-start ml-2 w-full gap-1">
-            <TabGenericInput
-              id={examsHematology.id.toString()}
-              type="checkbox"
-            />
-            <label
-              htmlFor={examsHematology.id.toString()}
-              className="text-sm"
+        <div className="space-y-2">
+          {examsWithType?.data.hematology.map((examsHematology) => (
+            <div
               key={examsHematology.id}
+              className="flex items-start ml-2 w-full gap-1"
             >
-              {examsHematology.name}
-            </label>
-          </div>
-        ))}
+              <TabGenericInput
+                id={examsHematology.id.toString()}
+                type="checkbox"
+                value={examsHematology.name}
+                {...register("examsHematology")}
+              />
+              <label
+                htmlFor={examsHematology.id.toString()}
+                className="text-sm"
+                key={examsHematology.id}
+              >
+                {examsHematology.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="col-span-2">
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>
-            BIOQUÍMICOS <span className="brightness-50">🟥</span>
+            BIOQUÍMICOS <span className="brightness-75">🟥</span>
           </p>
-          {/* <div className="size-4 bg-red-700 rounded-sm" /> */}
         </div>
-        <div className="grid grid-cols-3 ml-2 w-full gap-1">
+        <div className="grid grid-cols-3 ml-2 w-full gap-2">
           {examsWithType?.data.biochemistry.map((examsBiochemistry) => (
-            <div className="flex items-start ml-2 w-full gap-1">
+            <div
+              key={examsBiochemistry.id}
+              className="flex items-start ml-2 w-full gap-1"
+            >
               <TabGenericInput
                 id={examsBiochemistry.id.toString()}
                 type="checkbox"
+                value={examsBiochemistry.name}
+                {...register("examsBiochemistry")}
               />
               <label
                 htmlFor={examsBiochemistry.id.toString()}
@@ -69,66 +110,98 @@ export const AllExamsWithType = () => {
           <p>URINA</p>{" "}
           <img src={iconUrine} className="size-4 bg-red-700 rounded-sm" />
         </div>
-        {examsWithType?.data.urine.map((examsUrine) => (
-          <div className="flex items-start ml-2 w-full gap-1">
-            <TabGenericInput id={examsUrine.id.toString()} type="checkbox" />
-            <label
-              htmlFor={examsUrine.id.toString()}
-              className="text-sm"
+        <div className="space-y-2">
+          {examsWithType?.data.urine.map((examsUrine) => (
+            <div
               key={examsUrine.id}
+              className="flex items-start ml-2 w-full gap-1"
             >
-              {examsUrine.name}
-            </label>
-          </div>
-        ))}
+              <TabGenericInput
+                id={examsUrine.id.toString()}
+                type="checkbox"
+                value={examsUrine.name}
+                {...register("examsUrine")}
+              />
+              <label
+                htmlFor={examsUrine.id.toString()}
+                className="text-sm"
+                key={examsUrine.id}
+              >
+                {examsUrine.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
       <div>
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>FEZES</p> <img src={iconFeces} className="size-5 rounded-sm" />
         </div>
-        {examsWithType?.data.feces.map((examsFeces) => (
-          <div className="flex items-start ml-2 w-full gap-1">
-            <TabGenericInput id={examsFeces.id.toString()} type="checkbox" />
-            <label
-              htmlFor={examsFeces.id.toString()}
-              className="text-sm"
+        <div className="space-y-2">
+          {examsWithType?.data.feces.map((examsFeces) => (
+            <div
               key={examsFeces.id}
+              className="flex items-start ml-2 w-full gap-1"
             >
-              {examsFeces.name}
-            </label>
-          </div>
-        ))}
+              <TabGenericInput
+                id={examsFeces.id.toString()}
+                type="checkbox"
+                value={examsFeces.name}
+                {...register("examsFeces")}
+              />
+              <label
+                htmlFor={examsFeces.id.toString()}
+                className="text-sm"
+                key={examsFeces.id}
+              >
+                {examsFeces.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
       <div>
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>MICROBIOLOGIA</p>
         </div>
-        {examsWithType?.data.microbiology.map((examsMicrobiology) => (
-          <div className="flex items-start ml-2 w-full gap-1">
-            <TabGenericInput
-              id={examsMicrobiology.id.toString()}
-              type="checkbox"
-            />
-            <label
-              htmlFor={examsMicrobiology.id.toString()}
-              className="text-sm"
+        <div className="space-y-2">
+          {examsWithType?.data.microbiology.map((examsMicrobiology) => (
+            <div
               key={examsMicrobiology.id}
+              className="flex items-start ml-2 w-full gap-1"
             >
-              {examsMicrobiology.name}
-            </label>
-          </div>
-        ))}
+              <TabGenericInput
+                id={examsMicrobiology.id.toString()}
+                type="checkbox"
+                value={examsMicrobiology.name}
+                {...register("examsMicrobiology")}
+              />
+              <label
+                htmlFor={examsMicrobiology.id.toString()}
+                className="text-sm"
+                key={examsMicrobiology.id}
+              >
+                {examsMicrobiology.name}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="col-span-3">
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>DERMATOLOGIA</p>
         </div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-2 gap-2">
           {examsWithType?.data.dermatology.map((examsDermatology) => (
-            <div className="flex items-start ml-2 w-full gap-1">
+            <div
+              key={examsDermatology.id}
+              className="flex items-start ml-2 w-full gap-1"
+            >
               <TabGenericInput
                 id={examsDermatology.id.toString()}
                 type="checkbox"
+                value={examsDermatology.name}
+                {...register("examsDermatology")}
               />
               <label
                 htmlFor={examsDermatology.id.toString()}
@@ -145,12 +218,17 @@ export const AllExamsWithType = () => {
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>HORMÔNIOS</p>
         </div>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-3 gap-2">
           {examsWithType?.data.hormones.map((examsHormones) => (
-            <div className="flex items-start ml-2 w-full gap-1">
+            <div
+              key={examsHormones.id}
+              className="flex items-start ml-2 w-full gap-1"
+            >
               <TabGenericInput
                 id={examsHormones.id.toString()}
                 type="checkbox"
+                value={examsHormones.name}
+                {...register("examsHormones")}
               />
               <label
                 htmlFor={examsHormones.id.toString()}
@@ -167,13 +245,18 @@ export const AllExamsWithType = () => {
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>PATOLOGIA</p>
         </div>
-        <div className="grid grid-cols-3 gap-10">
-          <div className="col-span-2 grid grid-cols-2">
+        <div className="grid grid-cols-3 gap-x-10">
+          <div className="col-span-2 grid grid-cols-2 place-items-start">
             {examsWithType?.data.pathology.map((examsPathology) => (
-              <div className="flex items-start ml-2 w-full gap-1">
+              <div
+                key={examsPathology.id}
+                className="flex items-start ml-2 w-full gap-1"
+              >
                 <TabGenericInput
                   id={examsPathology.id.toString()}
                   type="checkbox"
+                  value={examsPathology.name}
+                  {...register("examsPathology")}
                 />
                 <label
                   htmlFor={examsPathology.id.toString()}
@@ -190,7 +273,6 @@ export const AllExamsWithType = () => {
             </div>
           </div>
           <div>
-            {/* <img src={imageBodyAnimal} className="" alt="" /> */}
             <KonvaComp />
           </div>
           <div className="col-span-2 flex flex-col gap-2 pl-2 text-sm">
@@ -227,32 +309,29 @@ export const AllExamsWithType = () => {
                 <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
               </div>
             </div>
-            <div className="grid grid-cols-3">
-              {[
-                "Nódulo",
-                "Placa",
-                "Aderida",
-                "Ulcerada",
-                "Eritematosa",
-                "Pigmentada",
-                "Macia",
-                "Firme",
-                "Firme",
-                "Flutuante",
-                "Alopécica",
-                "Pruriginosa",
-              ].map((exam, index) => (
-                <div className="flex items-start ml-2 w-full gap-1">
-                  <TabGenericInput id={index.toString()} type="checkbox" />
-                  <label
-                    htmlFor={index.toString()}
-                    className="text-sm"
-                    key={index}
+            <div className="grid grid-cols-3 gap-2">
+              {examsWithType?.data.pathologySecondPart.map(
+                (examPathologySecondPart) => (
+                  <div
+                    key={examPathologySecondPart.id}
+                    className="flex items-start ml-2 w-full gap-1"
                   >
-                    {exam}
-                  </label>
-                </div>
-              ))}
+                    <TabGenericInput
+                      id={examPathologySecondPart.id.toString()}
+                      type="checkbox"
+                      value={examPathologySecondPart.name}
+                      {...register("examPathologySecondPart")}
+                    />
+                    <label
+                      htmlFor={examPathologySecondPart.id.toString()}
+                      className="text-sm"
+                      key={examPathologySecondPart.id}
+                    >
+                      {examPathologySecondPart.name}
+                    </label>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -264,10 +343,15 @@ export const AllExamsWithType = () => {
           </div>
           <div className="grid grid-cols-2 gap-2">
             {examsWithType?.data.immunology.map((examsImmunology) => (
-              <div className="flex items-start ml-2 w-full gap-1">
+              <div
+                key={examsImmunology.id}
+                className="flex items-start ml-2 w-full gap-1 brightness-75"
+              >
                 <TabGenericInput
                   id={examsImmunology.id.toString()}
                   type="checkbox"
+                  value={examsImmunology.name}
+                  {...register("examsImmunology")}
                 />
                 <label
                   htmlFor={examsImmunology.id.toString()}
@@ -287,10 +371,15 @@ export const AllExamsWithType = () => {
           <div className="grid grid-cols-2 gap-2">
             {examsWithType?.data.molecularBiology.map(
               (examsMolecularBiology) => (
-                <div className="flex items-start ml-2 w-full gap-1">
+                <div
+                  key={examsMolecularBiology.id}
+                  className="flex items-start ml-2 w-full gap-1"
+                >
                   <TabGenericInput
                     id={examsMolecularBiology.id.toString()}
                     type="checkbox"
+                    value={examsMolecularBiology.name}
+                    {...register("examsMolecularBiology")}
                   />
                   <label
                     htmlFor={examsMolecularBiology.id.toString()}
@@ -301,11 +390,12 @@ export const AllExamsWithType = () => {
                   </label>
                 </div>
               )
-            )}{" "}
+            )}
           </div>
         </div>
         <RadiologyExams />
       </div>
-    </div>
+      <Button>Enviar Form</Button>
+    </form>
   );
 };
