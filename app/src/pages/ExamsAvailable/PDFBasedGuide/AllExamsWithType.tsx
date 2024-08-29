@@ -33,9 +33,9 @@ export const AllExamsWithType = () => {
 
   const {
     register,
-    getValues,
+    // getValues,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<IFormSolicitation>();
 
   const onSubmitForm = (values: IFormSolicitation) => {
@@ -50,7 +50,7 @@ export const AllExamsWithType = () => {
       <div className="flex flex-col w-full">
         <div className="flex items-center gap-2 bg-grayTypeExams mb-2 px-2 py-1 font-medium text-sm rounded-lg">
           <p>
-            HEMATOLOGIA <span className="brightness-75">🟪</span>
+            HEMATOLOGIA <span className="brightness-50 contrast-150">🟪</span>
           </p>
         </div>
         <div className="space-y-2">
