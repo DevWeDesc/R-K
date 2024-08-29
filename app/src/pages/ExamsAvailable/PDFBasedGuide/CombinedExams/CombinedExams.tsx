@@ -15,23 +15,48 @@ export const CombinedExams = () => {
         EXAMES COMBINADOS:
       </p>
       <div className="grid grid-cols-2 gap-5">
-        {profiles?.data
-          .filter((profile) => profile.examsInExamProfile.length > 0)
-          .map((profile) => (
+        <div className="h-full flex flex-col justify-between">
+          {profiles?.data.slice(0, 11)?.map((profile) => (
             <div
               key={profile.id}
-              className="flex items-center ml-2 w-full gap-1"
+              className="flex items-start ml-2 w-full gap-1"
             >
               <TabGenericInput id={profile.id.toString()} type="checkbox" />
               <label
                 htmlFor={profile.id.toString()}
-                className="text-sm flex items-center"
+                className="text-sm flex items-start"
               >
-                <strong>{profile?.name}: </strong>
-                <NameExamsInExamProfile profile={profile} />
+                <p>
+                  <strong className="text-nowrap">
+                    {profile?.name}: <span></span>
+                  </strong>
+                  <NameExamsInExamProfile profile={profile} />
+                </p>
               </label>
             </div>
           ))}
+        </div>
+        <div className="flex flex-col gap-2">
+          {profiles?.data.slice(11, profiles.data.length).map((profile) => (
+            <div
+              key={profile.id}
+              className="flex items-start ml-2 w-full gap-1"
+            >
+              <TabGenericInput id={profile.id.toString()} type="checkbox" />
+              <label
+                htmlFor={profile.id.toString()}
+                className="text-sm flex items-start"
+              >
+                <p>
+                  <strong className="text-nowrap">
+                    {profile?.name}: <span></span>
+                  </strong>
+                  <NameExamsInExamProfile profile={profile} />
+                </p>
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

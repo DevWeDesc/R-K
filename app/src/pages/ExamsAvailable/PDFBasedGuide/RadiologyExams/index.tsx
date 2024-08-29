@@ -1,7 +1,14 @@
 import { TabGenericInput } from "@/components/TabExamsCheckbox";
 import { Input } from "@/components/ui/input";
+import { GetAllExamsWithTypeService } from "@/services/Exams/GetAllExamsWithTypeService";
+import { useQuery } from "react-query";
 
 export const RadiologyExams = () => {
+  const { data: examsWithType } = useQuery({
+    queryKey: ["ExamsWithType"],
+    queryFn: () => GetAllExamsWithTypeService(),
+  });
+
   return (
     <div className="col-span-2 bg-red-100/50">
       <div className="flex items-center gap-2 bg-slate-800 mb-2 px-2 py-1 font-medium text-sm rounded-lg">
@@ -128,7 +135,7 @@ export const RadiologyExams = () => {
                 name=""
                 id=""
                 placeholder="Suspeita clínica"
-                className="p-1 w-full h-full bg-transparent border border-black"
+                className="p-1 w-full h-full max-h-16 bg-transparent border border-black"
               />
             </div>
           </div>
@@ -433,16 +440,15 @@ export const RadiologyExams = () => {
               Cardiologia
             </p>
             <div className="pl-6 py-3 space-y-2">
-              {[
-                "Ecodopplercardiograma",
-                "Eletrocardiograma",
-                "Pressão Arterial",
-                "Consulta",
-              ].map((exam, index) => (
+              {examsWithType?.data.cardiology.map((exam, index) => (
                 <div key={index} className="flex items-start gap-1 pb-2">
-                  <TabGenericInput id={exam} type="checkbox" />
-                  <label htmlFor={exam} className="font-medium" key={exam}>
-                    {exam}
+                  <TabGenericInput id={exam.id.toString()} type="checkbox" />
+                  <label
+                    htmlFor={exam.id.toString()}
+                    className="font-medium"
+                    key={exam.id.toString()}
+                  >
+                    {exam.name}
                   </label>
                 </div>
               ))}
@@ -453,33 +459,27 @@ export const RadiologyExams = () => {
               Ultrassonografia
             </p>
             <div className="grid grid-cols-3 pl-6 py-3 space-y-1 gap-x-5">
-              {[
-                "Abdominal",
-                "Abdominal + Perineal",
-                "Abdominal + Partes moles",
-                "Encéfalo",
-                "Cervical",
-                "Torax",
-                "Gestacional",
-                "Encéfalo",
-                "Cervical",
-                "Torax",
-                "Vascular com Doppler",
-                "Partes moles",
-              ].map((exam, index) => (
+              {examsWithType?.data.ultrasound.map((exam, index) => (
                 <div key={index} className="flex items-start gap-1 pb-2">
-                  <TabGenericInput id={exam} type="checkbox" />
-                  <label htmlFor={exam} className="font-medium" key={exam}>
-                    {exam}
+                  <TabGenericInput
+                    id={`${exam.id.toString()}${exam.name}`}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={`${exam.id.toString()}${exam.name}`}
+                    className="font-medium"
+                    key={exam.id.toString()}
+                  >
+                    {exam.name}
                   </label>
                 </div>
               ))}
-              <div className="flex items-center">
+              <div className="flex items-center col-span-3 pr-6">
                 <label htmlFor="">Suspeita: </label>
                 <Input className="py-0 rounded-none bg-inherit border-b border-black" />
               </div>
-              <div className="w-full flex items-center col-span-2 pr-6">
-                <div className="w-full flex items-start gap-1 pb-2">
+              <div className="col-span-3 w-full flex items-center pr-6">
+                <div className="w-full flex items-start gap-1 pb-2 mt-2">
                   <TabGenericInput id={"sedação"} type="checkbox" />
                   <label
                     htmlFor={"sedação"}
