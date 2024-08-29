@@ -76,6 +76,7 @@ enum ExamTypeEnum {
   CARDIOLOGIA
   ULTRASSONOGRAFIA
   DERMATOLOGIA
+  NOT_DEFINED
 }
 
 model Exams {
