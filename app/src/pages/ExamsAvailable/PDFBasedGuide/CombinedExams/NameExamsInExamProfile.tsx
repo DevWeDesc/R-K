@@ -20,24 +20,22 @@ export const NameExamsInExamProfile = ({
   );
 
   return (
-    <div className="flex items-center gap-2">
-      <p className="pl-1">
-        {examNames}
-        {typeExams.includes("HEMATOLOGIA") && (
-          <span className="size-4 rounded-sm brightness-75">🟪</span>
-        )}
-        {typeExams.includes("BIOQUIMICA_CLINICA") && (
-          <span className="size-4 rounded-sm brightness-75">🟥</span>
-        )}
-        {typeExams.includes("URINA") && (
-          <span>
-            <img
-              src={iconUrineBgWhite}
-              className="size-4 bg-red-700 rounded-sm"
-            />
-          </span>
-        )}
-      </p>
-    </div>
+    <span className="pl-1 font-medium">
+      <span className="text-black/50 font-medium">{examNames}</span>
+      {typeExams.includes("HEMATOLOGIA") && (
+        <span className="size-4 rounded-sm brightness-50 contrast-150">🟪</span>
+      )}
+      {typeExams.includes("BIOQUIMICA_CLINICA") && (
+        <span className="size-4 rounded-sm brightness-75">🟥</span>
+      )}
+      {typeExams.includes("URINA") && (
+        <span>
+          <img
+            src={iconUrineBgWhite}
+            className="inline size-4 bg-red-700 rounded-sm"
+          />
+        </span>
+      )}
+    </span>
   );
 };
