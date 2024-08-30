@@ -60,6 +60,7 @@ import GetExamsInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/G
 import DeleteExamInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/DeleteExamInExamProfileUseCase";
 import CreateExamsInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/CreateExamsInExamProfileUseCase";
 import GetAllExamsWithTypeUseCase from "./domain/useCases/Exams/GetAllExamsWithTypeUseCase";
+import CreateManyExamsInExamsProfileUseCase from "./domain/useCases/ExamsInExamProfile/CreateManyExamsInExamsProfileUseCase";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -124,6 +125,13 @@ export const updateExamUseCase = new UpdateExamUseCase(examsRepository);
 export const getExamsPerTypeUseCaseImpl = new GetExamsPerTypeUseCaseImpl(
   examsRepository
 );
+
+export const createManyExamsInExamsProfileUseCase =
+  new CreateManyExamsInExamsProfileUseCase(
+    examsInExamProfileRepository,
+    examsProfileRepository,
+    examsRepository
+  );
 
 export const getAllExamsWithTypeUseCase = new GetAllExamsWithTypeUseCase(
   examsRepository

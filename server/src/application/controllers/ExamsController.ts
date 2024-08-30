@@ -3,6 +3,7 @@ import {
   createExamsInExamProfileUseCase,
   createExamsProfileUseCase,
   createExamsUseCase,
+  createManyExamsInExamsProfileUseCase,
   deleteExamInExamProfileUseCase,
   deleteExamProfileUseCase,
   deleteExamUseCase,
@@ -21,6 +22,7 @@ import { ExamTypeEnum } from "../../domain/enums/ExamTypeEnum";
 import GetExamsPerTypeUseCase from "../../domain/useCases/Exams/GetExamsPerTypeUseCase";
 import { ExamsProfileRequestDTO } from "../DTOs/ExamsProfileDTO/ExamsProfileRequestDTO";
 import { ExamsInExamProfileRequestDTO } from "../DTOs/ExamsInExamProfile/ExamsInExamProfileRequestDTO";
+import { CreateManyExamsInExamsProfileRequestDTO } from "../DTOs/ExamsInExamProfile/CreateManyExamsInExamsProfileRequestDTO";
 
 export const ExamsController = {
   GetExams: async (
@@ -213,6 +215,21 @@ export const ExamsController = {
       const res = await deleteExamInExamProfileUseCase.execute(parseInt(id));
 
       return reply.code(204).send(res);
+    } catch (err) {
+      return reply.code(400).send(err);
+    }
+  },
+
+  CreateManyExamsInExamProfile: async (
+    request: FastifyRequest<{ Body: CreateManyExamsInExamsProfileRequestDTO }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const res = await createManyExamsInExamsProfileUseCase.execute(
+        request.body
+      );
+
+      return reply.code(201).send(res);
     } catch (err) {
       return reply.code(400).send(err);
     }

@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Table, TableRow, TableBody, TableCell } from "@/components/ui/table";
 import { SolicitationById } from "@/services/Solicitations/SolicitationById";
+import { FormatDate } from "@/utils/FormatDate";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
@@ -9,10 +10,13 @@ type ParamsType = {
 };
 export const InformationsGuide = () => {
   const { id } = useParams<ParamsType>();
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ["solicitation"],
     queryFn: () => SolicitationById(id ? id : ""),
   });
+
+  const typeSpecie = data?.data.solicitationsDetails.pet.specie;
+  const petSex = data?.data.solicitationsDetails.pet.sex;
 
   if (id)
     return (
@@ -32,53 +36,63 @@ export const InformationsGuide = () => {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <p>Esp: </p>
-                  <div className="flex gap-1">
-                    <Input
-                      defaultChecked
-                      id="espCanine"
-                      className="caret-red-700 accent-red-700 hover:shadow-none"
-                      type="radio"
-                      name="esp"
-                      value="Canina"
-                    />
-                    <label htmlFor="espCanine">Canina</label>
-                  </div>
-                  <div className="flex gap-1">
-                    <Input
-                      id="espFeline"
-                      type="radio"
-                      className="caret-red-700 accent-red-700 hover:shadow-none"
-                      name="esp"
-                      value="Felina"
-                    />
-                    <label htmlFor="espFeline">Felina</label>
-                  </div>
+                  {typeSpecie && (
+                    <>
+                      <div className="flex gap-1">
+                        <Input
+                          defaultChecked={typeSpecie === "Canino"}
+                          id="espCanine"
+                          className="caret-red-700 accent-red-700 hover:shadow-none"
+                          type="radio"
+                          name="esp"
+                          value="Canina"
+                        />
+                        <label htmlFor="espCanine">Canina</label>
+                      </div>
+                      <div className="flex gap-1">
+                        <Input
+                          defaultChecked={typeSpecie === "Felino"}
+                          id="espFeline"
+                          type="radio"
+                          className="caret-red-700 accent-red-700 hover:shadow-none"
+                          name="esp"
+                          value="Felina"
+                        />
+                        <label htmlFor="espFeline">Felina</label>
+                      </div>
+                    </>
+                  )}
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <p>Sexo: </p>
-                  <div className="flex gap-1">
-                    <Input
-                      defaultChecked
-                      id="sexMale"
-                      className="caret-red-700 accent-red-700 hover:shadow-none"
-                      type="radio"
-                      name="sexAnimal"
-                      value="Macho"
-                    />
-                    <label htmlFor="sexMale">Macho</label>
-                  </div>
-                  <div className="flex gap-1">
-                    <Input
-                      id="sexFemale"
-                      type="radio"
-                      className="caret-red-700 accent-red-700 hover:shadow-none"
-                      name="sexAnimal"
-                      value="Femea"
-                    />
-                    <label htmlFor="sexFemale">Fêmea</label>
-                  </div>
+                  {petSex && (
+                    <>
+                      <div className="flex gap-1">
+                        <Input
+                          defaultChecked={petSex === "Macho"}
+                          id="sexMale"
+                          className="caret-red-700 accent-red-700 hover:shadow-none"
+                          type="radio"
+                          name="sexAnimal"
+                          value="Macho"
+                        />
+                        <label htmlFor="sexMale">Macho</label>
+                      </div>
+                      <div className="flex gap-1">
+                        <Input
+                          defaultChecked={petSex === "Fêmea"}
+                          id="sexFemale"
+                          type="radio"
+                          className="caret-red-700 accent-red-700 hover:shadow-none"
+                          name="sexAnimal"
+                          value="Femea"
+                        />
+                        <label htmlFor="sexFemale">Fêmea</label>
+                      </div>
+                    </>
+                  )}
                 </div>
               </TableCell>
               <TableCell className="text-right">
@@ -112,11 +126,14 @@ export const InformationsGuide = () => {
               </TableCell>
               <TableCell colSpan={2}>
                 Data:{" "}
-                {/* {FormatDate(
-                  new Date(data?.data.solicitationsDetails.createdIn as string),
-                  "short",
-                  "medium"
-                ).replace(",", " às")} */}
+                {data?.data.solicitationsDetails.createdIn &&
+                  FormatDate(
+                    new Date(
+                      data?.data.solicitationsDetails.createdIn.toString() as string
+                    ),
+                    "short",
+                    "medium"
+                  ).replace(",", " às")}
               </TableCell>
             </TableRow>
           </TableBody>
