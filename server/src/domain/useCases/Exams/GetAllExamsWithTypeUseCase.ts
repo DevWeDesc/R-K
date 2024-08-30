@@ -47,6 +47,10 @@ export default class GetAllExamsWithTypeUseCase {
         ExamTypeEnum.ULTRASSONOGRAFIA
       );
 
+      const not_defined = await this.examsRepository.findByTypeExam(
+        ExamTypeEnum.NOT_DEFINED
+      );
+
       const data: GetAllExamsWithTypeResponse = {
         hematology,
         biochemistry,
@@ -61,6 +65,7 @@ export default class GetAllExamsWithTypeUseCase {
         molecularBiology,
         cardiology,
         ultrasound,
+        not_defined,
       };
 
       return data;

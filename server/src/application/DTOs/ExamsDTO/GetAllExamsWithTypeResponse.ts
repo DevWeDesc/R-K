@@ -14,4 +14,5 @@ export interface GetAllExamsWithTypeResponse {
   molecularBiology: Exams[] | Exams;
   cardiology: Exams[] | Exams;
   ultrasound: Exams[] | Exams;
+  not_defined: Exams[] | Exams;
 }
