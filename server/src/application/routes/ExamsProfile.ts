@@ -47,4 +47,10 @@ export async function examsProfileRoutes(app: FastifyInstance) {
     { preHandler: AuthWithRoleMiddleware },
     ExamsController.DeleteExamsInExamProfile
   );
+
+  app.post(
+    "/profile/exams/many",
+    { preHandler: AuthWithRoleMiddleware },
+    ExamsController.CreateManyExamsInExamProfile
+  );
 }
