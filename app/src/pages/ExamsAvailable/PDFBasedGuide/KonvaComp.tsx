@@ -1,16 +1,18 @@
 import imageBody from "@/../public/assets/littleBodyAnimal.png";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import { Stage, Layer, Image, Line } from "react-konva";
 import useImage from "use-image";
+import { IFormSolicitation } from "./AllExamsWithType";
 
 export const KonvaComp = () => {
   const [image] = useImage(imageBody);
   const [lines, setLines] = useState<any>([]);
   const [currentLine, setCurrentLine] = useState<any>([]);
   const [isPainting, setIsPainting] = useState(false);
-  const [imageURL, setImageUrl] = useState(image);
   const stageRef = useRef(null);
+  const { setValue } = useFormContext<IFormSolicitation>();
 
   const handleMouseDown = (event: any) => {
     setIsPainting(true);
@@ -23,8 +25,7 @@ export const KonvaComp = () => {
     const { x, y } = event.target.getStage().getPointerPosition();
     setCurrentLine([...currentLine, { x, y }]);
     stageRef.current &&
-      setImageUrl(stageRef.current.toDataURL({ pixelRatio: 3 }));
-    console.log(imageURL);
+      setValue("base64Image", stageRef.current.toDataURL({ pixelRatio: 3 }));
   };
 
   const handleMouseUp = () => {
