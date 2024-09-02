@@ -1,13 +1,17 @@
 import { TabGenericInput } from "@/components/TabExamsCheckbox";
 import { Input } from "@/components/ui/input";
 import { GetAllExamsWithTypeService } from "@/services/Exams/GetAllExamsWithTypeService";
+import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
+import { IFormSolicitation } from "../AllExamsWithType";
 
 export const RadiologyExams = () => {
   const { data: examsWithType } = useQuery({
     queryKey: ["ExamsWithType"],
     queryFn: () => GetAllExamsWithTypeService(),
   });
+
+  const { register } = useFormContext<IFormSolicitation>();
 
   return (
     <div className="col-span-2 bg-red-100/50">
@@ -442,7 +446,12 @@ export const RadiologyExams = () => {
             <div className="pl-6 py-3 space-y-2">
               {examsWithType?.data.cardiology.map((exam, index) => (
                 <div key={index} className="flex items-start gap-1 pb-2">
-                  <TabGenericInput id={exam.id.toString()} type="checkbox" />
+                  <TabGenericInput
+                    value={exam.name}
+                    {...register("examsCardiology")}
+                    id={exam.id.toString()}
+                    type="checkbox"
+                  />
                   <label
                     htmlFor={exam.id.toString()}
                     className="font-medium"
@@ -462,7 +471,9 @@ export const RadiologyExams = () => {
               {examsWithType?.data.ultrasound.map((exam, index) => (
                 <div key={index} className="flex items-start gap-1 pb-2">
                   <TabGenericInput
+                    value={exam.name}
                     id={`${exam.id.toString()}${exam.name}`}
+                    {...register("examsUltrasound")}
                     type="checkbox"
                   />
                   <label
