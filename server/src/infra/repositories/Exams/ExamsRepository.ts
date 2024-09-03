@@ -6,6 +6,30 @@ import { QueryParamsListAllExams } from "../../../application/DTOs/ExamsDTO/Quer
 import { ExamTypeEnum } from "../../../domain/enums/ExamTypeEnum";
 
 export default class ExamsRepository implements IExamsRepository {
+  public async createMany(exams: string[]): Promise<any> {
+    const examsArrayFiltered: ExamsRequestDTO[] = [];
+    for (const exam of exams) {
+      const findExamByName = await this.findByName(exam);
+
+      const data: ExamsRequestDTO = {
+        name: exam,
+        value: 200,
+        isHighligth: false,
+        deadline: "",
+        specie: "Canino / Felino",
+        typeExam: "NOT_DEFINED" as ExamTypeEnum,
+      };
+      if (!findExamByName) {
+        examsArrayFiltered.push(data);
+      }
+    }
+    const examsCreated = await prisma.exams.createMany({
+      data: examsArrayFiltered as any,
+    });
+
+    return examsCreated;
+  }
+
   public async findByTypeExam(
     typeExam: ExamTypeEnum
   ): Promise<Exams[] | Exams> {
@@ -17,11 +41,8 @@ export default class ExamsRepository implements IExamsRepository {
   }
 
   public async getByName(name: string, pageActual?: number): Promise<Exams[]> {
-    const firstLetterSearch = name.substring(0, 1).toUpperCase();
-    const nameSearch = firstLetterSearch.concat(name.substring(1, name.length));
-
     return await prisma.exams.findMany({
-      where: { name: { contains: nameSearch } },
+      where: { name: { contains: name, mode: "insensitive" } },
       skip: pageActual ? (pageActual - 1) * 10 : 0,
       take: 10,
     });
