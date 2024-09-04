@@ -6,4 +6,6 @@ export default interface IExamsInPetOnSolicitationsRepository
   extends IGenericRepository<
     ExamsInPetOnSolicitationsDTO,
     ExamsInPetOnSolicitations
-  > {}
+  > {
+  createMany(solicitationId: string, examsId: number[]): Promise<any>;
+}
