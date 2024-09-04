@@ -9,4 +9,5 @@ export interface IExamsRepository
   findByTypeExam(typeExam: ExamTypeEnum): Promise<Exams[] | Exams>;
   countExams(name?: string): Promise<number>;
   findByName(name: string): Promise<Exams | null>;
+  createMany(exams: string[]): Promise<any>;
 }

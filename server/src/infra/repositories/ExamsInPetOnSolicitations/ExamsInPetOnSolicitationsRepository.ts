@@ -6,6 +6,22 @@ import { prisma } from "../../../lib/prismaClient";
 export default class ExamsInPetOnSolicitationsRepository
   implements IExamsInPetOnSolicitationsRepository
 {
+  public async createMany(
+    solicitationId: string,
+    examsId: number[]
+  ): Promise<any> {
+    examsId.forEach(async (exam) => {
+      await prisma.examsInPetOnSolicitations.create({
+        data: {
+          examsId: parseInt(exam.toString()),
+          solicitationsId: solicitationId,
+        },
+      });
+    });
+
+    return { message: "Exames criados com sucesso!" };
+  }
+
   public async update(
     id: string | number,
     entity: ExamsInPetOnSolicitationsDTO
