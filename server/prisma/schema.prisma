@@ -121,6 +121,38 @@ model ExamsProfileInSolicitation {
   solicitationsId String?
 }
 
+enum TypeOfRadiologySection {
+  Skull
+  Skull_Dental_Arch
+  Members
+  Pelvic_Limb
+  Abdomen
+  Chest
+  Spine
+  Projections
+  Cervical_Region
+}
+
+model RadiologySections {
+  id                        Int                      @id @default(autoincrement())
+  radiologyInSolicitation   RadiologyInSolicitation? @relation(fields: [radiologyInSolicitationId], references: [id])
+  radiologyInSolicitationId String?
+  typeOfRadiologySection    TypeOfRadiologySection
+  sedated                   Boolean?
+  clinicalSuspicion         String?
+  region                    String[]
+  side                      String[]
+  articulation              String[]
+  observation               String?
+}
+
+model RadiologyInSolicitation {
+  id                String              @id @default(uuid())
+  solicitation      Solicitations       @relation(fields: [solicitationId], references: [id])
+  solicitationId    String              @unique
+  radiologySections RadiologySections[]
+}
+
 model Groups {
   id    Int     @id @default(autoincrement())
   name  String
@@ -136,17 +168,18 @@ model ExamsInPetOnSolicitations {
 }
 
 model Solicitations {
-  id              String                       @id @default(uuid())
-  slug            String?
-  bodyAnimalImage String?                      @default("")
-  isFinished      Boolean                      @default(false)
-  exams           ExamsInPetOnSolicitations[]
-  createdIn       DateTime                     @default(now())
-  finishedIn      DateTime?
-  observation     String?
-  veterinariansId Int
-  veterinarians   Veterinarians                @relation(fields: [veterinariansId], references: [id])
-  pet             Pets                         @relation(fields: [petsId], references: [id])
-  petsId          Int
-  examsProfiles   ExamsProfileInSolicitation[]
+  id                      String                       @id @default(uuid())
+  slug                    String?
+  bodyAnimalImage         String?                      @default("")
+  isFinished              Boolean                      @default(false)
+  exams                   ExamsInPetOnSolicitations[]
+  createdIn               DateTime                     @default(now())
+  finishedIn              DateTime?
+  observation             String?
+  veterinariansId         Int
+  veterinarians           Veterinarians                @relation(fields: [veterinariansId], references: [id])
+  pet                     Pets                         @relation(fields: [petsId], references: [id])
+  petsId                  Int
+  examsProfiles           ExamsProfileInSolicitation[]
+  radiologyInSolicitation RadiologyInSolicitation?
 }
