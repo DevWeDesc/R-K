@@ -2,12 +2,16 @@ import { TabGenericInput } from "@/components/TabExamsCheckbox";
 import { GetExamsProfile } from "@/services/ExamsProfile/GetExamsProfile";
 import { useQuery } from "react-query";
 import { NameExamsInExamProfile } from "./NameExamsInExamProfile";
+import { useFormContext } from "react-hook-form";
+import { IFormSolicitation } from "@/@interfaces/IFormSolicitation";
 
 export const CombinedExams = () => {
   const { data: profiles } = useQuery({
     queryKey: ["examsProfile"],
     queryFn: () => GetExamsProfile(),
   });
+
+  const { register } = useFormContext<IFormSolicitation>();
 
   return (
     <div className="text-sm">
@@ -21,7 +25,12 @@ export const CombinedExams = () => {
               key={profile.id}
               className="flex items-start ml-2 w-full gap-1"
             >
-              <TabGenericInput id={profile.id.toString()} type="checkbox" />
+              <TabGenericInput
+                value={profile.id}
+                {...register("examsProfile")}
+                id={profile.id.toString()}
+                type="checkbox"
+              />
               <label
                 htmlFor={profile.id.toString()}
                 className="text-sm flex items-start"
@@ -42,7 +51,12 @@ export const CombinedExams = () => {
               key={profile.id}
               className="flex items-start ml-2 w-full gap-1"
             >
-              <TabGenericInput id={profile.id.toString()} type="checkbox" />
+              <TabGenericInput
+                value={profile.id}
+                {...register("examsProfile")}
+                id={profile.id.toString()}
+                type="checkbox"
+              />
               <label
                 htmlFor={profile.id.toString()}
                 className="text-sm flex items-start"

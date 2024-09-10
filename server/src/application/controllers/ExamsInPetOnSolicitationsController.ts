@@ -5,6 +5,7 @@ import {
   getAllExamsInPetOnSolicitationsUseCase,
 } from "../..";
 import { ExamsInPetOnSolicitationsDTO } from "../DTOs/ExamsInPetOnSolicitationsDTO/ExamsInPetOnSolicitationsDTO";
+import { ExamsInPetOnSolicitationsRequestDTO } from "../DTOs/ExamsInPetOnSolicitationsDTO/ExamsInPetOnSolicitationsRequestDTO";
 
 export const ExamsInPetOnSolicitationsController = {
   GetExamsInPet: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -19,7 +20,7 @@ export const ExamsInPetOnSolicitationsController = {
 
   CreateExamsInPet: async (
     request: FastifyRequest<{
-      Body: ExamsInPetOnSolicitationsDTO;
+      Body: ExamsInPetOnSolicitationsRequestDTO;
     }>,
     reply: FastifyReply
   ) => {

@@ -61,6 +61,10 @@ import DeleteExamInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile
 import CreateExamsInExamProfileUseCase from "./domain/useCases/ExamsInExamProfile/CreateExamsInExamProfileUseCase";
 import GetAllExamsWithTypeUseCase from "./domain/useCases/Exams/GetAllExamsWithTypeUseCase";
 import CreateManyExamsInExamsProfileUseCase from "./domain/useCases/ExamsInExamProfile/CreateManyExamsInExamsProfileUseCase";
+import ExamsProfileInSolicitationRepository from "./infra/repositories/ExamsProfileInSolicitation/ExamsProfileInSolicitationRepository";
+import GetUniqueExamProfileUseCase from "./domain/useCases/ExamsProfile/GetUniqueExamProfileUseCase";
+import CreateExamsProfileInSolicitationUseCase from "./domain/useCases/ExamsProfileInSolicitation/CreateExamsProfileInSolicitationUseCase";
+import GetExamsProfileInSolicitationUseCase from "./domain/useCases/ExamsProfileInSolicitation/GetExamsProfileInSolicitationUseCase";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -74,6 +78,8 @@ export const examsInPetOnSolicitationsRepository =
   new ExamsInPetOnSolicitationsRepository();
 const examsProfileRepository = new ExamsProfileRepository();
 export const examsInExamProfileRepository = new ExamsInExamProfileRepository();
+export const examsProfileInSolicitationRepository =
+  new ExamsProfileInSolicitationRepository();
 
 //Model
 export const pdfModel = new PdfModel();
@@ -143,6 +149,10 @@ export const createExamsProfileUseCase = new CreateExamsProfileUseCase(
 export const getExamsProfileUseCase = new GetExamsProfileUseCase(
   examsProfileRepository
 );
+
+export const getUniqueExamProfileUseCase = new GetUniqueExamProfileUseCase(
+  examsProfileRepository
+);
 export const deleteExamProfileUseCase = new DeleteExamProfileUseCase(
   examsProfileRepository
 );
@@ -163,6 +173,17 @@ export const updateExamInExamProfileUseCase =
   new UpdateExamInExamProfileUseCase(examsInExamProfileRepository);
 export const deleteExamInExamProfileUseCase =
   new DeleteExamInExamProfileUseCase(examsInExamProfileRepository);
+
+export const createExamsProfileInSolicitationUseCase =
+  new CreateExamsProfileInSolicitationUseCase(
+    examsProfileInSolicitationRepository,
+    getUniqueExamProfileUseCase
+  );
+
+export const getExamsProfileInSolicitationUseCase =
+  new GetExamsProfileInSolicitationUseCase(
+    examsProfileInSolicitationRepository
+  );
 
 export const createGroupUseCase = new CreateGroupUseCase(groupRepository);
 export const getGroupsUseCase = new GetGroupsUseCase(groupRepository);
