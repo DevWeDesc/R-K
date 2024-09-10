@@ -13,6 +13,8 @@ import { IFormSolicitation } from "@/@interfaces/IFormSolicitation";
 import { useParams } from "react-router-dom";
 import { CreateExamsInPetSolicitations } from "@/services/ExamsInPetOnSolicitations/CreateExamsInPetSolicitations";
 import { toast } from "react-toastify";
+import { CreateExamsProfileInSolicitationsService } from "@/services/ExamsProfileInSolicitations/CreateExamsProfileInSolicitations.Service";
+import { CreateManyExamsProfileInSolicitationRequestDTO } from "@/@interfaces/DTOs/ExamsProfileInSolicitation/CreateManyExamsProfileInSolicitationRequestDTO";
 
 export const AllExamsWithType = () => {
   const { data: examsWithType } = useQuery({
@@ -25,11 +27,12 @@ export const AllExamsWithType = () => {
   const { register, handleSubmit } = useFormContext<IFormSolicitation>();
 
   const onSubmitForm = async (values: IFormSolicitation) => {
-    const data: ExamsInPetOnSolicitationsRequestDTO = {
-      examsId: [],
-      profileExamsId: [],
-      solicitationsId: id ? id : "",
-    };
+    const dataRequestExamsInSolicitation: ExamsInPetOnSolicitationsRequestDTO =
+      {
+        examsId: [],
+        profileExamsId: [],
+        solicitationsId: id ? id : "",
+      };
 
     const profileExams = values.examsProfile;
     const allExams: number[] = [
@@ -62,13 +65,23 @@ export const AllExamsWithType = () => {
         []),
     ];
 
-    if (profileExams.length > 0) data.profileExamsId.push(...profileExams);
+    const dataRequestExamsProfileInSolicitation: CreateManyExamsProfileInSolicitationRequestDTO =
+      { solicitationsId: id ? id : "", examProfileId: [] };
 
-    if (allExams.length > 0) data.examsId.push(...allExams);
+    if (profileExams.length > 0)
+      dataRequestExamsProfileInSolicitation.examProfileId.push(...profileExams);
 
-    await CreateExamsInPetSolicitations(data)
-      .then(() => toast.success("Exames adicionado a guia com sucesso!"))
-      .catch((err) => console.log(err));
+    if (allExams.length > 0)
+      dataRequestExamsInSolicitation.examsId.push(...allExams);
+
+    await Promise.all([
+      await CreateExamsInPetSolicitations(dataRequestExamsInSolicitation).catch(
+        (err) => console.log(err)
+      ),
+      await CreateExamsProfileInSolicitationsService(
+        dataRequestExamsProfileInSolicitation
+      ).catch((err) => console.log(err)),
+    ]).then(() => toast.success("Exames adicionado a guia com sucesso!"));
   };
 
   return (
