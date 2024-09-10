@@ -26,6 +26,7 @@ export default class SolicitationsRepository
         pet: { include: { customer: true } },
         veterinarians: true,
         exams: { include: { Exams: true } },
+        examsProfiles: { include: { ExamsProfile: true } },
       },
     });
   }

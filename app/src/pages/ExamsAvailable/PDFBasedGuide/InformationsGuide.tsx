@@ -82,7 +82,7 @@ export const InformationsGuide = () => {
                       </div>
                       <div className="flex gap-1">
                         <Input
-                          defaultChecked={petSex === "Fêmea"}
+                          defaultChecked={petSex === "Femea"}
                           id="sexFemale"
                           type="radio"
                           className="caret-red-700 accent-red-700 hover:shadow-none"
