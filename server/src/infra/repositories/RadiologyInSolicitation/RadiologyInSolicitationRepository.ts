@@ -1,123 +1,87 @@
-import { Exams } from "@prisma/client";
+import { RadiologyInSolicitation } from "@prisma/client";
 import { prisma } from "../../../lib/prismaClient";
-import { ExamsRequestDTO } from "../../../application/DTOs/ExamsDTO/ExamsRequestDTO";
 import { QueryParamsListAllExams } from "../../../application/DTOs/ExamsDTO/QueryParamsListAllExams";
-import { ExamTypeEnum } from "../../../domain/enums/ExamTypeEnum";
 import { IRadiologyInSolicitationRepository } from "./IRadiologyInSolicitationRepository";
+import { CreateRadiologyInSolicitationRequestDTO } from "../../../application/DTOs/RadiologyInSolicitationDTO/CreateRadiologyInSolicitationRequestDTO";
 
 export default class RadiologyInSolicitationRepository
   implements IRadiologyInSolicitationRepository
 {
-  public async createMany(exams: string[]): Promise<any> {
-    const examsArrayFiltered: ExamsRequestDTO[] = [];
-    for (const exam of exams) {
-      const findExamByName = await this.findByName(exam);
+  public async findRadiologyInSolicitationBySolicitationId(
+    solicitationId: string
+  ): Promise<RadiologyInSolicitation> {
+    const radiologyInSolicitationBySolicitationId =
+      await prisma.radiologyInSolicitation.findUnique({
+        where: { solicitationId },
+      });
 
-      const data: ExamsRequestDTO = {
-        name: exam,
-        value: 200,
-        isHighligth: false,
-        deadline: "",
-        specie: "Canino / Felino",
-        typeExam: "NOT_DEFINED" as ExamTypeEnum,
-      };
-      if (!findExamByName) {
-        examsArrayFiltered.push(data);
-      }
-    }
-    const examsCreated = await prisma.exams.createMany({
-      data: examsArrayFiltered as any,
-    });
+    if (!radiologyInSolicitationBySolicitationId)
+      throw new Error("Essa guia não tem Radiologia!");
 
-    return examsCreated;
+    return radiologyInSolicitationBySolicitationId;
   }
 
-  public async findByTypeExam(
-    typeExam: ExamTypeEnum
-  ): Promise<Exams[] | Exams> {
-    return await prisma.exams.findMany({ where: { typeExam } });
-  }
+  public async update(
+    id: number | string,
+    entity: CreateRadiologyInSolicitationRequestDTO
+  ): Promise<RadiologyInSolicitation> {
+    await this.findById(id);
 
-  public async findByName(name: string): Promise<Exams | null> {
-    return await prisma.exams.findUnique({ where: { name } });
-  }
-
-  public async getByName(name: string, pageActual?: number): Promise<Exams[]> {
-    return await prisma.exams.findMany({
-      where: { name: { contains: name, mode: "insensitive" } },
-      skip: pageActual ? (pageActual - 1) * 10 : 0,
-      take: 10,
+    return await prisma.radiologyInSolicitation.update({
+      where: { id: id.toString() },
+      data: entity,
     });
   }
 
-  public async findById(id: string | number): Promise<Exams | null> {
-    return await prisma.exams.findUnique({
-      where: { id: parseInt(id.toString()) },
-    });
+  public async findById(
+    id: number | string
+  ): Promise<RadiologyInSolicitation | null> {
+    const radiologyInSolicitationById =
+      await prisma.radiologyInSolicitation.findUnique({
+        where: { id: id.toString() },
+      });
+
+    if (!radiologyInSolicitationById)
+      throw new Error("Radiologia da guia não encontrada!");
+
+    return radiologyInSolicitationById;
   }
 
   public async listAll(
     queryParams: QueryParamsListAllExams
-  ): Promise<Exams[] | null> {
-    return await prisma.exams.findMany({
-      where: { name: { contains: queryParams.name, mode: "insensitive" } },
-      include: { group: true },
-      orderBy: [{ isHighligth: "desc" }, { value: queryParams.filterByValue }],
-      skip: queryParams.pageActual && (queryParams.pageActual - 1) * 10,
-      take: 10,
-    });
+  ): Promise<RadiologyInSolicitation[] | null> {
+    return await prisma.radiologyInSolicitation.findMany();
   }
-  public async countExams(name?: string): Promise<number> {
-    return await prisma.exams.count({
-      where: { name: { contains: name } },
+
+  public async create(
+    entity: CreateRadiologyInSolicitationRequestDTO
+  ): Promise<RadiologyInSolicitation> {
+    const { solicitationId } = entity;
+    return await prisma.radiologyInSolicitation.create({
+      data: { solicitationId },
     });
   }
 
-  // public async create(entity: ExamsRequestDTO): Promise<Exams> {
-  //   return await prisma.exams.create({
-  //     data: {
-  //       ...entity,
-  //       name: entity.name,
-  //       specie: entity.specie ? entity.specie : "Canino / Felino",
-  //     },
-  //   });
-  // }
-
-  public async create(entity: ExamsRequestDTO): Promise<Exams> {
-    const existingExam = await prisma.exams.findUnique({
-      where: { name: entity.name },
-    });
-
-    if (existingExam) {
-      throw new Error(`Exame com o nome ${entity.name} já existe.`);
-    }
-
-    return await prisma.exams.create({
-      data: {
-        ...entity,
-        specie: entity.specie ? entity.specie : "Canino / Felino",
-      },
-    });
-  }
-
-  public async update(
+  public async RadiologyInSolicitation(
     id: string | number,
-    entity: ExamsRequestDTO
-  ): Promise<Exams> {
-    return await prisma.exams.update({
-      where: { id: parseInt(id.toString()) },
-      data: entity,
+    entity: CreateRadiologyInSolicitationRequestDTO
+  ): Promise<RadiologyInSolicitation> {
+    const { solicitationId } = entity;
+    return await prisma.radiologyInSolicitation.update({
+      where: { id: id.toString() },
+      data: { solicitationId },
     });
   }
 
   public async delete(id: string | number): Promise<any> {
     try {
-      const examIsValid = await this.findById(id);
+      const radiologyInSolicitationIsValid = await this.findById(id);
 
-      if (!examIsValid) throw new Error("O exame informado não existe!");
+      if (!radiologyInSolicitationIsValid)
+        throw new Error("A radiologia informada não existe!");
 
-      return await prisma.exams.delete({
-        where: { id: parseInt(id.toString()) },
+      return await prisma.radiologyInSolicitation.delete({
+        where: { id: id.toString() },
       });
     } catch (error) {
       return error;
