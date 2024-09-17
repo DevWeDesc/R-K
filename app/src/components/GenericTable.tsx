@@ -12,10 +12,7 @@ import { Button } from "./ui/button";
 import { CiEdit, CiSearch, CiTrash } from "react-icons/ci";
 import { Input } from "./ui/input";
 import { PriceFormatter } from "@/utils/PriceFormatter";
-import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import CreateExamsInPetRequestDTO from "@/@interfaces/DTOs/ExamsInPetSolicitation/CreateExamsInPetRequestDTO";
-import { CreateExamsInPetSolicitations } from "@/services/ExamsInPetOnSolicitations/CreateExamsInPetSolicitations";
 import { IExams } from "@/@interfaces/IExams";
 import { useQuery } from "react-query";
 import { GetExams } from "@/services/Exams/GetExams";
@@ -34,10 +31,6 @@ import {
   SelectValue,
 } from "./ui/select";
 
-type IParamsGuide = {
-  id: string;
-};
-
 interface IModalInformations {
   modalDeleteIsOpened: boolean;
   modalEditIsOpened: boolean;
@@ -47,11 +40,7 @@ interface IModalInformations {
 export const GenericTable = ({
   headerTable,
   additionalFields,
-  setGuidIsVisible,
-  setIsLoading,
-  scrollForGuide,
 }: IGenericTable) => {
-  const { id } = useParams<IParamsGuide>();
   const [pageActual, setPageActual] = useState(1);
   const [examName, setExamName] = useState("");
   const [filterOptions, setFilterOptions] = useState("");
@@ -62,11 +51,7 @@ export const GenericTable = ({
       exam: null,
     });
 
-  const handleMutateLoading = () => {
-    setIsLoading && setIsLoading((prev) => (!prev ? true : false));
-  };
-
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [
       "examsList",
       pageActual,
@@ -83,21 +68,6 @@ export const GenericTable = ({
 
   const handleNextPage = () => {
     setPageActual((prev) => (prev < data?.data.numberPages ? prev + 1 : prev));
-  };
-
-  const handleAddNewExamInGuide = async (exam: IExams) => {
-    if (id) {
-      const dataRequest: CreateExamsInPetRequestDTO = {
-        examsId: exam.id,
-        solicitationsId: id,
-      };
-      await CreateExamsInPetSolicitations(dataRequest);
-      setGuidIsVisible && setGuidIsVisible();
-      toast.success(`Exame ${exam.name} adicionado com sucesso!`);
-      scrollForGuide && scrollForGuide();
-      handleMutateLoading();
-      refetch();
-    }
   };
 
   const handleDeleteExam = async (examId: number) => {
@@ -186,11 +156,7 @@ export const GenericTable = ({
                     {additionalFields ===
                     additionalFieldsTableGenericEnum.list ? (
                       <TableCell className="font-semibold border">
-                        <Button
-                          onClick={() => handleAddNewExamInGuide(exam)}
-                          variant="outline"
-                          className="rounded-full px-5"
-                        >
+                        <Button variant="outline" className="rounded-full px-5">
                           Incluir Exame na Guia
                         </Button>
                       </TableCell>
