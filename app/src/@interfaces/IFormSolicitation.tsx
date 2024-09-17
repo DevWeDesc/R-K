@@ -1,5 +1,7 @@
 export interface IFormSolicitation {
   base64Image: string;
+  observationGuide: string;
+  specialistReferred: number | string;
   examsProfile: string[];
   examsHematology: number[];
   examsBiochemistry: number[];
