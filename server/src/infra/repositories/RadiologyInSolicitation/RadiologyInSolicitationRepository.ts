@@ -9,14 +9,13 @@ export default class RadiologyInSolicitationRepository
 {
   public async findRadiologyInSolicitationBySolicitationId(
     solicitationId: string
-  ): Promise<RadiologyInSolicitation> {
+  ): Promise<RadiologyInSolicitation | null> {
     const radiologyInSolicitationBySolicitationId =
       await prisma.radiologyInSolicitation.findUnique({
         where: { solicitationId },
       });
 
-    if (!radiologyInSolicitationBySolicitationId)
-      throw new Error("Essa guia não tem Radiologia!");
+    if (!radiologyInSolicitationBySolicitationId) return null;
 
     return radiologyInSolicitationBySolicitationId;
   }
