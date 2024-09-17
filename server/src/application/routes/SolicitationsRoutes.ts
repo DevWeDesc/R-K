@@ -27,4 +27,16 @@ export async function solicitationsRoutes(app: FastifyInstance) {
     { preHandler: AuthMiddleware },
     SolicitationsController.FinalizeSolicitation
   );
+
+  app.post(
+    "/solicitation/radiology",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.CreateRadiology
+  );
+
+  app.get(
+    "/solicitation/radiology",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.GetRadiologies
+  );
 }

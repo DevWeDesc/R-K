@@ -1,10 +1,10 @@
 import imageBody from "@/../public/assets/littleBodyAnimal.png";
+import { IFormSolicitation } from "@/@interfaces/IFormSolicitation";
 import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { Stage, Layer, Image, Line } from "react-konva";
 import useImage from "use-image";
-import { IFormSolicitation } from "./AllExamsWithType";
 
 export const KonvaComp = () => {
   const [image] = useImage(imageBody);
@@ -78,10 +78,10 @@ export const KonvaComp = () => {
         </Layer>
       </Stage>
       <div className="flex justify-end gap-2">
-        <Button onClick={saveImage} size="sm">
+        <Button type="button" onClick={saveImage} size="sm">
           Salvar imagem
         </Button>
-        <Button onClick={clearImage} size="sm">
+        <Button type="button" onClick={clearImage} size="sm">
           Limpar imagem
         </Button>
       </div>

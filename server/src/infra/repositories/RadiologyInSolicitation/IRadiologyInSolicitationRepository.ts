@@ -9,5 +9,5 @@ export interface IRadiologyInSolicitationRepository
   > {
   findRadiologyInSolicitationBySolicitationId(
     solicitationId: string
-  ): Promise<RadiologyInSolicitation>;
+  ): Promise<RadiologyInSolicitation | null>;
 }

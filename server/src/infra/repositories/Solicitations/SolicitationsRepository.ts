@@ -27,6 +27,7 @@ export default class SolicitationsRepository
         veterinarians: true,
         exams: { include: { Exams: true } },
         examsProfiles: { include: { ExamsProfile: true } },
+        radiologyInSolicitation: { include: { radiologySections: true } },
       },
     });
   }

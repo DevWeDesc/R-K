@@ -65,6 +65,11 @@ import ExamsProfileInSolicitationRepository from "./infra/repositories/ExamsProf
 import GetUniqueExamProfileUseCase from "./domain/useCases/ExamsProfile/GetUniqueExamProfileUseCase";
 import CreateExamsProfileInSolicitationUseCase from "./domain/useCases/ExamsProfileInSolicitation/CreateExamsProfileInSolicitationUseCase";
 import GetExamsProfileInSolicitationUseCase from "./domain/useCases/ExamsProfileInSolicitation/GetExamsProfileInSolicitationUseCase";
+import GetAllRadiologyInSolicitationsUseCase from "./domain/useCases/RadiologyInSolicitation/GetAllRadiologyInSolicitationsUseCase";
+import RadiologyInSolicitationRepository from "./infra/repositories/RadiologyInSolicitation/RadiologyInSolicitationRepository";
+import CreateRadiologyInSolicitationUseCase from "./domain/useCases/RadiologyInSolicitation/CreateRadiologyInSolicitationUseCase";
+import RadiologySectionsRepository from "./infra/repositories/RadiologySections/RadiologySectionsRepository";
+import CreateRadiologySectionsUseCase from "./domain/useCases/RadiologySections/CreateRadiologySectionsUseCase";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -80,11 +85,13 @@ const examsProfileRepository = new ExamsProfileRepository();
 export const examsInExamProfileRepository = new ExamsInExamProfileRepository();
 export const examsProfileInSolicitationRepository =
   new ExamsProfileInSolicitationRepository();
-
+export const radiologyInSolicitationRepository =
+  new RadiologyInSolicitationRepository();
+export const radiologySectionsRepository = new RadiologySectionsRepository();
 //Model
 export const pdfModel = new PdfModel();
 
-// Use Cases
+// Use Cases Use Cases Veterinarian
 export const tokenGenerate = new TokenGenerate();
 export const createVeterinarianUseCase = new CreateVeterinarianUseCase(
   veterinarianRepository
@@ -98,17 +105,16 @@ export const getAllVeterinariansUseCase = new GetAllVeterinariansUseCase(
 
 export const getSolicitationsByVeterinarian =
   new GetSolicitationsByVeterinarian(veterinarianRepository);
-
 export const deleteVeterinarianUseCase = new DeleteVeterinarianUseCase(
   veterinarianRepository,
   userLoginRepository
 );
 
+// Use Cases Login
 export const createLoginUseCase = new CreateLoginUseCase(
   userLoginRepository,
   createVeterinarianUseCase
 );
-
 export const getAllLoginsUseCase = new GetAllLoginsUseCase();
 export const getUniqueUserUseCase = new GetUniqueUserUseCase();
 export const autenticationUserUseCase = new AutenticationUserUseCase(
@@ -118,12 +124,12 @@ export const autenticationUserUseCase = new AutenticationUserUseCase(
 export const deleteLoginUseCase = new DeleteLoginUseCase(
   deleteVeterinarianUseCase
 );
-
 export const updateUserUseCase = new UpdateUserUseCase(
   userLoginRepository,
   veterinarianRepository
 );
 
+// Use Cases Exams
 export const getExamsUseCase = new GetExamsUseCase(examsRepository);
 export const createExamsUseCase = new CreateExamsUseCase(examsRepository);
 export const deleteExamUseCase = new DeleteExamUseCase(examsRepository);
@@ -131,18 +137,11 @@ export const updateExamUseCase = new UpdateExamUseCase(examsRepository);
 export const getExamsPerTypeUseCaseImpl = new GetExamsPerTypeUseCaseImpl(
   examsRepository
 );
-
-export const createManyExamsInExamsProfileUseCase =
-  new CreateManyExamsInExamsProfileUseCase(
-    examsInExamProfileRepository,
-    examsProfileRepository,
-    examsRepository
-  );
-
 export const getAllExamsWithTypeUseCase = new GetAllExamsWithTypeUseCase(
   examsRepository
 );
 
+// Use Cases ExamProfile
 export const createExamsProfileUseCase = new CreateExamsProfileUseCase(
   examsProfileRepository
 );
@@ -160,6 +159,7 @@ export const updateExamProfileUseCase = new UpdateExamProfileUseCase(
   examsProfileRepository
 );
 
+// Use Cases Exams in ExamProfile
 export const getExamsInExamProfileUseCase = new GetExamsInExamProfileUseCase(
   examsInExamProfileRepository
 );
@@ -173,21 +173,27 @@ export const updateExamInExamProfileUseCase =
   new UpdateExamInExamProfileUseCase(examsInExamProfileRepository);
 export const deleteExamInExamProfileUseCase =
   new DeleteExamInExamProfileUseCase(examsInExamProfileRepository);
-
 export const createExamsProfileInSolicitationUseCase =
   new CreateExamsProfileInSolicitationUseCase(
     examsProfileInSolicitationRepository,
     getUniqueExamProfileUseCase
   );
-
 export const getExamsProfileInSolicitationUseCase =
   new GetExamsProfileInSolicitationUseCase(
     examsProfileInSolicitationRepository
   );
+export const createManyExamsInExamsProfileUseCase =
+  new CreateManyExamsInExamsProfileUseCase(
+    examsInExamProfileRepository,
+    examsProfileRepository,
+    examsRepository
+  );
 
+// Use Cases Groups
 export const createGroupUseCase = new CreateGroupUseCase(groupRepository);
 export const getGroupsUseCase = new GetGroupsUseCase(groupRepository);
 
+// Use Cases Customer
 export const getUniqueCustomerUseCase = new GetUniqueCustomerUseCase(
   customerRepository
 );
@@ -208,6 +214,7 @@ export const deletedCustomerUseCase = new DeletedCustomerUseCase(
   getUniqueCustomerUseCase
 );
 
+// Use Cases Pets
 export const getAllPetsUseCase = new GetAllPetsUseCase(petsRepository);
 export const createPetUseCase = new CreatePetUseCase(
   petsRepository,
@@ -218,6 +225,7 @@ export const getPetsPerCustomerUseCase = new GetPetsPerCustomerUseCase(
   getUniqueCustomerUseCase
 );
 
+// Use Cases Solicitations
 export const getAllSolicitationsUseCase = new GetAllSolicitationsUseCase(
   solicitationsRepository
 );
@@ -239,10 +247,21 @@ export const deleteExamsInPetOnSolicitationsUseCase =
   new DeleteExamsInPetOnSolicitationsUseCase(
     examsInPetOnSolicitationsRepository
   );
-
 export const getUniqueSolicitationsUseCase = new GetUniqueSolicitationsUseCase(
   solicitationsRepository
 );
+
+// Use Cases Radiology
+export const getAllRadiologyInSolicitationsUseCase =
+  new GetAllRadiologyInSolicitationsUseCase(radiologyInSolicitationRepository);
+export const createRadiologyInSolicitationUseCase =
+  new CreateRadiologyInSolicitationUseCase(
+    radiologyInSolicitationRepository,
+    solicitationsRepository
+  );
+
+export const createRadiologySectionsUseCase =
+  new CreateRadiologySectionsUseCase(radiologySectionsRepository);
 
 export const mailModel = new MailModel(
   process.env.MAILSERVICE as string,
