@@ -1,12 +1,15 @@
 import { FastifyRequest, FastifyReply, FastifyPluginAsync } from "fastify";
 import {
+  createRadiologyInSolicitationUseCase,
   createSolicitationsUseCase,
   finalizeSolicitationUseCase,
+  getAllRadiologyInSolicitationsUseCase,
   getAllSolicitationsUseCase,
   getUniqueSolicitationsUseCase,
   pdfPerSolicitationUseCase,
 } from "../..";
 import { SolicitationRequestDTO } from "../DTOs/SolicitationsDTO/SolicitationRequestDTO";
+import { CreateRadiologyInSolicitationRequestDTO } from "../DTOs/RadiologyInSolicitationDTO/CreateRadiologyInSolicitationRequestDTO";
 
 export const SolicitationsController = {
   GetAllSolicitations: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -79,6 +82,28 @@ export const SolicitationsController = {
       return reply.send(res);
     } catch (err) {
       reply.status(404).send(err);
+    }
+  },
+
+  CreateRadiology: async (
+    request: FastifyRequest<{ Body: CreateRadiologyInSolicitationRequestDTO }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { body } = request;
+      const res = await createRadiologyInSolicitationUseCase.execute(body);
+      return reply.code(201).send(res);
+    } catch (err) {
+      return reply.code(404).send(err);
+    }
+  },
+
+  GetRadiologies: async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const res = await getAllRadiologyInSolicitationsUseCase.execute();
+      return reply.code(200).send(res);
+    } catch (err) {
+      return reply.code(404).send(err);
     }
   },
 };
