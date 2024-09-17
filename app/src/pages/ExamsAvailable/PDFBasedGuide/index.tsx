@@ -4,6 +4,7 @@ import { CombinedExams } from "./CombinedExams/CombinedExams";
 import { HeaderGuide } from "./HeaderGuide";
 import { InformationsGuide } from "./InformationsGuide";
 import { IFormSolicitation } from "@/@interfaces/IFormSolicitation";
+import { AdditionalInformations } from "./AdditionalInformations";
 
 export const PDFBasedGuide = () => {
   const methods = useForm<IFormSolicitation>();
@@ -13,6 +14,7 @@ export const PDFBasedGuide = () => {
       <HeaderGuide />
       <InformationsGuide />
       <FormProvider {...methods}>
+        <AdditionalInformations />
         <CombinedExams />
         <AllExamsWithType />
       </FormProvider>
