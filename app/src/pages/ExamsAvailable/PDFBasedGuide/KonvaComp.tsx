@@ -1,6 +1,7 @@
 import imageBody from "@/../public/assets/littleBodyAnimal.png";
 import { IFormSolicitation } from "@/@interfaces/IFormSolicitation";
 import { Button } from "@/components/ui/button";
+import Konva from "konva";
 import { useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { Stage, Layer, Image, Line } from "react-konva";
@@ -11,7 +12,7 @@ export const KonvaComp = () => {
   const [lines, setLines] = useState<any>([]);
   const [currentLine, setCurrentLine] = useState<any>([]);
   const [isPainting, setIsPainting] = useState(false);
-  const stageRef = useRef(null);
+  const stageRef = useRef<Konva.Stage>(null);
   const { setValue } = useFormContext<IFormSolicitation>();
 
   const handleMouseDown = (event: any) => {
