@@ -122,7 +122,8 @@ export const InformationsGuide = () => {
             </TableRow>
             <TableRow>
               <TableCell colSpan={2}>
-                Email vet: {data?.data.solicitationsDetails.veterinarians.email}
+                E-mail vet:{" "}
+                {data?.data.solicitationsDetails.veterinarians.email}
               </TableCell>
               <TableCell colSpan={2}>
                 Data:{" "}
