@@ -1,4 +1,24 @@
 export interface IFormSolicitation {
+  radiologySection: {
+    Skull: { region: string; sedation: boolean; clinicalSuspicion: string };
+    Skull_Dental_Arch: {
+      regions: string[];
+      sedation: true;
+      clinicalSuspicion: string;
+    };
+    Members: { side: string[]; region: string[]; articulation: string[] };
+    Pelvic_Limb: {
+      side: string[];
+      region: string[];
+      articulation: string[];
+      observation: string;
+    };
+    Chest: { region: string; clinicalSuspicion: string };
+    Abdomen: { region: string; clinicalSuspicion: string };
+    Spine: { region: string[] };
+    Projections: { region: string };
+    Cervical_Region: { region: string; clinicalSuspicion: string };
+  };
   base64Image: string;
   observationGuide: string;
   specialistReferred: number | string;
