@@ -16,6 +16,33 @@ import { toast } from "react-toastify";
 import { CreateExamsProfileInSolicitationsService } from "@/services/ExamsProfileInSolicitations/CreateExamsProfileInSolicitations.Service";
 import { CreateManyExamsProfileInSolicitationRequestDTO } from "@/@interfaces/DTOs/ExamsProfileInSolicitation/CreateManyExamsProfileInSolicitationRequestDTO";
 
+export enum TypeOfRadiologySectionEnum {
+  Skull = "Skull",
+  Skull_Dental_Arch = "Skull_Dental_Arch",
+  Members = "Members",
+  Pelvic_Limb = "Pelvic_Limb",
+  Abdomen = "Abdomen",
+  Chest = "Chest",
+  Spine = "Spine",
+  Projections = "Projections",
+  Cervical_Region = "Cervical_Region",
+}
+
+export interface CreateRadiologySectionRequestDTO {
+  solicitationId: string;
+  typeOfRadiologySection: TypeOfRadiologySectionEnum;
+  sedated?: boolean | null | undefined;
+  clinicalSuspicion?: string;
+  region: string[];
+  side?: string[];
+  articulation?: string[];
+  observation?: string;
+}
+
+export interface CreateRadiologySectionControllerRequestDTO {
+  data: CreateRadiologySectionRequestDTO[];
+}
+
 export const AllExamsWithType = () => {
   const { data: examsWithType } = useQuery({
     queryKey: ["ExamsWithType"],
@@ -27,6 +54,26 @@ export const AllExamsWithType = () => {
   const { register, handleSubmit } = useFormContext<IFormSolicitation>();
 
   const onSubmitForm = async (values: IFormSolicitation) => {
+    const radiologyDataRequest: CreateRadiologySectionControllerRequestDTO = {
+      data: [
+        {
+          solicitationId: id ? id : "",
+          typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull,
+          region: [values.radiologySection.Skull.region],
+          sedated: values.radiologySection.Skull.sedation as boolean,
+        },
+        {
+          solicitationId: id ? id : "",
+          typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull_Dental_Arch,
+          region: values.radiologySection.Skull_Dental_Arch.regions,
+          sedated: values.radiologySection.Skull_Dental_Arch
+            .sedation as boolean,
+        },
+      ],
+    };
+
+    console.log(radiologyDataRequest);
+
     const dataRequestExamsInSolicitation: ExamsInPetOnSolicitationsRequestDTO =
       {
         examsId: [],
