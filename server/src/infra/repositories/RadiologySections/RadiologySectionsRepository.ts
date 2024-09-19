@@ -3,10 +3,14 @@ import { prisma } from "../../../lib/prismaClient";
 import { QueryParamsListAllExams } from "../../../application/DTOs/ExamsDTO/QueryParamsListAllExams";
 import { IRadiologySectionsRepository } from "./IRadiologySectionsRepository";
 import { CreateRadiologySectionRequestDTO } from "../../../application/DTOs/RadiologySectionsDTO/CreateRadiologySectionRequestDTO";
+import { IRadiologyInSolicitationRepository } from "../RadiologyInSolicitation/IRadiologyInSolicitationRepository";
 
 export default class RadiologySectionsRepository
   implements IRadiologySectionsRepository
 {
+  constructor(
+    readonly radiologyInSolicitationRepository: IRadiologyInSolicitationRepository
+  ) {}
   public async findByRadiologySectionsType(
     typeOfRadiologySection: TypeOfRadiologySection
   ): Promise<RadiologySections[] | RadiologySections> {
@@ -15,24 +19,32 @@ export default class RadiologySectionsRepository
     });
   }
 
-  public async createMany(
-    entity: CreateRadiologySectionRequestDTO[]
-  ): Promise<any> {
-    const examsArrayFiltered: CreateRadiologySectionRequestDTO[] = [];
-    for (const radiologySection of entity) {
-      const data: CreateRadiologySectionRequestDTO = {
-        articulation: [""],
-        region: [""],
-        side: [""],
-        typeOfRadiologySection: "Skull",
-      };
-    }
-    const radiologyCreated = await prisma.radiologySections.createMany({
-      data: examsArrayFiltered,
-    });
+  // public async createMany(
+  //   entity: CreateRadiologySectionRequestDTO
+  // ): Promise<any> {
+  //   const radiologyInSolicitationBySolicitationId =
+  //     await this.radiologyInSolicitationRepository.findRadiologyInSolicitationBySolicitationId(
+  //       entity.solicitationId
+  //     );
 
-    return radiologyCreated;
-  }
+  //   if (!radiologyInSolicitationBySolicitationId)
+  //     throw new Error("Solicitação inválida!");
+
+  //   const radiologyCreated = await prisma.radiologySections.create({
+  //     data: {
+  //       typeOfRadiologySection: entity.typeOfRadiologySection,
+  //       articulation: entity.articulation,
+  //       clinicalSuspicion: entity.clinicalSuspicion,
+  //       observation: entity.observation,
+  //       region: entity.region,
+  //       sedated: entity.sedated,
+  //       side: entity.side,
+  //       radiologyInSolicitationId: radiologyInSolicitationBySolicitationId.id,
+  //     },
+  //   });
+
+  //   return radiologyCreated;
+  // }
 
   public async findById(
     id: string | number
@@ -51,9 +63,28 @@ export default class RadiologySectionsRepository
   public async create(
     entity: CreateRadiologySectionRequestDTO
   ): Promise<RadiologySections> {
-    return await prisma.radiologySections.create({
-      data: entity,
+    const radiologyInSolicitationBySolicitationId =
+      await this.radiologyInSolicitationRepository.findRadiologyInSolicitationBySolicitationId(
+        entity.solicitationId
+      );
+
+    if (!radiologyInSolicitationBySolicitationId)
+      throw new Error("Solicitação inválida!");
+
+    const radiologyCreated = await prisma.radiologySections.create({
+      data: {
+        typeOfRadiologySection: entity.typeOfRadiologySection,
+        articulation: entity.articulation,
+        clinicalSuspicion: entity.clinicalSuspicion,
+        observation: entity.observation,
+        region: entity.region,
+        sedated: entity.sedated,
+        side: entity.side,
+        radiologyInSolicitationId: radiologyInSolicitationBySolicitationId.id,
+      },
     });
+
+    return radiologyCreated;
   }
 
   public async update(
