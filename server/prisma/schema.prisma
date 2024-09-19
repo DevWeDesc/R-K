@@ -138,12 +138,12 @@ model RadiologySections {
   radiologyInSolicitation   RadiologyInSolicitation? @relation(fields: [radiologyInSolicitationId], references: [id])
   radiologyInSolicitationId String?
   typeOfRadiologySection    TypeOfRadiologySection
-  sedated                   Boolean?
-  clinicalSuspicion         String?
-  region                    String[]
-  side                      String[]
-  articulation              String[]
-  observation               String?
+  sedated                   Boolean?                 @default(false)
+  clinicalSuspicion         String?                  @default("")
+  region                    String[]                 @default([])
+  side                      String[]                 @default([])
+  articulation              String[]                 @default([])
+  observation               String?                  @default("")
 }
 
 model RadiologyInSolicitation {
