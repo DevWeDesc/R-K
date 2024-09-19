@@ -11,8 +11,7 @@ export const RadiologyExams = () => {
     queryFn: () => GetAllExamsWithTypeService(),
   });
 
-  const { register } = useFormContext<IFormSolicitation>();
-
+  const { register, watch } = useFormContext<IFormSolicitation>();
   return (
     <div className="col-span-2 bg-red-100/50">
       <div className="flex items-center gap-2 bg-slate-800 mb-2 px-2 py-1 font-medium text-sm rounded-lg">
@@ -21,26 +20,35 @@ export const RadiologyExams = () => {
       <div className="grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-2 text-sm px-6">
           <div className="flex items-center border-b border-black">
-            <p className="font-medium">CRÂNIO</p>{" "}
-            <Input className="bg-inherit py-0" />
+            <p className="font-medium">CRÂNIO</p>
           </div>
           <div className="flex items-center gap-2">
-            <p className="font-medium">Região: </p>{" "}
-            <Input className="bg-inherit py-0 border-b border-black rounded-none" />
+            <p className="font-medium">Região: </p>
+            <Input
+              {...register("radiologySection.Skull.region")}
+              className="bg-inherit py-0 border-b border-black rounded-none"
+            />
           </div>
           <div className="flex items-start w-full gap-1 ">
-            <TabGenericInput id={"sedação"} type="checkbox" />
+            <TabGenericInput
+              {...register("radiologySection.Skull.sedation")}
+              id="skullSedation"
+              type="checkbox"
+            />
             <label
-              htmlFor={"sedação"}
+              htmlFor="skullSedation"
               className="text-sm font-medium"
-              key={"sedação"}
+              key="skullSedation"
             >
               Sedação
             </label>
           </div>
           <div className="flex items-center gap-2">
             <p className="text-nowrap font-medium">Suspeita clínica: </p>{" "}
-            <Input className="bg-inherit py-0 border-b border-black rounded-none" />
+            <Input
+              {...register("radiologySection.Skull.clinicalSuspicion")}
+              className="bg-inherit py-0 border-b border-black rounded-none"
+            />
           </div>
           <p className="font-medium">
             Crânio - Arcada Dentária (necessário sedação)
@@ -48,96 +56,101 @@ export const RadiologyExams = () => {
           <div className="grid grid-cols-6">
             <div>
               <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
+                <TabGenericInput
+                  {...register("radiologySection.Skull_Dental_Arch.regions")}
+                  id="upperRegion"
+                  type="checkbox"
+                  value="Superior"
+                />
                 <label
-                  htmlFor={"sedação"}
+                  htmlFor="upperRegion"
                   className="text-sm font-medium"
-                  key={"sedação"}
+                  key="upperRegion"
                 >
                   Superior
                 </label>
               </div>
             </div>
             <div>
-              <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Direita
-                </label>
-              </div>
-              <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Esquerda
-                </label>
-              </div>
-              <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Incisivos
-                </label>
-              </div>
+              {[
+                { id: "rightRegion", value: "Direita" },
+                {
+                  id: "leftRegion",
+                  value: "Esquerda",
+                },
+                {
+                  id: "incisivesRegion",
+                  value: "Incisivos",
+                },
+              ].map((region) => (
+                <div key={region.id} className="flex items-start w-full gap-1">
+                  <TabGenericInput
+                    {...register("radiologySection.Skull_Dental_Arch.regions")}
+                    id={region.id}
+                    value={region.value}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={region.id}
+                    className="text-sm font-medium"
+                    key={region.id}
+                  >
+                    {region.value}
+                  </label>
+                </div>
+              ))}
             </div>
             <div>
               <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
+                <TabGenericInput
+                  {...register("radiologySection.Skull_Dental_Arch.regions")}
+                  id="lowerRegion"
+                  type="checkbox"
+                  value="Inferior"
+                />
                 <label
-                  htmlFor={"sedação"}
+                  htmlFor="lowerRegion"
                   className="text-sm font-medium"
-                  key={"sedação"}
+                  key="lowerRegion"
                 >
                   Inferior
                 </label>
               </div>
             </div>
             <div>
-              <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Direita
-                </label>
-              </div>
-              <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Esquerda
-                </label>
-              </div>
-              <div className="flex items-start w-full gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Incisivos
-                </label>
-              </div>
+              {[
+                { id: "rightRegion2", value: "Direita" },
+                {
+                  id: "leftRegion2",
+                  value: "Esquerda",
+                },
+                {
+                  id: "IncisivesRegion2",
+                  value: "Incisivos",
+                },
+              ].map((region) => (
+                <div key={region.id} className="flex items-start w-full gap-1">
+                  <TabGenericInput
+                    {...register("radiologySection.Skull_Dental_Arch.regions")}
+                    id={region.id}
+                    value={region.value}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={region.id}
+                    className="text-sm font-medium"
+                    key={region.id}
+                  >
+                    {region.value}
+                  </label>
+                </div>
+              ))}
             </div>
             <div className="col-span-2 ml-4">
               <textarea
-                name=""
-                id=""
+                {...register(
+                  "radiologySection.Skull_Dental_Arch.clinicalSuspicion"
+                )}
                 placeholder="Suspeita clínica"
                 className="p-1 w-full h-full max-h-16 bg-transparent border border-black"
               />
@@ -146,194 +159,196 @@ export const RadiologyExams = () => {
           <p className="border-b border-black font-medium">MEMBROS</p>
           <div className="flex items-center gap-2">
             <p className="font-medium">Membro Torácico</p>
-            <div className="flex items-start gap-1">
-              <TabGenericInput id={"sedação"} type="checkbox" />
-              <label htmlFor={"sedação"} className="text-sm" key={"sedação"}>
-                Direito
-              </label>
-            </div>
-            <div className="flex items-start gap-1">
-              <TabGenericInput id={"sedação"} type="checkbox" />
-              <label htmlFor={"sedação"} className="text-sm" key={"sedação"}>
-                Esquerdo
-              </label>
-            </div>
+            {[
+              { id: "rightRegionMember", value: "Direito" },
+              { id: "leftRegionMember", value: "Esquerdo" },
+            ].map((regionMember) => (
+              <div key={regionMember.id} className="flex items-start gap-1">
+                <TabGenericInput
+                  {...register("radiologySection.Members.side")}
+                  id={regionMember.id}
+                  value={regionMember.value}
+                  type="checkbox"
+                />
+                <label
+                  htmlFor={regionMember.id}
+                  className="text-sm"
+                  key={regionMember.id}
+                >
+                  {regionMember.value}
+                </label>
+              </div>
+            ))}
           </div>
           <div className="flex gap-2">
             <p className="font-medium">Região: </p>
             <div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
+              {[
+                { id: "ScapulaRegion", value: "Escápula" },
+                { id: "HumerusRegion", value: "Úmero" },
+                { id: "Radius/ulnaRegion", value: "Rádio/ulna" },
+                {
+                  id: "CarpalsMetacarpalsPhalangesRegion",
+                  value: "Carpos, metacarpos e falanges.",
+                },
+              ].map((articulationMember) => (
+                <div
+                  key={articulationMember.id}
+                  className="flex items-start gap-1"
                 >
-                  Escápula
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Úmero
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Rádio/ulna
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Carpos, metacarpos e falanges.
-                </label>
-              </div>
+                  <TabGenericInput
+                    {...register("radiologySection.Members.articulation")}
+                    id={articulationMember.id}
+                    value={articulationMember.value}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={articulationMember.id}
+                    className="text-sm font-medium"
+                    key={articulationMember.id}
+                  >
+                    {articulationMember.value}
+                  </label>
+                </div>
+              ))}
             </div>
             <p className="font-medium">Articulação: </p>
             <div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Escapuloumeral
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Umerorradioulnar
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Cárpica / Carpometacárpica / Metacarpofalangeana /
-                  Interfalangeana
-                </label>
-              </div>
+              {[
+                { id: "ScapulohumeralArticulation", value: "Escapuloumeral" },
+                {
+                  id: "humeroradioulnarArticulation",
+                  value: "Umerorradioulnar",
+                },
+                {
+                  id: "CárpicaCarpometacárpicaArticulation",
+                  value:
+                    "Cárpica / Carpometacárpica / Metacarpofalangeana / Interfalangeana",
+                },
+              ].map((articulation) => (
+                <div key={articulation.id} className="flex items-start gap-1">
+                  <TabGenericInput
+                    value={articulation.value}
+                    id={articulation.id}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={articulation.id}
+                    className="text-sm font-medium"
+                    key={articulation.id}
+                  >
+                    {articulation.value}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
           <div className="grid grid-cols-2">
             <div className="flex items-center gap-4">
               <p className="font-medium">Membro Pélvico</p>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Direito
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Esquerdo
-                </label>
-              </div>
+              {[
+                { id: "PelvicSideRight", value: "Direita" },
+                {
+                  id: "PelvicSideLeft",
+                  value: "Esquerda",
+                },
+              ].map((pelvicSide) => (
+                <div key={pelvicSide.id} className="flex items-start gap-1">
+                  <TabGenericInput
+                    {...register("radiologySection.Pelvic_Limb.side")}
+                    value={pelvicSide.value}
+                    id={pelvicSide.id}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={pelvicSide.id}
+                    className="text-sm font-medium"
+                    key={pelvicSide.id}
+                  >
+                    {pelvicSide.value}
+                  </label>
+                </div>
+              ))}
             </div>
             <div className="flex items-center">
               <span className="font-medium">Obs:</span>
-              <Input className="py-0 bg-inherit rounded-none border-b border-black" />
+              <Input
+                {...register("radiologySection.Pelvic_Limb.observation")}
+                className="py-0 bg-inherit rounded-none border-b border-black"
+              />
             </div>
           </div>
           <div className="flex gap-2">
             <p className="font-medium">Região: </p>
             <div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
+              {[
+                { id: "FemurPelvicMemberRegion", value: "Fêmur" },
+                {
+                  id: "TibiaetatarsalsPelvicMemberRegion",
+                  value: "Tíbia / Fíbula",
+                },
+                {
+                  id: "TarsiMetatarsalsEtcPelvicMemberRegion",
+                  value: "Tarsos, metatarsos e falanges.",
+                },
+              ].map((pelvicMemberRegion) => (
+                <div
+                  key={pelvicMemberRegion.id}
+                  className="flex items-start gap-1"
                 >
-                  Fêmur
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Tíbia / Fíbula
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Tarsos, metatarsos e falanges.
-                </label>
-              </div>
+                  <TabGenericInput
+                    {...register("radiologySection.Pelvic_Limb.region")}
+                    value={pelvicMemberRegion.value}
+                    id={pelvicMemberRegion.id}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={pelvicMemberRegion.id}
+                    className="text-sm font-medium"
+                    key={pelvicMemberRegion.id}
+                  >
+                    {pelvicMemberRegion.value}
+                  </label>
+                </div>
+              ))}
             </div>
             <p className="font-medium">Articulação: </p>
             <div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
+              {[
+                {
+                  id: "CoxofemoralMemberPelvicArticulation",
+                  value: "Coxofemoral",
+                },
+                {
+                  id: "FemurotibiopatelarMemberPelvicArticulation",
+                  value: "Femurotibiopatelar",
+                },
+                {
+                  id: "TarsicaTarsometatarsicaMemberPelvicArticulation",
+                  value:
+                    "Társica / Tarsometatársica / Metatarsofalangeana / Interfalangeana",
+                },
+              ].map((pelvicMemberArticulation) => (
+                <div
+                  key={pelvicMemberArticulation.id}
+                  className="flex items-start gap-1"
                 >
-                  Coxofemoral
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Femurotibiopatelar
-                </label>
-              </div>
-              <div className="flex items-start gap-1">
-                <TabGenericInput id={"sedação"} type="checkbox" />
-                <label
-                  htmlFor={"sedação"}
-                  className="text-sm font-medium"
-                  key={"sedação"}
-                >
-                  Társica / Tarsometatársica / Metatarsofalangeana /
-                  Interfalangeana
-                </label>
-              </div>
+                  <TabGenericInput
+                    {...register("radiologySection.Pelvic_Limb.articulation")}
+                    value={pelvicMemberArticulation.value}
+                    id={pelvicMemberArticulation.id}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor={pelvicMemberArticulation.id}
+                    className="text-sm font-medium"
+                    key={pelvicMemberArticulation.id}
+                  >
+                    {pelvicMemberArticulation.value}
+                  </label>
+                </div>
+              ))}
+
               <div className="flex items-center">
                 <span className="font-medium">Obs:</span>
                 <Input className="py-0 bg-inherit rounded-none border-b border-black" />
@@ -344,70 +359,120 @@ export const RadiologyExams = () => {
         <div className="flex flex-col gap-2 text-sm mr-6">
           <div className="border-b border-black flex items-center">
             <div className="flex items-start gap-1 pb-2">
-              <TabGenericInput id={"sedação"} type="checkbox" />
+              <TabGenericInput
+                value="Tórax"
+                {...register("radiologySection.Chest.region")}
+                id={"ToraxRegion"}
+                type="checkbox"
+              />
               <label
-                htmlFor={"sedação"}
+                htmlFor={"ToraxRegion"}
                 className="font-medium"
-                key={"sedação"}
+                key={"ToraxRegion"}
               >
                 TÓRAX
               </label>
             </div>
           </div>
           <div className="flex flex-col">
-            <label htmlFor="" className="font-medium">
+            <label
+              htmlFor=""
+              className={`font-medium  ${
+                !watch("radiologySection.Chest.region") && "text-black/50"
+              }`}
+            >
               Suspeita clínica:
             </label>
-            <Input className="px-1 py-1 bg-inherit border-b border-black rounded-none" />
+            <Input
+              {...register("radiologySection.Chest.clinicalSuspicion")}
+              disabled={!watch("radiologySection.Chest.region")}
+              className={`
+                px-1 py-1 bg-inherit border-b border-black rounded-none
+                ${
+                  !watch("radiologySection.Chest.region") && "border-black/30"
+                }`}
+            />
           </div>
           <div className="border-b border-black flex items-center">
             <div className="flex items-start gap-1 pb-2">
-              <TabGenericInput id={"sedação"} type="checkbox" />
+              <TabGenericInput
+                {...register("radiologySection.Abdomen.region")}
+                id={"AbdomenRegion"}
+                value="Abdômen"
+                type="checkbox"
+              />
               <label
-                htmlFor={"sedação"}
+                htmlFor={"AbdomenRegion"}
                 className="font-medium"
-                key={"sedação"}
+                key={"AbdomenRegion"}
               >
-                AMDÔMEN
+                ABDÔMEN
               </label>
             </div>
           </div>
           <div className="flex flex-col">
-            <label htmlFor="" className="font-medium">
+            <label
+              htmlFor=""
+              className={`font-medium ${
+                !watch("radiologySection.Abdomen.region") && "text-black/50"
+              }`}
+            >
               Suspeita clínica:
             </label>
-            <Input className="px-1 py-1 bg-inherit border-b border-black rounded-none" />
+            <Input
+              disabled={!watch("radiologySection.Abdomen.region")}
+              {...register("radiologySection.Abdomen.clinicalSuspicion")}
+              className={`px-1 py-1 bg-inherit border-b border-black rounded-none ${
+                !watch("radiologySection.Abdomen.region") && "border-black/30"
+              }`}
+            />
           </div>
           <div className="border-b border-black flex items-center">
             <div className="flex items-start gap-1 pb-2">
-              <p className="font-medium" key={"sedação"}>
-                COLUNA VERTEBRAL
-              </p>
+              <p className="font-medium">COLUNA VERTEBRAL</p>
             </div>
           </div>
           <div className="grid grid-cols-2 border-b border-black pb-2">
             {[
-              "Cervical",
-              "Coccigea/Caudal ",
-              "Cervicotorácica",
-              "Toda ",
-              "Torácica",
-              "Toracolombar",
-              "Lombar",
-              "Lombossacral",
-            ].map((exam, index) => (
-              <div key={index} className="flex items-start gap-1 pb-2">
-                <TabGenericInput id={exam} type="checkbox" />
-                <label htmlFor={exam} className="font-medium" key={exam}>
-                  {exam}
+              { id: "CervicalSpineRegion", value: "Cervical" },
+              { id: "Coccigea/CaudalSpineRegion", value: "Coccigea/Caudal" },
+              { id: "CervicotorácicaSpineRegion", value: "Cervicotorácica" },
+              { id: "TodaSpineRegion", value: "Toda" },
+              { id: "TorácicaSpineRegion", value: "Torácica" },
+              { id: "ToracolombarSpineRegion", value: "Toracolombar" },
+              { id: "LombarSpineRegion", value: "Lombar" },
+              { id: "LombossacralSpineRegion", value: "Lombossacral" },
+            ].map((spineRegion) => (
+              <div key={spineRegion.id} className="flex items-start gap-1 pb-2">
+                <TabGenericInput
+                  {...register("radiologySection.Spine.region")}
+                  value={spineRegion.value}
+                  id={spineRegion.id}
+                  type="checkbox"
+                />
+                <label
+                  htmlFor={spineRegion.id}
+                  className="font-medium"
+                  key={spineRegion.id}
+                >
+                  {spineRegion.value}
                 </label>
               </div>
             ))}
           </div>
           <div className="flex items-start gap-1 pb-2">
             <p className="font-medium">PROJEÇÕES: </p>
-            <TabGenericInput id={"sedação"} type="checkbox" />
-            <label htmlFor={"sedação"} className="font-medium" key={"sedação"}>
+            <TabGenericInput
+              {...register("radiologySection.Projections.region")}
+              value="A critério do radiologista."
+              id="projectionRegion"
+              type="checkbox"
+            />
+            <label
+              htmlFor="projectionRegion"
+              className="font-medium"
+              key="projectionRegion"
+            >
               A critério do radiologista.
             </label>
           </div>
@@ -416,11 +481,16 @@ export const RadiologyExams = () => {
             <div className="flex items-center">
               <div className="flex items-start gap-1 pb-2">
                 <p className="font-medium">Região Cervical: </p>
-                <TabGenericInput id={"sedação"} type="checkbox" />
+                <TabGenericInput
+                  {...register("radiologySection.Cervical_Region.region")}
+                  id="cervicalRegion"
+                  value="Partes Moles."
+                  type="checkbox"
+                />
                 <label
-                  htmlFor={"sedação"}
+                  htmlFor="cervicalRegion"
                   className="font-medium"
-                  key={"sedação"}
+                  key="cervicalRegion"
                 >
                   Partes Moles.
                 </label>
@@ -434,7 +504,16 @@ export const RadiologyExams = () => {
               >
                 Suspeita clínica:
               </label>
-              <Input className="py-0 px-2 border-b border-black bg-inherit rounded-none" />
+              <Input
+                {...register(
+                  "radiologySection.Cervical_Region.clinicalSuspicion"
+                )}
+                disabled={!watch("radiologySection.Cervical_Region.region")}
+                className={`py-0 px-2 border-b border-black bg-inherit rounded-none ${
+                  !watch("radiologySection.Cervical_Region.region") &&
+                  "border-black/30"
+                }`}
+              />
             </div>
           </div>
         </div>
@@ -444,8 +523,8 @@ export const RadiologyExams = () => {
               Cardiologia
             </p>
             <div className="pl-6 py-3 space-y-2">
-              {examsWithType?.data.cardiology.map((exam, index) => (
-                <div key={index} className="flex items-start gap-1 pb-2">
+              {examsWithType?.data.cardiology.map((exam) => (
+                <div key={exam.id} className="flex items-start gap-1 pb-2">
                   <TabGenericInput
                     value={exam.id}
                     {...register("examsCardiology")}
@@ -468,8 +547,8 @@ export const RadiologyExams = () => {
               Ultrassonografia
             </p>
             <div className="grid grid-cols-3 pl-6 py-3 space-y-1 gap-x-5">
-              {examsWithType?.data.ultrasound.map((exam, index) => (
-                <div key={index} className="flex items-start gap-1 pb-2">
+              {examsWithType?.data.ultrasound.map((exam) => (
+                <div key={exam.id} className="flex items-start gap-1 pb-2">
                   <TabGenericInput
                     value={exam.id}
                     id={`${exam.id.toString()}${exam.name}`}
@@ -491,11 +570,15 @@ export const RadiologyExams = () => {
               </div>
               <div className="col-span-3 w-full flex items-center pr-6">
                 <div className="w-full flex items-start gap-1 pb-2 mt-2">
-                  <TabGenericInput id={"sedação"} type="checkbox" />
+                  <TabGenericInput
+                    value="Pets não convencionais"
+                    id="unconventionalPets"
+                    type="checkbox"
+                  />
                   <label
-                    htmlFor={"sedação"}
+                    htmlFor="unconventionalPets"
                     className="font-medium text-nowrap"
-                    key={"sedação"}
+                    key="unconventionalPets"
                   >
                     Pets não convencionais
                   </label>
