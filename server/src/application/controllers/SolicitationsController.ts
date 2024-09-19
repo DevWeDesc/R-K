@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply, FastifyPluginAsync } from "fastify";
 import {
   createRadiologyInSolicitationUseCase,
+  createRadiologySectionsUseCase,
   createSolicitationsUseCase,
   finalizeSolicitationUseCase,
   getAllRadiologyInSolicitationsUseCase,
@@ -10,6 +11,10 @@ import {
 } from "../..";
 import { SolicitationRequestDTO } from "../DTOs/SolicitationsDTO/SolicitationRequestDTO";
 import { CreateRadiologyInSolicitationRequestDTO } from "../DTOs/RadiologyInSolicitationDTO/CreateRadiologyInSolicitationRequestDTO";
+import {
+  CreateRadiologySectionRequestControllerDTO,
+  CreateRadiologySectionRequestDTO,
+} from "../DTOs/RadiologySectionsDTO/CreateRadiologySectionRequestDTO";
 
 export const SolicitationsController = {
   GetAllSolicitations: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -102,6 +107,21 @@ export const SolicitationsController = {
     try {
       const res = await getAllRadiologyInSolicitationsUseCase.execute();
       return reply.code(200).send(res);
+    } catch (err) {
+      return reply.code(404).send(err);
+    }
+  },
+
+  CreateRadiologySections: async (
+    request: FastifyRequest<{
+      Body: CreateRadiologySectionRequestControllerDTO;
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { body } = request;
+      const res = await createRadiologySectionsUseCase.execute(body.data);
+      return reply.code(201).send(res);
     } catch (err) {
       return reply.code(404).send(err);
     }

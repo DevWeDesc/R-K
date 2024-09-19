@@ -11,7 +11,7 @@ type ParamsType = {
 export const InformationsGuide = () => {
   const { id } = useParams<ParamsType>();
   const { data } = useQuery({
-    queryKey: ["solicitation"],
+    queryKey: ["solicitation", id],
     queryFn: () => SolicitationById(id ? id : ""),
   });
 

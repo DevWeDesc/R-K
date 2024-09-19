@@ -6,10 +6,11 @@ export default class CreateRadiologySectionsUseCase {
     readonly radiologySectionRepository: IRadiologySectionsRepository
   ) {}
   async execute(
-    createRadiologySectionRequestDTO: CreateRadiologySectionRequestDTO
+    createRadiologySectionRequestDTO: CreateRadiologySectionRequestDTO[]
   ) {
-    return this.radiologySectionRepository.create(
-      createRadiologySectionRequestDTO
-    );
+    for (const radiologySectionRequest of createRadiologySectionRequestDTO) {
+      if (radiologySectionRequest.region.length > 0)
+        return this.radiologySectionRepository.create(radiologySectionRequest);
+    }
   }
 }

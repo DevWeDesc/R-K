@@ -87,7 +87,9 @@ export const examsProfileInSolicitationRepository =
   new ExamsProfileInSolicitationRepository();
 export const radiologyInSolicitationRepository =
   new RadiologyInSolicitationRepository();
-export const radiologySectionsRepository = new RadiologySectionsRepository();
+export const radiologySectionsRepository = new RadiologySectionsRepository(
+  radiologyInSolicitationRepository
+);
 //Model
 export const pdfModel = new PdfModel();
 

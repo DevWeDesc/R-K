@@ -10,5 +10,5 @@ export interface IRadiologySectionsRepository
   findByRadiologySectionsType(
     typeOfRadiologySection: TypeOfRadiologySection
   ): Promise<RadiologySections[] | RadiologySections>;
-  createMany(entity: CreateRadiologySectionRequestDTO[]): Promise<any>;
+  // createMany(entity: CreateRadiologySectionRequestDTO): Promise<any>;
 }
