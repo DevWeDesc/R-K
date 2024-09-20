@@ -144,6 +144,8 @@ model RadiologySections {
   side                      String[]                 @default([])
   articulation              String[]                 @default([])
   observation               String?                  @default("")
+
+  @@unique([radiologyInSolicitationId, typeOfRadiologySection])
 }
 
 model RadiologyInSolicitation {
