@@ -15,33 +15,11 @@ import { CreateExamsInPetSolicitations } from "@/services/ExamsInPetOnSolicitati
 import { toast } from "react-toastify";
 import { CreateExamsProfileInSolicitationsService } from "@/services/ExamsProfileInSolicitations/CreateExamsProfileInSolicitations.Service";
 import { CreateManyExamsProfileInSolicitationRequestDTO } from "@/@interfaces/DTOs/ExamsProfileInSolicitation/CreateManyExamsProfileInSolicitationRequestDTO";
-
-export enum TypeOfRadiologySectionEnum {
-  Skull = "Skull",
-  Skull_Dental_Arch = "Skull_Dental_Arch",
-  Members = "Members",
-  Pelvic_Limb = "Pelvic_Limb",
-  Abdomen = "Abdomen",
-  Chest = "Chest",
-  Spine = "Spine",
-  Projections = "Projections",
-  Cervical_Region = "Cervical_Region",
-}
-
-export interface CreateRadiologySectionRequestDTO {
-  solicitationId: string;
-  typeOfRadiologySection: TypeOfRadiologySectionEnum;
-  sedated?: boolean | null | undefined;
-  clinicalSuspicion?: string;
-  region: string[];
-  side?: string[];
-  articulation?: string[];
-  observation?: string;
-}
-
-export interface CreateRadiologySectionControllerRequestDTO {
-  data: CreateRadiologySectionRequestDTO[];
-}
+import { CreateRadiologySectionControllerRequestDTO } from "@/@interfaces/DTOs/Solicitations/RadiologySection/CreateRadiologySection";
+import { TypeOfRadiologySectionEnum } from "@/enums/TypeOfRadiologySectionEnum";
+import { CreateRadiologyInSolicitation } from "@/services/Solicitations/Radiology/CreateRadiologyInSolicitation";
+import { CreateRadiologyInSolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/RadiologyInSolicitation/CreateRadiologyInSolicitationRequestDTO";
+import { CreateRadiologySectionsInRadiologyOfSolicitation } from "@/services/Solicitations/Radiology/RadiologySection/CreateRadiologySectionsInRadiologyOfSolicitation";
 
 export const AllExamsWithType = () => {
   const { data: examsWithType } = useQuery({
@@ -54,25 +32,69 @@ export const AllExamsWithType = () => {
   const { register, handleSubmit } = useFormContext<IFormSolicitation>();
 
   const onSubmitForm = async (values: IFormSolicitation) => {
-    const radiologyDataRequest: CreateRadiologySectionControllerRequestDTO = {
-      data: [
-        {
-          solicitationId: id ? id : "",
-          typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull,
-          region: [values.radiologySection.Skull.region],
-          sedated: values.radiologySection.Skull.sedation as boolean,
-        },
-        {
-          solicitationId: id ? id : "",
-          typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull_Dental_Arch,
-          region: values.radiologySection.Skull_Dental_Arch.regions,
-          sedated: values.radiologySection.Skull_Dental_Arch
-            .sedation as boolean,
-        },
-      ],
-    };
-
-    console.log(radiologyDataRequest);
+    const createRadiologySectionsDataRequest: CreateRadiologySectionControllerRequestDTO =
+      {
+        data: [
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull,
+            region: [values.radiologySection.Skull.region],
+            sedated: values.radiologySection.Skull.sedation as boolean,
+          },
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection:
+              TypeOfRadiologySectionEnum.Skull_Dental_Arch,
+            region: values.radiologySection.Skull_Dental_Arch.regions,
+            sedated: values.radiologySection.Skull_Dental_Arch
+              .sedation as boolean,
+          },
+          {
+            solicitationId: id ? id : "",
+            side: values.radiologySection.Members.side,
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Members,
+            articulation: values.radiologySection.Members.articulation,
+            region: values.radiologySection.Members.region,
+          },
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Pelvic_Limb,
+            articulation: values.radiologySection.Pelvic_Limb.articulation,
+            side: values.radiologySection.Pelvic_Limb.side,
+            region: values.radiologySection.Pelvic_Limb.region,
+          },
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Chest,
+            region: [values.radiologySection.Chest.region],
+            clinicalSuspicion: values.radiologySection.Chest.clinicalSuspicion,
+          },
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Abdomen,
+            region: [values.radiologySection.Abdomen.region],
+            clinicalSuspicion:
+              values.radiologySection.Abdomen.clinicalSuspicion,
+          },
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Spine,
+            region: values.radiologySection.Spine.region,
+          },
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Projections,
+            region: [values.radiologySection.Projections.region],
+          },
+          {
+            solicitationId: id ? id : "",
+            typeOfRadiologySection: TypeOfRadiologySectionEnum.Cervical_Region,
+            region: [values.radiologySection.Cervical_Region.region],
+            clinicalSuspicion:
+              values.radiologySection.Cervical_Region.clinicalSuspicion,
+          },
+        ],
+      };
 
     const dataRequestExamsInSolicitation: ExamsInPetOnSolicitationsRequestDTO =
       {
@@ -121,12 +143,23 @@ export const AllExamsWithType = () => {
     if (allExams.length > 0)
       dataRequestExamsInSolicitation.examsId.push(...allExams);
 
+    const createRadiologyRequestBody: CreateRadiologyInSolicitationRequestDTO =
+      {
+        solicitationId: id ? id : "",
+      };
+
     await Promise.all([
+      await CreateRadiologyInSolicitation(createRadiologyRequestBody).catch(
+        (err) => console.log(err)
+      ),
       await CreateExamsInPetSolicitations(dataRequestExamsInSolicitation).catch(
         (err) => console.log(err)
       ),
       await CreateExamsProfileInSolicitationsService(
         dataRequestExamsProfileInSolicitation
+      ).catch((err) => console.log(err)),
+      await CreateRadiologySectionsInRadiologyOfSolicitation(
+        createRadiologySectionsDataRequest
       ).catch((err) => console.log(err)),
     ]).then(() => toast.success("Exames adicionado a guia com sucesso!"));
   };
