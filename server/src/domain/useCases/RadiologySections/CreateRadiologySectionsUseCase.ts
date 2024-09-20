@@ -8,9 +8,10 @@ export default class CreateRadiologySectionsUseCase {
   async execute(
     createRadiologySectionRequestDTO: CreateRadiologySectionRequestDTO[]
   ) {
+    console.log(createRadiologySectionRequestDTO);
     for (const radiologySectionRequest of createRadiologySectionRequestDTO) {
-      if (radiologySectionRequest.region.length > 0)
-        return this.radiologySectionRepository.create(radiologySectionRequest);
+      await this.radiologySectionRepository.create(radiologySectionRequest);
     }
+    return { message: "Sessões de radiologia criadas!" };
   }
 }
