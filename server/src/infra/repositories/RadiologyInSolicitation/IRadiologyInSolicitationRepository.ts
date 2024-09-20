@@ -1,4 +1,7 @@
-import { RadiologyInSolicitation } from "@prisma/client";
+import {
+  RadiologyInSolicitation,
+  TypeOfRadiologySection,
+} from "@prisma/client";
 import { IGenericRepository } from "../IGenericRepository";
 import { CreateRadiologyInSolicitationRequestDTO } from "../../../application/DTOs/RadiologyInSolicitationDTO/CreateRadiologyInSolicitationRequestDTO";
 
