@@ -21,15 +21,16 @@ model UsersLogin {
 }
 
 model Veterinarians {
-  id                Int             @id @unique @default(autoincrement())
-  name              String
-  crmv              String          @unique
-  email             String          @unique
-  state             String
-  phone             String
-  veterinarianLogin UsersLogin      @relation(fields: [usersLoginId], references: [id])
-  usersLoginId      Int             @unique
-  solicitations     Solicitations[]
+  id                                    Int                      @id @unique @default(autoincrement())
+  name                                  String
+  crmv                                  String                   @unique
+  email                                 String                   @unique
+  state                                 String
+  phone                                 String
+  veterinarianLogin                     UsersLogin               @relation(fields: [usersLoginId], references: [id])
+  usersLoginId                          Int                      @unique
+  solicitations                         Solicitations[]
+  ReferralForConsutationWithASpecialist ReferralWithSpecialist[]
 }
 
 model Customers {
@@ -169,6 +170,27 @@ model ExamsInPetOnSolicitations {
   solicitationsId String?
 }
 
+model ReferralWithSpecialist {
+  id              String        @id @default(uuid())
+  specialist      Veterinarians @relation(fields: [veterinariansId], references: [id])
+  veterinariansId Int
+  solicitations   Solicitations @relation(fields: [solicitationsId], references: [id])
+  solicitationsId String        @unique
+  historic        String?
+}
+
+model PatologyInSolicitation {
+  id                   String        @id @default(uuid())
+  solicitation         Solicitations @relation(fields: [solicitationId], references: [id])
+  solicitationId       String        @unique
+  numberOfInjuries     String?
+  collectionregion     String?
+  underTreatment       String?
+  historySuspicionNote String?       @map("history_Suspicion_Note")
+  evolutionTime        String?
+  size                 String?
+}
+
 model Solicitations {
   id                      String                       @id @default(uuid())
   slug                    String?
@@ -184,4 +206,6 @@ model Solicitations {
   petsId                  Int
   examsProfiles           ExamsProfileInSolicitation[]
   radiologyInSolicitation RadiologyInSolicitation?
+  patologyInSolicitation  PatologyInSolicitation?
+  referralWithSpecialist  ReferralWithSpecialist?
 }
