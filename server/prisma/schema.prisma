@@ -171,12 +171,12 @@ model ExamsInPetOnSolicitations {
 }
 
 model ReferralWithSpecialist {
-  id              String        @id @default(uuid())
-  specialist      Veterinarians @relation(fields: [veterinariansId], references: [id])
-  veterinariansId Int
-  solicitations   Solicitations @relation(fields: [solicitationsId], references: [id])
-  solicitationsId String        @unique
-  historic        String?
+  id             String        @id @default(uuid())
+  specialist     Veterinarians @relation(fields: [veterinarianId], references: [id])
+  veterinarianId Int
+  solicitation   Solicitations @relation(fields: [solicitationId], references: [id])
+  solicitationId String        @unique
+  historic       String?
 }
 
 model PatologyInSolicitation {
@@ -197,6 +197,7 @@ model Solicitations {
   bodyAnimalImage         String?                      @default("")
   isFinished              Boolean                      @default(false)
   exams                   ExamsInPetOnSolicitations[]
+  otherExams              String[]
   createdIn               DateTime                     @default(now())
   finishedIn              DateTime?
   observation             String?
