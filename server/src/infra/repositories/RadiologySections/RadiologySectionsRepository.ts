@@ -11,6 +11,17 @@ export default class RadiologySectionsRepository
   constructor(
     readonly radiologyInSolicitationRepository: IRadiologyInSolicitationRepository
   ) {}
+  public async findFirstRadiologySectionBySolicitationIdAndTypeSection(
+    radiologyInSolicitationId: string,
+    typeOfRadiologySection: TypeOfRadiologySection
+  ): Promise<RadiologySections | null> {
+    return await prisma.radiologySections.findFirst({
+      where: {
+        radiologyInSolicitationId: radiologyInSolicitationId,
+        typeOfRadiologySection: typeOfRadiologySection,
+      },
+    });
+  }
   public async findByRadiologySectionsType(
     typeOfRadiologySection: TypeOfRadiologySection
   ): Promise<RadiologySections[] | RadiologySections> {
@@ -69,7 +80,7 @@ export default class RadiologySectionsRepository
       );
 
     if (!radiologyInSolicitationBySolicitationId)
-      throw new Error("Solicitação inválida!");
+      throw new Error("Não tem sessão radiologia na solicitação informada!");
 
     const radiologyCreated = await prisma.radiologySections.create({
       data: {
@@ -91,10 +102,39 @@ export default class RadiologySectionsRepository
     id: string | number,
     entity: CreateRadiologySectionRequestDTO
   ): Promise<RadiologySections> {
-    return await prisma.radiologySections.update({
-      where: { id: parseInt(id.toString()) },
-      data: entity,
+    const radiologyInSolicitationBySolicitationId =
+      await this.radiologyInSolicitationRepository.findRadiologyInSolicitationBySolicitationId(
+        entity.solicitationId
+      );
+
+    if (!radiologyInSolicitationBySolicitationId)
+      throw new Error("Não tem sessão radiologia na solicitação informada!");
+
+    const radiologySectionBySolicitationId =
+      await this.findFirstRadiologySectionBySolicitationIdAndTypeSection(
+        radiologyInSolicitationBySolicitationId?.id,
+        entity.typeOfRadiologySection
+      );
+
+    const radiologyCreated = await prisma.radiologySections.update({
+      where: {
+        id: radiologySectionBySolicitationId?.id,
+        radiologyInSolicitationId: radiologyInSolicitationBySolicitationId.id,
+        typeOfRadiologySection: entity.typeOfRadiologySection,
+      },
+      data: {
+        typeOfRadiologySection: entity.typeOfRadiologySection,
+        articulation: entity.articulation,
+        clinicalSuspicion: entity.clinicalSuspicion,
+        observation: entity.observation,
+        region: entity.region,
+        sedated: entity.sedated,
+        side: entity.side,
+        radiologyInSolicitationId: radiologyInSolicitationBySolicitationId.id,
+      },
     });
+
+    return radiologyCreated;
   }
 
   public async delete(id: string | number): Promise<any> {

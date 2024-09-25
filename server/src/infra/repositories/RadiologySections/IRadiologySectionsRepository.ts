@@ -10,5 +10,10 @@ export interface IRadiologySectionsRepository
   findByRadiologySectionsType(
     typeOfRadiologySection: TypeOfRadiologySection
   ): Promise<RadiologySections[] | RadiologySections>;
+
+  findFirstRadiologySectionBySolicitationIdAndTypeSection(
+    radiologyInSolicitationId: string,
+    typeOfRadiologySection: TypeOfRadiologySection
+  ): Promise<RadiologySections | null>;
   // createMany(entity: CreateRadiologySectionRequestDTO): Promise<any>;
 }
