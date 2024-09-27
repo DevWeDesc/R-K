@@ -1,4 +1,4 @@
-import { Customers, ReferralWithSpecialist } from "@prisma/client";
+import { ReferralWithSpecialist } from "@prisma/client";
 import { prisma } from "../../../lib/prismaClient";
 import { IReferralWithSpecialistRepository } from "./IReferralWithSpecialistRepository";
 import { ReferralWithSpecialistRequestDTO } from "../../../application/DTOs/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";

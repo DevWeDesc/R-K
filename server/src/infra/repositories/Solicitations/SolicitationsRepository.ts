@@ -28,6 +28,8 @@ export default class SolicitationsRepository
         exams: { include: { Exams: true } },
         examsProfiles: { include: { ExamsProfile: true } },
         radiologyInSolicitation: { include: { radiologySections: true } },
+        patologyInSolicitation: true,
+        referralWithSpecialist: { include: { specialist: true } },
       },
     });
   }

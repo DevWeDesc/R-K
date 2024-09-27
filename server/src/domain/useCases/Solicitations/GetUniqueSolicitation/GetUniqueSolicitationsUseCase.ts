@@ -2,19 +2,20 @@ import { ExamsInPetOnSolicitations } from "@prisma/client";
 import SolicitationsRepository from "../../../../infra/repositories/Solicitations/SolicitationsRepository";
 import { FormatedValueForCurrent } from "../../../../utils/FormatedValueForCurrent";
 import SolicitationsNotFoundError from "../../../errors/Solicitations/SolicitationsNotFound";
+import { SolicitationModel } from "../../../models/Solicitation";
 
-interface ISolicitationDetails {
-  id: string;
-  veterinariansId: number;
-  petsId: number;
-  exams?: ExamsInPetOnSolicitations[];
-}
+// interface ISolicitationDetails {
+//   id: string;
+//   veterinariansId: number;
+//   petsId: number;
+//   exams?: ExamsInPetOnSolicitations[];
+// }
 
 export default class GetUniqueSolicitationsUseCase {
   constructor(readonly solicitationRepository: SolicitationsRepository) {}
 
   async execute(idSolicitation: string) {
-    const solicitationsDetails: ISolicitationDetails | null =
+    const solicitationsDetails: SolicitationModel | null =
       await this.solicitationRepository.findById(idSolicitation);
 
     if (!solicitationsDetails) throw new SolicitationsNotFoundError();

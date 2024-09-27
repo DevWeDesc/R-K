@@ -45,4 +45,16 @@ export async function solicitationsRoutes(app: FastifyInstance) {
     { preHandler: AuthMiddleware },
     SolicitationsController.CreateRadiologySections
   );
+
+  app.post(
+    "/solicitation/radiology/referralWithSpecialist",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.CreateReferralWithSpecialist
+  );
+
+  app.post(
+    "/solicitation/radiology/patology",
+    { preHandler: AuthMiddleware },
+    SolicitationsController.CreatePatologyInSolicitation
+  );
 }
