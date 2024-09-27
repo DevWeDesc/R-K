@@ -1,7 +1,9 @@
 import { FastifyRequest, FastifyReply, FastifyPluginAsync } from "fastify";
 import {
+  createPatologyInSolicitationUseCase,
   createRadiologyInSolicitationUseCase,
   createRadiologySectionsUseCase,
+  createReferralWithSpecialistUseCase,
   createSolicitationsUseCase,
   finalizeSolicitationUseCase,
   getAllRadiologyInSolicitationsUseCase,
@@ -11,10 +13,9 @@ import {
 } from "../..";
 import { SolicitationRequestDTO } from "../DTOs/SolicitationsDTO/SolicitationRequestDTO";
 import { CreateRadiologyInSolicitationRequestDTO } from "../DTOs/RadiologyInSolicitationDTO/CreateRadiologyInSolicitationRequestDTO";
-import {
-  CreateRadiologySectionRequestControllerDTO,
-  CreateRadiologySectionRequestDTO,
-} from "../DTOs/RadiologySectionsDTO/CreateRadiologySectionRequestDTO";
+import { CreateRadiologySectionRequestControllerDTO } from "../DTOs/RadiologySectionsDTO/CreateRadiologySectionRequestDTO";
+import { ReferralWithSpecialistRequestDTO } from "../DTOs/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";
+import { PatologyInSolicitationRequestDTO } from "../DTOs/PatologyInSolicitationDTO/PatologyInSolicitationRequestDTO";
 
 export const SolicitationsController = {
   GetAllSolicitations: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -121,6 +122,36 @@ export const SolicitationsController = {
     try {
       const { body } = request;
       const res = await createRadiologySectionsUseCase.execute(body.data);
+      return reply.code(201).send(res);
+    } catch (err) {
+      return reply.code(404).send(err);
+    }
+  },
+
+  CreateReferralWithSpecialist: async (
+    request: FastifyRequest<{
+      Body: ReferralWithSpecialistRequestDTO;
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { body } = request;
+      const res = await createReferralWithSpecialistUseCase.execute(body);
+      return reply.code(201).send(res);
+    } catch (err) {
+      return reply.code(404).send(err);
+    }
+  },
+
+  CreatePatologyInSolicitation: async (
+    request: FastifyRequest<{
+      Body: PatologyInSolicitationRequestDTO;
+    }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { body } = request;
+      const res = await createPatologyInSolicitationUseCase.execute(body);
       return reply.code(201).send(res);
     } catch (err) {
       return reply.code(404).send(err);

@@ -70,6 +70,10 @@ import RadiologyInSolicitationRepository from "./infra/repositories/RadiologyInS
 import CreateRadiologyInSolicitationUseCase from "./domain/useCases/RadiologyInSolicitation/CreateRadiologyInSolicitationUseCase";
 import RadiologySectionsRepository from "./infra/repositories/RadiologySections/RadiologySectionsRepository";
 import CreateRadiologySectionsUseCase from "./domain/useCases/RadiologySections/CreateRadiologySectionsUseCase";
+import ReferralWithSpecialistRepository from "./infra/repositories/ReferralWithSpecialist/ReferralWithSpecialistRepository";
+import CreateReferralWithSpecialistUseCase from "./domain/useCases/ReferralWithSpecialist/CreateReferralWithSpecialistUseCase";
+import PatologyInSolicitationRepository from "./infra/repositories/PatologyInSolicitation/PatologyInSolicitationRepository";
+import CreatePatologyInSolicitationUseCase from "./domain/useCases/PatologyInSolicitation/CreatePatologyInSolicitationUseCase";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -90,6 +94,11 @@ export const radiologyInSolicitationRepository =
 export const radiologySectionsRepository = new RadiologySectionsRepository(
   radiologyInSolicitationRepository
 );
+export const referralWithSpecialistRepository =
+  new ReferralWithSpecialistRepository();
+export const patologyInSolicitationRepository =
+  new PatologyInSolicitationRepository();
+
 //Model
 export const pdfModel = new PdfModel();
 
@@ -260,6 +269,20 @@ export const createRadiologyInSolicitationUseCase =
   new CreateRadiologyInSolicitationUseCase(
     radiologyInSolicitationRepository,
     solicitationsRepository
+  );
+
+// Use Cases pathology
+export const createPatologyInSolicitationUseCase =
+  new CreatePatologyInSolicitationUseCase(
+    patologyInSolicitationRepository,
+    getUniqueSolicitationsUseCase
+  );
+
+// Use cases ReferralWithSpecialist
+export const createReferralWithSpecialistUseCase =
+  new CreateReferralWithSpecialistUseCase(
+    referralWithSpecialistRepository,
+    getUniqueSolicitationsUseCase
   );
 
 export const createRadiologySectionsUseCase =

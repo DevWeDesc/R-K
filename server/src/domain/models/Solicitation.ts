@@ -39,4 +39,29 @@ export interface SolicitationModel {
       cpf: string;
     };
   };
+  patologyInSolicitation: {
+    id: string;
+    solicitationId: string;
+    numberOfInjuries: string;
+    collectionregion: string;
+    underTreatment?: string;
+    historySuspicionNote?: string;
+    evolutionTime?: string;
+    size?: string;
+  };
+  referralWithSpecialist: {
+    id: string;
+    veterinarianId: number;
+    solicitationId: string;
+    historic?: string;
+    specialist: {
+      id: number;
+      name: string;
+      crmv: string;
+      email: string;
+      state: string;
+      phone: string;
+      usersLoginId: number;
+    };
+  };
 }
