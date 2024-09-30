@@ -1,3 +1,6 @@
+import { PatologyInSolicitationRequestDTO } from "./DTOs/Solicitations/PatologyInSolicitation/PatologyInSolicitationRequestDTO";
+import { ReferralWithSpecialistRequestDTO } from "./DTOs/Solicitations/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";
+
 export interface IFormSolicitation {
   radiologySection: {
     Skull: { region: string; sedation: boolean; clinicalSuspicion: string };
@@ -19,6 +22,11 @@ export interface IFormSolicitation {
     Projections: { region: string };
     Cervical_Region: { region: string; clinicalSuspicion: string };
   };
+  referralWithSpecialistSection: Omit<
+    ReferralWithSpecialistRequestDTO,
+    "solicitationId"
+  >;
+  patologySection: Omit<PatologyInSolicitationRequestDTO, "solicitationId">;
   base64Image: string;
   observationGuide: string;
   specialistReferred: number | string;
