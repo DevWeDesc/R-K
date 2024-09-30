@@ -50,7 +50,7 @@ export const AdditionalInformations = () => {
               Especialista:
             </label>
             <Controller
-              name="specialistReferred"
+              name="referralWithSpecialistSection.veterinarianId"
               control={control}
               render={({ field }) => (
                 <>
@@ -85,7 +85,10 @@ export const AdditionalInformations = () => {
             <label className="text-sm" htmlFor="">
               Histórico:
             </label>
-            <Input className="bg-white py-0 border-b border-black rounded-none" />
+            <Input
+              {...register("referralWithSpecialistSection.historic")}
+              className="bg-white py-0 border-b border-black rounded-none"
+            />
           </div>
         </div>
       </div>
