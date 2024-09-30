@@ -15,11 +15,15 @@ import { CreateExamsInPetSolicitations } from "@/services/ExamsInPetOnSolicitati
 import { toast } from "react-toastify";
 import { CreateExamsProfileInSolicitationsService } from "@/services/ExamsProfileInSolicitations/CreateExamsProfileInSolicitations.Service";
 import { CreateManyExamsProfileInSolicitationRequestDTO } from "@/@interfaces/DTOs/ExamsProfileInSolicitation/CreateManyExamsProfileInSolicitationRequestDTO";
-import { CreateRadiologySectionControllerRequestDTO } from "@/@interfaces/DTOs/Solicitations/RadiologySection/CreateRadiologySection";
-import { TypeOfRadiologySectionEnum } from "@/enums/TypeOfRadiologySectionEnum";
 import { CreateRadiologyInSolicitation } from "@/services/Solicitations/Radiology/CreateRadiologyInSolicitation";
 import { CreateRadiologyInSolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/RadiologyInSolicitation/CreateRadiologyInSolicitationRequestDTO";
 import { CreateRadiologySectionsInRadiologyOfSolicitation } from "@/services/Solicitations/Radiology/RadiologySection/CreateRadiologySectionsInRadiologyOfSolicitation";
+import { CreateRadiologySectionsDataRequest } from "@/utils/FormatDataRequestForms/CreateRadiologySectionsDataRequest";
+import { AllExamsInSolicitation } from "@/utils/FormatDataRequestForms/AllExamsInSolicitation";
+import { CreatePatologyInSolicitation } from "@/services/Solicitations/Patology/CreatePatologyInSolicitation";
+import { PatologyInSolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/PatologyInSolicitation/PatologyInSolicitationRequestDTO";
+import { CreateReferralWithSpecialist } from "@/services/Solicitations/ReferralWIthSpecialist/CreateReferralWithSpecialist";
+import { ReferralWithSpecialistRequestDTO } from "@/@interfaces/DTOs/Solicitations/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";
 
 export const AllExamsWithType = () => {
   const { data: examsWithType } = useQuery({
@@ -32,69 +36,72 @@ export const AllExamsWithType = () => {
   const { register, handleSubmit } = useFormContext<IFormSolicitation>();
 
   const onSubmitForm = async (values: IFormSolicitation) => {
-    const createRadiologySectionsDataRequest: CreateRadiologySectionControllerRequestDTO =
-      {
-        data: [
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull,
-            region: [values.radiologySection.Skull.region],
-            sedated: values.radiologySection.Skull.sedation as boolean,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection:
-              TypeOfRadiologySectionEnum.Skull_Dental_Arch,
-            region: values.radiologySection.Skull_Dental_Arch.regions,
-            sedated: values.radiologySection.Skull_Dental_Arch
-              .sedation as boolean,
-          },
-          {
-            solicitationId: id ? id : "",
-            side: values.radiologySection.Members.side,
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Members,
-            articulation: values.radiologySection.Members.articulation,
-            region: values.radiologySection.Members.region,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Pelvic_Limb,
-            articulation: values.radiologySection.Pelvic_Limb.articulation,
-            side: values.radiologySection.Pelvic_Limb.side,
-            region: values.radiologySection.Pelvic_Limb.region,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Chest,
-            region: [values.radiologySection.Chest.region],
-            clinicalSuspicion: values.radiologySection.Chest.clinicalSuspicion,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Abdomen,
-            region: [values.radiologySection.Abdomen.region],
-            clinicalSuspicion:
-              values.radiologySection.Abdomen.clinicalSuspicion,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Spine,
-            region: values.radiologySection.Spine.region,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Projections,
-            region: [values.radiologySection.Projections.region],
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Cervical_Region,
-            region: [values.radiologySection.Cervical_Region.region],
-            clinicalSuspicion:
-              values.radiologySection.Cervical_Region.clinicalSuspicion,
-          },
-        ],
-      };
+    const createRadiologySectionsDataRequest =
+      CreateRadiologySectionsDataRequest(values, id ? id : "");
+
+    // const createRadiologySectionsDataRequest: CreateRadiologySectionControllerRequestDTO =
+    //   {
+    //     data: [
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull,
+    //         region: [values.radiologySection.Skull.region],
+    //         sedated: values.radiologySection.Skull.sedation as boolean,
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection:
+    //           TypeOfRadiologySectionEnum.Skull_Dental_Arch,
+    //         region: values.radiologySection.Skull_Dental_Arch.regions,
+    //         sedated: values.radiologySection.Skull_Dental_Arch
+    //           .sedation as boolean,
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         side: values.radiologySection.Members.side,
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Members,
+    //         articulation: values.radiologySection.Members.articulation,
+    //         region: values.radiologySection.Members.region,
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Pelvic_Limb,
+    //         articulation: values.radiologySection.Pelvic_Limb.articulation,
+    //         side: values.radiologySection.Pelvic_Limb.side,
+    //         region: values.radiologySection.Pelvic_Limb.region,
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Chest,
+    //         region: [values.radiologySection.Chest.region],
+    //         clinicalSuspicion: values.radiologySection.Chest.clinicalSuspicion,
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Abdomen,
+    //         region: [values.radiologySection.Abdomen.region],
+    //         clinicalSuspicion:
+    //           values.radiologySection.Abdomen.clinicalSuspicion,
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Spine,
+    //         region: values.radiologySection.Spine.region,
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Projections,
+    //         region: [values.radiologySection.Projections.region],
+    //       },
+    //       {
+    //         solicitationId: id ? id : "",
+    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Cervical_Region,
+    //         region: [values.radiologySection.Cervical_Region.region],
+    //         clinicalSuspicion:
+    //           values.radiologySection.Cervical_Region.clinicalSuspicion,
+    //       },
+    //     ],
+    //   };
 
     const dataRequestExamsInSolicitation: ExamsInPetOnSolicitationsRequestDTO =
       {
@@ -103,50 +110,39 @@ export const AllExamsWithType = () => {
         solicitationsId: id ? id : "",
       };
 
-    const profileExams = values.examsProfile;
-    const allExams: number[] = [
-      ...((Array.isArray(values.examsHematology) && values.examsHematology) ||
-        []),
-      ...((Array.isArray(values.examsBiochemistry) &&
-        values.examsBiochemistry) ||
-        []),
-      ...((Array.isArray(values.examsUrine) && values.examsUrine) || []),
-      ...((Array.isArray(values.examsFeces) && values.examsFeces) || []),
-      ...((Array.isArray(values.examsMicrobiology) &&
-        values.examsMicrobiology) ||
-        []),
-      ...((Array.isArray(values.examsDermatology) && values.examsDermatology) ||
-        []),
-      ...((Array.isArray(values.examsHormones) && values.examsHormones) || []),
-      ...((Array.isArray(values.examsPathology) && values.examsPathology) ||
-        []),
-      ...((Array.isArray(values.examPathologySecondPart) &&
-        values.examPathologySecondPart) ||
-        []),
-      ...((Array.isArray(values.examsImmunology) && values.examsImmunology) ||
-        []),
-      ...((Array.isArray(values.examsMolecularBiology) &&
-        values.examsMolecularBiology) ||
-        []),
-      ...((Array.isArray(values.examsCardiology) && values.examsCardiology) ||
-        []),
-      ...((Array.isArray(values.examsUltrasound) && values.examsUltrasound) ||
-        []),
-    ];
-
     const dataRequestExamsProfileInSolicitation: CreateManyExamsProfileInSolicitationRequestDTO =
       { solicitationsId: id ? id : "", examProfileId: [] };
-
-    if (profileExams.length > 0)
-      dataRequestExamsProfileInSolicitation.examProfileId.push(...profileExams);
-
-    if (allExams.length > 0)
-      dataRequestExamsInSolicitation.examsId.push(...allExams);
 
     const createRadiologyRequestBody: CreateRadiologyInSolicitationRequestDTO =
       {
         solicitationId: id ? id : "",
       };
+
+    const createPatologyInSolicitationRequest: PatologyInSolicitationRequestDTO =
+      {
+        solicitationId: id ? id : "",
+        collectionregion: values.patologySection.collectionregion,
+        evolutionTime: values.patologySection.evolutionTime,
+        historySuspicionNote: values.patologySection.historySuspicionNote,
+        numberOfInjuries: values.patologySection.numberOfInjuries,
+        size: values.patologySection.size,
+        underTreatment: values.patologySection.underTreatment,
+      };
+
+    const createReferralWithSpecialist: ReferralWithSpecialistRequestDTO = {
+      solicitationId: id ? id : "",
+      veterinarianId: values.referralWithSpecialistSection.veterinarianId,
+      historic: values.referralWithSpecialistSection.historic,
+    };
+
+    const profileExams = values.examsProfile;
+    const allExamsInSlicitation = AllExamsInSolicitation(values);
+
+    if (profileExams.length > 0)
+      dataRequestExamsProfileInSolicitation.examProfileId.push(...profileExams);
+
+    if (allExamsInSlicitation.length > 0)
+      dataRequestExamsInSolicitation.examsId.push(...allExamsInSlicitation);
 
     await Promise.all([
       await CreateRadiologyInSolicitation(createRadiologyRequestBody).catch(
@@ -161,6 +157,12 @@ export const AllExamsWithType = () => {
       await CreateRadiologySectionsInRadiologyOfSolicitation(
         createRadiologySectionsDataRequest
       ).catch((err) => console.log(err)),
+      await CreatePatologyInSolicitation(
+        createPatologyInSolicitationRequest
+      ).catch((err) => console.log(err)),
+      await CreateReferralWithSpecialist(createReferralWithSpecialist).catch(
+        (err) => console.log(err)
+      ),
     ]).then(() => toast.success("Exames adicionado a guia com sucesso!"));
   };
 
@@ -400,23 +402,31 @@ export const AllExamsWithType = () => {
           <div className="col-span-2 flex flex-col gap-2 pl-2 text-sm">
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">Número de lesões:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.numberOfInjuries")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">Região de coleta:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.collectionregion")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">Sob tratamento (Especificar):</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.underTreatment")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">HISTÓRICO / SUSPEITA / OBS:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
-            </div>
-            <div className="flex items-center w-full gap-2">
-              <p className="whitespace-nowrap">Número de lesões:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.historySuspicionNote")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
           </div>
 
@@ -424,11 +434,17 @@ export const AllExamsWithType = () => {
             <div className="grid grid-cols-2">
               <div className="flex items-center w-full gap-2">
                 <p className="whitespace-nowrap">Tempo de evolução:</p>
-                <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+                <Input
+                  {...register("patologySection.evolutionTime")}
+                  className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                />
               </div>
               <div className="flex items-center w-full gap-2">
                 <p className="whitespace-nowrap">Tamanho:</p>
-                <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+                <Input
+                  {...register("patologySection.size")}
+                  className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                />
               </div>
             </div>
             <div className="grid grid-cols-3 gap-2">
