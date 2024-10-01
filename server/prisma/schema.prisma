@@ -168,6 +168,8 @@ model ExamsInPetOnSolicitations {
   examsId         Int?
   Solicitations   Solicitations? @relation(fields: [solicitationsId], references: [id])
   solicitationsId String?
+  material        String?
+  samples         String[]
 }
 
 model ReferralWithSpecialist {
