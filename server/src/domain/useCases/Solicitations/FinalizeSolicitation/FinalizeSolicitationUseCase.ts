@@ -9,6 +9,7 @@ import { FormatterMessageFromWhatsApp } from "../../WhatsApp/FormatterMessageFro
 import { FormatedDate } from "../../../../utils/FormatedDate";
 import createPDFDocument from "../../../../domain/models/pdf/PdfDocument";
 import path from "path";
+import { FinalizeSolicitationRequestDTO } from "../../../../application/DTOs/SolicitationsDTO/FinalizeSolicitationRequestDTO";
 
 export default class FinalizeSolicitationUseCase {
   constructor(
@@ -18,8 +19,7 @@ export default class FinalizeSolicitationUseCase {
 
   async execute(
     idSolicitation: string,
-    emailVeterinarian?: string,
-    observation?: string
+    requestDTO: FinalizeSolicitationRequestDTO
   ) {
     let solicitationById: SolicitationModel =
       await this.solicitationRepository.findById(idSolicitation);
@@ -40,7 +40,8 @@ export default class FinalizeSolicitationUseCase {
         isFinished: true,
         finishedIn: dateFinished,
         slug: slugForSolicitation,
-        observation,
+        observation: requestDTO.observation,
+        bodyAnimalImage: requestDTO.bodyAnimalImage,
       })
       .then(async () => {
         solicitationById = await this.solicitationRepository.findById(
@@ -66,7 +67,7 @@ export default class FinalizeSolicitationUseCase {
         to: `
           r.k.ofc2@gmail.com,
           ${solicitationById.pet.customer.email},
-          ${emailVeterinarian && emailVeterinarian}
+          ${requestDTO.emailVeterinarian && requestDTO.emailVeterinarian}
         `,
         subject: `Finalização Guia RK do Pet ${solicitationById.pet.name}`,
         html: HtmlMailContent,
@@ -82,9 +83,9 @@ export default class FinalizeSolicitationUseCase {
         "https://rkdiagnostico.com.br/wp-content/uploads/2021/07/logo-rkdiagnostico-colorido.png"
       );
 
-      await this.sendMailUseCase.execute(dataSendEmail).catch((err) => {
-        throw new Error(err);
-      });
+      // await this.sendMailUseCase.execute(dataSendEmail).catch((err) => {
+      //   throw new Error(err);
+      // });
     }, 3000);
 
     return {
