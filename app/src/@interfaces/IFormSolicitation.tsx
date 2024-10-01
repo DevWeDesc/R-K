@@ -36,6 +36,7 @@ export interface IFormSolicitation {
   examsUrine: number[];
   examsFeces: number[];
   examsMicrobiology: number[];
+  materialForExamsMicrobiology: string[];
   examsDermatology: number[];
   examsHormones: number[];
   examsPathology: number[];
