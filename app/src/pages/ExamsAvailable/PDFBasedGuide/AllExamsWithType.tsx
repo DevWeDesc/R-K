@@ -44,7 +44,7 @@ export const AllExamsWithType = () => {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const { register, handleSubmit, watch, getValues } =
+  const { register, handleSubmit, getValues } =
     useFormContext<IFormSolicitation>();
 
   const onSubmitForm = async (values: IFormSolicitation) => {
