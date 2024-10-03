@@ -3,4 +3,5 @@ export interface FinishedSolicitationDTO {
   finishedIn: Date;
   slug: string;
   observation?: string;
+  bodyAnimalImage?: string;
 }
