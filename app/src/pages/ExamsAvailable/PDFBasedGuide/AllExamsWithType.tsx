@@ -15,159 +15,41 @@ import { CreateExamsInPetSolicitations } from "@/services/ExamsInPetOnSolicitati
 import { toast } from "react-toastify";
 import { CreateExamsProfileInSolicitationsService } from "@/services/ExamsProfileInSolicitations/CreateExamsProfileInSolicitations.Service";
 import { CreateManyExamsProfileInSolicitationRequestDTO } from "@/@interfaces/DTOs/ExamsProfileInSolicitation/CreateManyExamsProfileInSolicitationRequestDTO";
-import { CreateRadiologySectionControllerRequestDTO } from "@/@interfaces/DTOs/Solicitations/RadiologySection/CreateRadiologySection";
-import { TypeOfRadiologySectionEnum } from "@/enums/TypeOfRadiologySectionEnum";
 import { CreateRadiologyInSolicitation } from "@/services/Solicitations/Radiology/CreateRadiologyInSolicitation";
 import { CreateRadiologyInSolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/RadiologyInSolicitation/CreateRadiologyInSolicitationRequestDTO";
 import { CreateRadiologySectionsInRadiologyOfSolicitation } from "@/services/Solicitations/Radiology/RadiologySection/CreateRadiologySectionsInRadiologyOfSolicitation";
-import { Fragment } from "react/jsx-runtime";
-import { ModalGeneric } from "@/components/ModalGeneric";
-import { FormGuide } from "../GuidePreview/FormGuide";
-import { SolicitationById } from "@/services/Solicitations/SolicitationById";
-import { ParamsType } from "./InformationsGuide";
-import { useState } from "react";
+import { CreateRadiologySectionsDataRequest } from "@/utils/FormatDataRequestForms/CreateRadiologySectionsDataRequest";
+import { AllExamsInSolicitation } from "@/utils/FormatDataRequestForms/AllExamsInSolicitation";
+import { CreatePatologyInSolicitation } from "@/services/Solicitations/Patology/CreatePatologyInSolicitation";
+import { PatologyInSolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/PatologyInSolicitation/PatologyInSolicitationRequestDTO";
 import { CreateReferralWithSpecialist } from "@/services/Solicitations/ReferralWIthSpecialist/CreateReferralWithSpecialist";
 import { ReferralWithSpecialistRequestDTO } from "@/@interfaces/DTOs/Solicitations/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";
+import { ModalGeneric } from "@/components/ModalGeneric";
+import { useState } from "react";
+import { FormGuide } from "../GuidePreview/FormGuide";
+import { SolicitationById } from "@/services/Solicitations/SolicitationById";
 
 export const AllExamsWithType = () => {
+  const { id } = useParams<string>();
+
   const { data: examsWithType } = useQuery({
     queryKey: ["ExamsWithType"],
     queryFn: () => GetAllExamsWithTypeService(),
   });
 
-  const { id } = useParams<ParamsType>();
-
   const { data: solicitation } = useQuery({
-    queryKey: ["solicitation", id],
+    queryKey: ["Solicitation", id],
     queryFn: () => SolicitationById(id ? id : ""),
   });
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const { register, handleSubmit, getValues } =
     useFormContext<IFormSolicitation>();
 
+  const [openModal, setOpenModal] = useState(false);
+
   const onSubmitForm = async (values: IFormSolicitation) => {
-    const createRadiologySectionsDataRequest: CreateRadiologySectionControllerRequestDTO =
-      {
-        data: [
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull,
-            region: [values.radiologySection.Skull.region],
-            sedated: values.radiologySection.Skull.sedation as boolean,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection:
-              TypeOfRadiologySectionEnum.Skull_Dental_Arch,
-            region: values.radiologySection.Skull_Dental_Arch.regions,
-            sedated: values.radiologySection.Skull_Dental_Arch
-              .sedation as boolean,
-          },
-          {
-            solicitationId: id ? id : "",
-            side: values.radiologySection.Members.side,
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Members,
-            articulation: values.radiologySection.Members.articulation,
-            region: values.radiologySection.Members.region,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Pelvic_Limb,
-            articulation: values.radiologySection.Pelvic_Limb.articulation,
-            side: values.radiologySection.Pelvic_Limb.side,
-            region: values.radiologySection.Pelvic_Limb.region,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Chest,
-            region: [values.radiologySection.Chest.region],
-            clinicalSuspicion: values.radiologySection.Chest.clinicalSuspicion,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Abdomen,
-            region: [values.radiologySection.Abdomen.region],
-            clinicalSuspicion:
-              values.radiologySection.Abdomen.clinicalSuspicion,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Spine,
-            region: values.radiologySection.Spine.region,
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Projections,
-            region: [values.radiologySection.Projections.region],
-          },
-          {
-            solicitationId: id ? id : "",
-            typeOfRadiologySection: TypeOfRadiologySectionEnum.Cervical_Region,
-            region: [values.radiologySection.Cervical_Region.region],
-            clinicalSuspicion:
-              values.radiologySection.Cervical_Region.clinicalSuspicion,
-          },
-        ],
-      };
-
-    // const materialValues = values.materialForExamsMicrobiology.filter(
-    //   (meterial) => meterial != ""
-    // );
-
-    // console.log(values.materialForExamsMicrobiology);
-
-    // const idExamsByMaterial = materialValues.map((material) =>
-    //   values.materialForExamsMicrobiology.indexOf(material)
-    // );
-
-    // const idExamsByMaterialFilteredByExamsMicrobiologySelected =
-    //   values.examsMicrobiology.filter((exams) =>
-    //     idExamsByMaterial.some((examsByMaterial) => examsByMaterial == exams)
-    //   );
-
-    // console.log(idExamsByMaterialFilteredByExamsMicrobiologySelected);
-
-    // const dataMicrobiologyWithMaterial: any[] = [];
-
-    // for (
-    //   let count: number = 0;
-    //   count <= values.examsMicrobiology.length;
-    //   count++
-    // ) {
-    //   const idExamsMicrobiology = [
-    //     ...idExamsByMaterialFilteredByExamsMicrobiologySelected,
-    //   ];
-    //   const materialValuesInFor = [...materialValues];
-
-    //   if (
-    //     idExamsByMaterialFilteredByExamsMicrobiologySelected &&
-    //     idExamsByMaterialFilteredByExamsMicrobiologySelected != undefined &&
-    //     materialValuesInFor &&
-    //     materialValuesInFor != undefined
-    //   ) {
-    //     dataMicrobiologyWithMaterial.push({
-    //       id: idExamsMicrobiology[count] ? idExamsMicrobiology[count] : null,
-    //       material: materialValuesInFor[count]
-    //         ? materialValuesInFor[count]
-    //         : null,
-    //     });
-
-    //     console.table([idExamsMicrobiology[count], materialValuesInFor[count]]);
-    //   } else {
-    //     const indexRemoveItem = dataMicrobiologyWithMaterial.indexOf({
-    //       id: idExamsMicrobiology[count],
-    //       material: materialValuesInFor[count],
-    //     });
-
-    //     if (indexRemoveItem > -1) console.log(indexRemoveItem);
-
-    //     dataMicrobiologyWithMaterial.splice(indexRemoveItem, 1);
-    //   }
-    // }
-
-    // console.log(dataMicrobiologyWithMaterial);
+    const createRadiologySectionsDataRequest =
+      CreateRadiologySectionsDataRequest(values, id ? id : "");
 
     const dataRequestExamsInSolicitation: ExamsInPetOnSolicitationsRequestDTO =
       {
@@ -176,84 +58,90 @@ export const AllExamsWithType = () => {
         solicitationsId: id ? id : "",
       };
 
-    const profileExams = values.examsProfile;
-    const allExams: number[] = [
-      ...((Array.isArray(values.examsHematology) && values.examsHematology) ||
-        []),
-      ...((Array.isArray(values.examsBiochemistry) &&
-        values.examsBiochemistry) ||
-        []),
-      ...((Array.isArray(values.examsUrine) && values.examsUrine) || []),
-      ...((Array.isArray(values.examsFeces) && values.examsFeces) || []),
-      ...((Array.isArray(values.examsMicrobiology) &&
-        values.examsMicrobiology) ||
-        []),
-      ...((Array.isArray(values.examsDermatology) && values.examsDermatology) ||
-        []),
-      ...((Array.isArray(values.examsHormones) && values.examsHormones) || []),
-      ...((Array.isArray(values.examsPathology) && values.examsPathology) ||
-        []),
-      ...((Array.isArray(values.examPathologySecondPart) &&
-        values.examPathologySecondPart) ||
-        []),
-      ...((Array.isArray(values.examsImmunology) && values.examsImmunology) ||
-        []),
-      ...((Array.isArray(values.examsMolecularBiology) &&
-        values.examsMolecularBiology) ||
-        []),
-      ...((Array.isArray(values.examsCardiology) && values.examsCardiology) ||
-        []),
-      ...((Array.isArray(values.examsUltrasound) && values.examsUltrasound) ||
-        []),
-    ];
-
     const dataRequestExamsProfileInSolicitation: CreateManyExamsProfileInSolicitationRequestDTO =
       { solicitationsId: id ? id : "", examProfileId: [] };
-
-    if (profileExams.length > 0)
-      dataRequestExamsProfileInSolicitation.examProfileId.push(...profileExams);
-
-    if (allExams.length > 0)
-      dataRequestExamsInSolicitation.examsId.push(...allExams);
 
     const createRadiologyRequestBody: CreateRadiologyInSolicitationRequestDTO =
       {
         solicitationId: id ? id : "",
       };
 
-    const createReferralWithSpecialistRequestBody: ReferralWithSpecialistRequestDTO =
+    const createPatologyInSolicitationRequest: PatologyInSolicitationRequestDTO =
       {
         solicitationId: id ? id : "",
-        veterinarianId: parseInt(
-          values.referralWithSpecialistSection.veterinarianId.toString()
-        ),
-        historic: values.referralWithSpecialistSection.historic,
+        collectionregion: values.patologySection.collectionregion,
+        evolutionTime: values.patologySection.evolutionTime,
+        historySuspicionNote: values.patologySection.historySuspicionNote,
+        numberOfInjuries: values.patologySection.numberOfInjuries,
+        size: values.patologySection.size,
+        underTreatment: values.patologySection.underTreatment,
       };
 
+    const createReferralWithSpecialist: ReferralWithSpecialistRequestDTO = {
+      solicitationId: id ? id : "",
+      veterinarianId: parseInt(
+        values.referralWithSpecialistSection.veterinarianId?.toString()
+      ),
+      historic: values.referralWithSpecialistSection.historic,
+    };
+
+    const examsWithMaterial = Array.from(
+      { length: values.materialForExamsMicrobiology.length },
+      (_, index) => ({
+        id: index,
+        material: values.materialForExamsMicrobiology[index] ?? null,
+      })
+    ).filter(
+      (item) =>
+        item.material !== null &&
+        Array.isArray(values.examsMicrobiology) &&
+        values.examsMicrobiology.find((exam) => exam == item.id)
+    );
+
+    const examsWithSamples = Array.from(
+      { length: values.samplesForExamsFeces.length },
+      (_, index) => ({
+        id: index,
+        sample: values.samplesForExamsFeces[index] ?? null,
+      })
+    ).filter(
+      (item) =>
+        item.sample !== null &&
+        Array.isArray(values.samplesForExamsFeces) &&
+        values.examsFeces?.find((exam) => exam == item.id)
+    );
+
+    console.log(examsWithMaterial);
+    console.log(examsWithSamples);
+
+    const profileExams = values.examsProfile;
+    const allExamsInSlicitation = AllExamsInSolicitation(values);
+
+    if (profileExams.length > 0)
+      dataRequestExamsProfileInSolicitation.examProfileId.push(...profileExams);
+
+    if (allExamsInSlicitation.length > 0)
+      dataRequestExamsInSolicitation.examsId.push(...allExamsInSlicitation);
+
     await Promise.all([
-      createRadiologyRequestBody &&
-        (await CreateRadiologyInSolicitation(createRadiologyRequestBody).catch(
-          (err) => console.log(err)
-        )),
-      dataRequestExamsInSolicitation &&
-        (await CreateExamsInPetSolicitations(
-          dataRequestExamsInSolicitation
-        ).catch((err) => console.log(err))),
-
-      dataRequestExamsProfileInSolicitation &&
-        (await CreateExamsProfileInSolicitationsService(
-          dataRequestExamsProfileInSolicitation
-        ).catch((err) => console.log(err))),
-
-      createReferralWithSpecialistRequestBody &&
-        (await CreateReferralWithSpecialist(
-          createReferralWithSpecialistRequestBody
-        ).catch((err) => console.log(err))),
-
-      createRadiologySectionsDataRequest &&
-        (await CreateRadiologySectionsInRadiologyOfSolicitation(
-          createRadiologySectionsDataRequest
-        ).catch((err) => console.log(err))),
+      await CreateRadiologyInSolicitation(createRadiologyRequestBody).catch(
+        (err) => console.log(err)
+      ),
+      await CreateExamsInPetSolicitations(dataRequestExamsInSolicitation).catch(
+        (err) => console.log(err)
+      ),
+      await CreateExamsProfileInSolicitationsService(
+        dataRequestExamsProfileInSolicitation
+      ).catch((err) => console.log(err)),
+      await CreateRadiologySectionsInRadiologyOfSolicitation(
+        createRadiologySectionsDataRequest
+      ).catch((err) => console.log(err)),
+      await CreatePatologyInSolicitation(
+        createPatologyInSolicitationRequest
+      ).catch((err) => console.log(err)),
+      await CreateReferralWithSpecialist(createReferralWithSpecialist).catch(
+        (err) => console.log(err)
+      ),
     ]).then(() => toast.success("Exames adicionado a guia com sucesso!"));
   };
 
@@ -354,64 +242,45 @@ export const AllExamsWithType = () => {
         </div>
         <div className="space-y-2">
           {examsWithType?.data.feces.map((examsFeces) => (
-            <Fragment key={examsFeces.id}>
-              {examsFeces.name.toLowerCase() ===
-              "Parasitológico de Fezes (3 Amostra)".toLocaleLowerCase() ? (
-                <div className="ml-2">
-                  <div
-                    key={examsFeces.id}
-                    className="flex items-start w-full gap-1"
-                  >
-                    <TabGenericInput
-                      id={examsFeces.id.toString()}
-                      type="checkbox"
-                      value={examsFeces.id}
-                      {...register("examsFeces")}
-                    />
-                    <label
-                      htmlFor={examsFeces.id.toString()}
-                      className="text-sm"
-                      key={examsFeces.id}
-                    >
-                      {examsFeces.name}
-                    </label>
-                  </div>
-                  <div className="grid grid-cols-3 text-sm">
-                    <div className="flex">
-                      <span>1º</span>
-                      <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
-                    </div>
-                    <div className="flex">
-                      <span>2º</span>
-                      <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
-                    </div>
-                    <div className="flex">
-                      <span>3º</span>
-                      <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div
+            <div key={examsFeces.id} className="ml-2">
+              <div
+                key={examsFeces.id}
+                className="flex items-start w-full gap-1"
+              >
+                <TabGenericInput
+                  id={examsFeces.id.toString()}
+                  type="checkbox"
+                  value={examsFeces.id}
+                  {...register("examsFeces")}
+                />
+                <label
+                  htmlFor={examsFeces.id.toString()}
+                  className="text-sm"
                   key={examsFeces.id}
-                  className="flex items-start ml-2 w-full gap-1"
                 >
-                  <TabGenericInput
-                    id={examsFeces.id.toString()}
-                    type="checkbox"
-                    value={examsFeces.id}
-                    {...register("examsFeces")}
+                  {examsFeces.name}
+                </label>
+              </div>
+              {examsFeces.name === "Parasitológico de Fezes (3 Amostra)" && (
+                <div className="flex gap-1">
+                  <span className="text-sm font-medium">1º</span>
+                  <Input
+                    {...register(`samplesForExamsFeces.${examsFeces.id}.${1}`)}
+                    className="bg-inherit border-b border-black rounded-none py-0 px-1"
                   />
-                  <label
-                    htmlFor={examsFeces.id.toString()}
-                    className="text-sm"
-                    key={examsFeces.id}
-                  >
-                    {examsFeces.name}
-                  </label>
+                  <span className="text-sm font-medium">2º</span>
+                  <Input
+                    {...register(`samplesForExamsFeces.${examsFeces.id}.${2}`)}
+                    className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                  />
+                  <span className="text-sm font-medium">3º</span>
+                  <Input
+                    {...register(`samplesForExamsFeces.${examsFeces.id}.${3}`)}
+                    className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                  />
                 </div>
               )}
-            </Fragment>
+            </div>
           ))}
         </div>
       </div>
@@ -440,29 +309,16 @@ export const AllExamsWithType = () => {
                   {examsMicrobiology.name}
                 </label>
               </div>
-
-              {/* <div className="flex gap-1">
-                <span
-                  className={`text-sm font-medium ${
-                    !watch("examsMicrobiology")?.find(
-                      (exam) => exam == examsMicrobiology.id
-                    ) && "text-black/50"
-                  }`}
-                >
-                  Material:
-                </span>
+              <div className="flex gap-1">
+                <span className="text-sm font-medium">Material:</span>
                 <Input
-                  disabled={
-                    !watch("examsMicrobiology")?.find(
-                      (exam) => exam == examsMicrobiology.id
-                    )
-                  }
                   {...register(
                     `materialForExamsMicrobiology.${examsMicrobiology.id}`
                   )}
                   className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                  placeholder="Informe o material"
                 />
-              </div> */}
+              </div>
             </div>
           ))}
         </div>
@@ -558,35 +414,48 @@ export const AllExamsWithType = () => {
           <div className="col-span-2 flex flex-col gap-2 pl-2 text-sm">
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">Número de lesões:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.numberOfInjuries")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">Região de coleta:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.collectionregion")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">Sob tratamento (Especificar):</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.underTreatment")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
             <div className="flex items-center w-full gap-2">
               <p className="whitespace-nowrap">HISTÓRICO / SUSPEITA / OBS:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
-            </div>
-            <div className="flex items-center w-full gap-2">
-              <p className="whitespace-nowrap">Número de lesões:</p>
-              <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+              <Input
+                {...register("patologySection.historySuspicionNote")}
+                className="bg-inherit border-b border-black rounded-none py-0 px-1"
+              />
             </div>
           </div>
-
           <div className="flex flex-col gap-2 mt-5 pl-2 text-sm">
             <div className="grid grid-cols-2">
               <div className="flex items-center w-full gap-2">
                 <p className="whitespace-nowrap">Tempo de evolução:</p>
-                <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+                <Input
+                  {...register("patologySection.evolutionTime")}
+                  className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                />
               </div>
               <div className="flex items-center w-full gap-2">
                 <p className="whitespace-nowrap">Tamanho:</p>
-                <Input className="bg-inherit border-b border-black rounded-none py-0 px-1" />
+                <Input
+                  {...register("patologySection.size")}
+                  className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                />
               </div>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -676,23 +545,23 @@ export const AllExamsWithType = () => {
         <RadiologyExams />
       </div>
       <ModalGeneric
-        textDescription="Finalização de guia"
-        textButtonActive="Enviar Form"
-        textTitle="Finalização da guia"
-        openModal={modalIsOpen}
+        textDescription="Finalização da guia"
+        textTitle="Finalizar Guia"
+        openModal={openModal}
+        setModalOpen={() => setOpenModal(false)}
       >
         <FormGuide
-          closeModal={() => setModalIsOpen(false)}
           customerInformations={
-            solicitation?.data.solicitationsDetails.pet.customer
+            solicitation?.data.solicitationsDetails.pet?.customer
           }
           emailVeterinarian={
             solicitation?.data.solicitationsDetails.veterinarians.email
           }
           observation={getValues("observationGuide")}
+          closeModal={() => setOpenModal(false)}
         />
       </ModalGeneric>
-      <Button onClick={() => setModalIsOpen(true)} type="button">
+      <Button type="submit" onClick={() => setOpenModal(true)}>
         Enviar Form
       </Button>
     </form>
