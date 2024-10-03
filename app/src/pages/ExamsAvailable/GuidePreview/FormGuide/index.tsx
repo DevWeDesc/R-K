@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FinalizeSolicitation } from "@/services/Solicitations/FInalizeSolicitation";
 import { useState } from "react";
-import { get, useForm, useFormContext } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { ImSpinner8 } from "react-icons/im";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
