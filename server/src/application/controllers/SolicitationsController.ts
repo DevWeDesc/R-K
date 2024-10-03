@@ -16,6 +16,7 @@ import { CreateRadiologyInSolicitationRequestDTO } from "../DTOs/RadiologyInSoli
 import { CreateRadiologySectionRequestControllerDTO } from "../DTOs/RadiologySectionsDTO/CreateRadiologySectionRequestDTO";
 import { ReferralWithSpecialistRequestDTO } from "../DTOs/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";
 import { PatologyInSolicitationRequestDTO } from "../DTOs/PatologyInSolicitationDTO/PatologyInSolicitationRequestDTO";
+import { FinalizeSolicitationRequestDTO } from "../DTOs/SolicitationsDTO/FinalizeSolicitationRequestDTO";
 
 export const SolicitationsController = {
   GetAllSolicitations: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -30,18 +31,14 @@ export const SolicitationsController = {
   FinalizeSolicitation: async (
     request: FastifyRequest<{
       Params: { id: string };
-      Body: { emailVeterinarian?: string; observation?: string };
+      Body: FinalizeSolicitationRequestDTO;
     }>,
     reply: FastifyReply
   ) => {
     try {
       const { id } = request.params;
-      const { emailVeterinarian, observation } = request.body;
-      const res = await finalizeSolicitationUseCase.execute(
-        id,
-        emailVeterinarian,
-        observation
-      );
+      // const { emailVeterinarian, observation } = request.body;
+      const res = await finalizeSolicitationUseCase.execute(id, request.body);
       return reply.code(200).send(res);
     } catch (err) {
       return reply.code(400).send(err);

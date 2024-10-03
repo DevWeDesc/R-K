@@ -5,9 +5,10 @@ import { FormatDate } from "@/utils/FormatDate";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
-type ParamsType = {
+export type ParamsType = {
   id: string;
 };
+
 export const InformationsGuide = () => {
   const { id } = useParams<ParamsType>();
   const { data } = useQuery({

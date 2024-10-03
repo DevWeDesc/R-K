@@ -24,84 +24,32 @@ import { CreatePatologyInSolicitation } from "@/services/Solicitations/Patology/
 import { PatologyInSolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/PatologyInSolicitation/PatologyInSolicitationRequestDTO";
 import { CreateReferralWithSpecialist } from "@/services/Solicitations/ReferralWIthSpecialist/CreateReferralWithSpecialist";
 import { ReferralWithSpecialistRequestDTO } from "@/@interfaces/DTOs/Solicitations/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";
+import { ModalGeneric } from "@/components/ModalGeneric";
+import { useState } from "react";
+import { FormGuide } from "../GuidePreview/FormGuide";
+import { SolicitationById } from "@/services/Solicitations/SolicitationById";
 
 export const AllExamsWithType = () => {
+  const { id } = useParams<string>();
+
   const { data: examsWithType } = useQuery({
     queryKey: ["ExamsWithType"],
     queryFn: () => GetAllExamsWithTypeService(),
   });
 
-  const { id } = useParams<string>();
+  const { data: solicitation } = useQuery({
+    queryKey: ["Solicitation", id],
+    queryFn: () => SolicitationById(id ? id : ""),
+  });
 
-  const { register, handleSubmit } = useFormContext<IFormSolicitation>();
+  const { register, handleSubmit, getValues } =
+    useFormContext<IFormSolicitation>();
+
+  const [openModal, setOpenModal] = useState(false);
 
   const onSubmitForm = async (values: IFormSolicitation) => {
     const createRadiologySectionsDataRequest =
       CreateRadiologySectionsDataRequest(values, id ? id : "");
-
-    // const createRadiologySectionsDataRequest: CreateRadiologySectionControllerRequestDTO =
-    //   {
-    //     data: [
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Skull,
-    //         region: [values.radiologySection.Skull.region],
-    //         sedated: values.radiologySection.Skull.sedation as boolean,
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection:
-    //           TypeOfRadiologySectionEnum.Skull_Dental_Arch,
-    //         region: values.radiologySection.Skull_Dental_Arch.regions,
-    //         sedated: values.radiologySection.Skull_Dental_Arch
-    //           .sedation as boolean,
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         side: values.radiologySection.Members.side,
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Members,
-    //         articulation: values.radiologySection.Members.articulation,
-    //         region: values.radiologySection.Members.region,
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Pelvic_Limb,
-    //         articulation: values.radiologySection.Pelvic_Limb.articulation,
-    //         side: values.radiologySection.Pelvic_Limb.side,
-    //         region: values.radiologySection.Pelvic_Limb.region,
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Chest,
-    //         region: [values.radiologySection.Chest.region],
-    //         clinicalSuspicion: values.radiologySection.Chest.clinicalSuspicion,
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Abdomen,
-    //         region: [values.radiologySection.Abdomen.region],
-    //         clinicalSuspicion:
-    //           values.radiologySection.Abdomen.clinicalSuspicion,
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Spine,
-    //         region: values.radiologySection.Spine.region,
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Projections,
-    //         region: [values.radiologySection.Projections.region],
-    //       },
-    //       {
-    //         solicitationId: id ? id : "",
-    //         typeOfRadiologySection: TypeOfRadiologySectionEnum.Cervical_Region,
-    //         region: [values.radiologySection.Cervical_Region.region],
-    //         clinicalSuspicion:
-    //           values.radiologySection.Cervical_Region.clinicalSuspicion,
-    //       },
-    //     ],
-    //   };
 
     const dataRequestExamsInSolicitation: ExamsInPetOnSolicitationsRequestDTO =
       {
@@ -131,9 +79,40 @@ export const AllExamsWithType = () => {
 
     const createReferralWithSpecialist: ReferralWithSpecialistRequestDTO = {
       solicitationId: id ? id : "",
-      veterinarianId: values.referralWithSpecialistSection.veterinarianId,
+      veterinarianId: parseInt(
+        values.referralWithSpecialistSection.veterinarianId?.toString()
+      ),
       historic: values.referralWithSpecialistSection.historic,
     };
+
+    const examsWithMaterial = Array.from(
+      { length: values.materialForExamsMicrobiology.length },
+      (_, index) => ({
+        id: index,
+        material: values.materialForExamsMicrobiology[index] ?? null,
+      })
+    ).filter(
+      (item) =>
+        item.material !== null &&
+        Array.isArray(values.examsMicrobiology) &&
+        values.examsMicrobiology.find((exam) => exam == item.id)
+    );
+
+    const examsWithSamples = Array.from(
+      { length: values.samplesForExamsFeces.length },
+      (_, index) => ({
+        id: index,
+        sample: values.samplesForExamsFeces[index] ?? null,
+      })
+    ).filter(
+      (item) =>
+        item.sample !== null &&
+        Array.isArray(values.samplesForExamsFeces) &&
+        values.examsFeces?.find((exam) => exam == item.id)
+    );
+
+    console.log(examsWithMaterial);
+    console.log(examsWithSamples);
 
     const profileExams = values.examsProfile;
     const allExamsInSlicitation = AllExamsInSolicitation(values);
@@ -263,23 +242,44 @@ export const AllExamsWithType = () => {
         </div>
         <div className="space-y-2">
           {examsWithType?.data.feces.map((examsFeces) => (
-            <div
-              key={examsFeces.id}
-              className="flex items-start ml-2 w-full gap-1"
-            >
-              <TabGenericInput
-                id={examsFeces.id.toString()}
-                type="checkbox"
-                value={examsFeces.id}
-                {...register("examsFeces")}
-              />
-              <label
-                htmlFor={examsFeces.id.toString()}
-                className="text-sm"
+            <div key={examsFeces.id} className="ml-2">
+              <div
                 key={examsFeces.id}
+                className="flex items-start w-full gap-1"
               >
-                {examsFeces.name}
-              </label>
+                <TabGenericInput
+                  id={examsFeces.id.toString()}
+                  type="checkbox"
+                  value={examsFeces.id}
+                  {...register("examsFeces")}
+                />
+                <label
+                  htmlFor={examsFeces.id.toString()}
+                  className="text-sm"
+                  key={examsFeces.id}
+                >
+                  {examsFeces.name}
+                </label>
+              </div>
+              {examsFeces.name === "Parasitológico de Fezes (3 Amostra)" && (
+                <div className="flex gap-1">
+                  <span className="text-sm font-medium">1º</span>
+                  <Input
+                    {...register(`samplesForExamsFeces.${examsFeces.id}.${1}`)}
+                    className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                  />
+                  <span className="text-sm font-medium">2º</span>
+                  <Input
+                    {...register(`samplesForExamsFeces.${examsFeces.id}.${2}`)}
+                    className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                  />
+                  <span className="text-sm font-medium">3º</span>
+                  <Input
+                    {...register(`samplesForExamsFeces.${examsFeces.id}.${3}`)}
+                    className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -290,23 +290,35 @@ export const AllExamsWithType = () => {
         </div>
         <div className="space-y-2">
           {examsWithType?.data.microbiology.map((examsMicrobiology) => (
-            <div
-              key={examsMicrobiology.id}
-              className="flex items-start ml-2 w-full gap-1"
-            >
-              <TabGenericInput
-                id={examsMicrobiology.id.toString()}
-                type="checkbox"
-                value={examsMicrobiology.id}
-                {...register("examsMicrobiology")}
-              />
-              <label
-                htmlFor={examsMicrobiology.id.toString()}
-                className="text-sm"
+            <div key={examsMicrobiology.id} className="ml-2">
+              <div
                 key={examsMicrobiology.id}
+                className="flex items-start w-full gap-1"
               >
-                {examsMicrobiology.name}
-              </label>
+                <TabGenericInput
+                  id={examsMicrobiology.id.toString()}
+                  type="checkbox"
+                  value={examsMicrobiology.id}
+                  {...register("examsMicrobiology")}
+                />
+                <label
+                  htmlFor={examsMicrobiology.id.toString()}
+                  className="text-sm"
+                  key={examsMicrobiology.id}
+                >
+                  {examsMicrobiology.name}
+                </label>
+              </div>
+              <div className="flex gap-1">
+                <span className="text-sm font-medium">Material:</span>
+                <Input
+                  {...register(
+                    `materialForExamsMicrobiology.${examsMicrobiology.id}`
+                  )}
+                  className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                  placeholder="Informe o material"
+                />
+              </div>
             </div>
           ))}
         </div>
@@ -429,7 +441,6 @@ export const AllExamsWithType = () => {
               />
             </div>
           </div>
-
           <div className="flex flex-col gap-2 mt-5 pl-2 text-sm">
             <div className="grid grid-cols-2">
               <div className="flex items-center w-full gap-2">
@@ -533,7 +544,26 @@ export const AllExamsWithType = () => {
         </div>
         <RadiologyExams />
       </div>
-      <Button>Enviar Form</Button>
+      <ModalGeneric
+        textDescription="Finalização da guia"
+        textTitle="Finalizar Guia"
+        openModal={openModal}
+        setModalOpen={() => setOpenModal(false)}
+      >
+        <FormGuide
+          customerInformations={
+            solicitation?.data.solicitationsDetails.pet?.customer
+          }
+          emailVeterinarian={
+            solicitation?.data.solicitationsDetails.veterinarians.email
+          }
+          observation={getValues("observationGuide")}
+          closeModal={() => setOpenModal(false)}
+        />
+      </ModalGeneric>
+      <Button type="submit" onClick={() => setOpenModal(true)}>
+        Enviar Form
+      </Button>
     </form>
   );
 };

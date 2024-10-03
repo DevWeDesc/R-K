@@ -1,16 +1,15 @@
 import { api } from "@/utils/Api/AxiosInstance";
 import { AxiosResponse } from "axios";
 import { headerRequest } from "../UserLocal";
+import { FinalizeSolicitationRequestDTO } from "@/@interfaces/DTOs/Solicitations/FinalizeSolicitaton/FinalizeSolicitationRequestDTO";
 
 export const FinalizeSolicitation = async (
   idSolicitation: string,
-  emailVeterinarian: string,
-  observation: string
+  requestDTO: FinalizeSolicitationRequestDTO
 ): Promise<AxiosResponse> => {
-  const dataRequest = { isFinished: true, emailVeterinarian, observation };
   return await api.patch(
     `/solicitations/${idSolicitation}`,
-    dataRequest,
+    requestDTO,
     headerRequest
   );
 };
