@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FinalizeSolicitation } from "@/services/Solicitations/FInalizeSolicitation";
 import { useState } from "react";
-import { useForm, useFormContext } from "react-hook-form";
+import { get, useForm, useFormContext } from "react-hook-form";
 import { ImSpinner8 } from "react-icons/im";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -40,18 +40,16 @@ export const FormGuide = ({
     setIsLoading(true);
 
     const dataRequest: FinalizeSolicitationRequestDTO = {
-      emailVeterinarian,
+      emailVeterinarian: emailVeterinarian,
       isFinished: true,
-      observation,
+      observation: observation,
       bodyAnimalImage: form.getValues("base64Image"),
     };
-
     if (id)
       await FinalizeSolicitation(id, dataRequest).then(() => {
         toast.success("Guia finalizada com sucesso! Enviada pelo email");
         navigate("/home");
         setIsLoading(false);
-        form.setValue("base64Image", "");
       });
   };
 
@@ -112,12 +110,7 @@ export const FormGuide = ({
       </div>
 
       <div className="col-span-2 flex justify-end gap-2 mt-4">
-        <Button
-          type="button"
-          onClick={closeModal}
-          variant="outline"
-          className="px-6 text-sm"
-        >
+        <Button onClick={closeModal} variant="outline" className="px-6 text-sm">
           Cancelar
         </Button>
         {isLoading ? (
