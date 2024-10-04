@@ -11,8 +11,8 @@ export default class ExamsProfileInSolicitationRepository
   constructor() {}
   public async findByExamProfileId(
     examProfileId: string
-  ): Promise<ExamsProfileInSolicitation[]> {
-    return await prisma.examsProfileInSolicitation.findMany({
+  ): Promise<ExamsProfileInSolicitation | null> {
+    return await prisma.examsProfileInSolicitation.findFirst({
       where: { examProfileId: examProfileId },
     });
   }
@@ -38,6 +38,7 @@ export default class ExamsProfileInSolicitationRepository
   ): Promise<ExamsProfileInSolicitation[] | null> {
     return await prisma.examsProfileInSolicitation.findMany();
   }
+
   public async create(
     entity: CreateExamsProfileInSolicitationRequestDTO
   ): Promise<ExamsProfileInSolicitation> {
@@ -45,9 +46,7 @@ export default class ExamsProfileInSolicitationRepository
       where: { id: entity.examProfileId },
     });
 
-    if (!existingExamProfile) {
-      throw new Error(`Perfil de exame ${entity.examProfileId} não existe!`);
-    }
+    if (!existingExamProfile) throw new Error(`Perfil de exame não existe!`);
 
     return await prisma.examsProfileInSolicitation.create({ data: entity });
   }

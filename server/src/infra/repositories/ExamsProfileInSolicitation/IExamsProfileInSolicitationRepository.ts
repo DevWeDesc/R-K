@@ -11,5 +11,5 @@ export interface IExamsProfileInSolicitationRepository
   > {
   findByExamProfileId(
     examProfileId: string
-  ): Promise<ExamsProfileInSolicitation[]>;
+  ): Promise<ExamsProfileInSolicitation | null>;
 }
