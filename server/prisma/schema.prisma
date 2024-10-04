@@ -120,6 +120,8 @@ model ExamsProfileInSolicitation {
   examProfileId   String?
   Solicitations   Solicitations? @relation(fields: [solicitationsId], references: [id])
   solicitationsId String?
+
+  @@unique([examProfileId, solicitationsId])
 }
 
 enum TypeOfRadiologySection {
