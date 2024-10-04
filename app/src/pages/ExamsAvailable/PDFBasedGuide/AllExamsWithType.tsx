@@ -42,7 +42,7 @@ export const AllExamsWithType = () => {
     queryFn: () => SolicitationById(id ? id : ""),
   });
 
-  const { register, handleSubmit, getValues } =
+  const { register, handleSubmit, getValues, watch } =
     useFormContext<IFormSolicitation>();
 
   const [openModal, setOpenModal] = useState(false);
@@ -107,8 +107,8 @@ export const AllExamsWithType = () => {
     ).filter(
       (item) =>
         item.sample !== null &&
-        Array.isArray(values.samplesForExamsFeces) &&
-        values.examsFeces?.find((exam) => exam == item.id)
+        Array.isArray(values.examsFeces) &&
+        values.examsFeces.find((exam) => exam == item.id)
     );
 
     console.log(examsWithMaterial);
@@ -123,8 +123,10 @@ export const AllExamsWithType = () => {
     if (allExamsInSlicitation.length > 0)
       dataRequestExamsInSolicitation.examsId.push(...allExamsInSlicitation);
 
+    console.log(dataRequestExamsProfileInSolicitation);
+
     await Promise.all([
-      await CreateRadiologyInSolicitation(createRadiologyRequestBody).catch(
+      await CreateReferralWithSpecialist(createReferralWithSpecialist).catch(
         (err) => console.log(err)
       ),
       await CreateExamsInPetSolicitations(dataRequestExamsInSolicitation).catch(
@@ -133,15 +135,15 @@ export const AllExamsWithType = () => {
       await CreateExamsProfileInSolicitationsService(
         dataRequestExamsProfileInSolicitation
       ).catch((err) => console.log(err)),
+      await CreateRadiologyInSolicitation(createRadiologyRequestBody).catch(
+        (err) => console.log(err)
+      ),
       await CreateRadiologySectionsInRadiologyOfSolicitation(
         createRadiologySectionsDataRequest
       ).catch((err) => console.log(err)),
       await CreatePatologyInSolicitation(
         createPatologyInSolicitationRequest
       ).catch((err) => console.log(err)),
-      await CreateReferralWithSpecialist(createReferralWithSpecialist).catch(
-        (err) => console.log(err)
-      ),
     ]).then(() => toast.success("Exames adicionado a guia com sucesso!"));
   };
 
@@ -289,38 +291,54 @@ export const AllExamsWithType = () => {
           <p>MICROBIOLOGIA</p>
         </div>
         <div className="space-y-2">
-          {examsWithType?.data.microbiology.map((examsMicrobiology) => (
-            <div key={examsMicrobiology.id} className="ml-2">
-              <div
-                key={examsMicrobiology.id}
-                className="flex items-start w-full gap-1"
-              >
-                <TabGenericInput
-                  id={examsMicrobiology.id.toString()}
-                  type="checkbox"
-                  value={examsMicrobiology.id}
-                  {...register("examsMicrobiology")}
-                />
-                <label
-                  htmlFor={examsMicrobiology.id.toString()}
-                  className="text-sm"
+          {examsWithType?.data.microbiology.map((examsMicrobiology) => {
+            const materialIsDisponible =
+              Array.isArray(watch("examsMicrobiology")) &&
+              watch("examsMicrobiology").find(
+                (exams) => exams == examsMicrobiology.id
+              );
+
+            return (
+              <div key={examsMicrobiology.id} className="ml-2">
+                <div
                   key={examsMicrobiology.id}
+                  className="flex items-start w-full gap-1"
                 >
-                  {examsMicrobiology.name}
-                </label>
+                  <TabGenericInput
+                    id={examsMicrobiology.id.toString()}
+                    type="checkbox"
+                    value={examsMicrobiology.id}
+                    {...register("examsMicrobiology")}
+                  />
+                  <label
+                    htmlFor={examsMicrobiology.id.toString()}
+                    className="text-sm"
+                    key={examsMicrobiology.id}
+                  >
+                    {examsMicrobiology.name}
+                  </label>
+                </div>
+
+                <div className="flex gap-1">
+                  <span
+                    className={`text-sm font-medium ${
+                      !materialIsDisponible && "text-black/65"
+                    }`}
+                  >
+                    Material:
+                  </span>
+                  <Input
+                    {...register(
+                      `materialForExamsMicrobiology.${examsMicrobiology.id}`
+                    )}
+                    disabled={!materialIsDisponible as boolean}
+                    className="bg-inherit border-b border-black rounded-none py-0 px-1"
+                    placeholder="Informe o material"
+                  />
+                </div>
               </div>
-              <div className="flex gap-1">
-                <span className="text-sm font-medium">Material:</span>
-                <Input
-                  {...register(
-                    `materialForExamsMicrobiology.${examsMicrobiology.id}`
-                  )}
-                  className="bg-inherit border-b border-black rounded-none py-0 px-1"
-                  placeholder="Informe o material"
-                />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       <div className="col-span-3">
