@@ -55,7 +55,7 @@ enum SexEnum {
 model Pets {
   id            Int             @id @default(autoincrement())
   name          String
-  age           String
+  dateOfBirth   String
   sex           SexEnum
   specie        SpecieEnum
   customer      Customers       @relation(fields: [customerId], references: [id])
