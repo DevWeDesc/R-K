@@ -1,9 +1,22 @@
 import { FormatedDate } from "../../../../utils/FormatedDate";
 import { SolicitationModel } from "../../Solicitation";
+import moment from "moment";
 
 export const HtmlFinalizedSolicitation = (
-  solicitationDetails: SolicitationModel | null | any
+  solicitationDetails: SolicitationModel
 ) => {
+  const ageAnimal = moment(solicitationDetails.pet.dateOfBirth)
+    .fromNow()
+    .split(" ");
+
+  const formatAnimalAge = () => {
+    return `${ageAnimal[0].replace("a", "1")} ${ageAnimal[1]
+      .replace("months", "meses")
+      .replace("years", "anos")
+      .replace("month", "mês")
+      .replace("year", "ano")}`;
+  };
+
   return `<body
   style="margin: 0; padding: 0; font-family: 'Times New Roman', Times, serif; position: relative;"
 >
@@ -65,9 +78,7 @@ export const HtmlFinalizedSolicitation = (
         </tr>
         <tr>
           <td>
-            <p style="margin: 0 5px;"><strong>Idade: </strong> ${
-              solicitationDetails.pet.age
-            }</p>
+            <p style="margin: 0 5px;"><strong>Idade: </strong> ${formatAnimalAge()}</p>
           </td>
           <td style="text-align: end;"> 
             <p style="margin: 0 5px;"><strong>Sexo do Animal: </strong> ${

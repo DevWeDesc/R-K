@@ -3,7 +3,7 @@ import { SexEnum, SpecieEnum } from "@prisma/client";
 export interface PetRequestDTO {
   name: string;
   specie: SpecieEnum;
-  age: string;
+  dateOfBirth: string;
   sex: SexEnum;
   customerId: number;
 }
