@@ -4,6 +4,7 @@ import { SolicitationById } from "@/services/Solicitations/SolicitationById";
 import { FormatDate } from "@/utils/FormatDate";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 
 export type ParamsType = {
   id: string;
@@ -18,6 +19,18 @@ export const InformationsGuide = () => {
 
   const typeSpecie = data?.data.solicitationsDetails.pet.specie;
   const petSex = data?.data.solicitationsDetails.pet.sex;
+
+  const ageAnimal = moment(data?.data.solicitationsDetails.pet.dateOfBirth)
+    .fromNow()
+    .split(" ");
+
+  const formatAnimalAge = () => {
+    return `${ageAnimal[0].replace("a", "1")} ${ageAnimal[1]
+      .replace("months", "meses")
+      .replace("years", "anos")
+      .replace("month", "mês")
+      .replace("year", "ano")}`;
+  };
 
   if (id)
     return (
@@ -97,7 +110,7 @@ export const InformationsGuide = () => {
                 </div>
               </TableCell>
               <TableCell className="text-right">
-                Idade: {data?.data.solicitationsDetails.pet.age}
+                Idade: {formatAnimalAge()}
               </TableCell>
             </TableRow>
             <TableRow>
