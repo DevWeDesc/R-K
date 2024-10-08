@@ -31,7 +31,7 @@ export interface IReportPerVet {
       pet: {
         id: number;
         name: string;
-        age: string;
+        dateOfBirth: string;
         sex: string;
         specie: string;
         customerId: number;

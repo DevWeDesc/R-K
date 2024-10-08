@@ -2,6 +2,7 @@ import { PatologyInSolicitationRequestDTO } from "./DTOs/Solicitations/PatologyI
 import { ReferralWithSpecialistRequestDTO } from "./DTOs/Solicitations/ReferralWithSpecialist/ReferralWithSpecialistRequestDTO";
 
 export interface IFormSolicitation {
+  emailVeterinarian: string;
   radiologySection: {
     Skull: { region: string; sedation: boolean; clinicalSuspicion: string };
     Skull_Dental_Arch: {

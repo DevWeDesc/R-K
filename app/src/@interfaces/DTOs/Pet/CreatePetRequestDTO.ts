@@ -2,6 +2,6 @@ export interface ICreatePetRequestDTO {
   name: string;
   specie: string;
   customerId: number;
-  age: string;
+  dateOfBirth: string;
   sex: string;
 }

@@ -1,7 +1,7 @@
 import { ICustomer } from "./ICustomer";
 
 export interface IPets {
-  age: string;
+  dateOfBirth: string;
   customerId: number;
   id: number;
   name: string;
