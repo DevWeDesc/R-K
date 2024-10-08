@@ -74,7 +74,7 @@ export const GuidePreviewComponent = forwardRef<HTMLDivElement, IGuidePreview>(
                 </p>
                 <p>
                   <strong>Idade:</strong>{" "}
-                  {data?.data.solicitationsDetails.pet.age}.
+                  {data?.data.solicitationsDetails.pet.dateOfBirth}.
                 </p>
                 <p>
                   <strong>Tutor:</strong>{" "}
