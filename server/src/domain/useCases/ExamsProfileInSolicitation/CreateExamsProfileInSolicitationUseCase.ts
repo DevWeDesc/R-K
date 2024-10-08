@@ -14,28 +14,22 @@ export default class CreateExamsProfileInSolicitationUseCase {
     examProfileRequest: CreateManyExamsProfileInSolicitationRequestDTO
   ) {
     try {
+      const validatedExamProfiles: string[] = [];
+
       for (const examProfileId of examProfileRequest.examProfileId) {
+        const examProfileExists =
+          await this.getUniqueExamProfileUseCase.execute(examProfileId);
+
+        if (examProfileExists) validatedExamProfiles.push(examProfileId);
+      }
+
+      for (const examProfileId of validatedExamProfiles) {
         const dataRequest: CreateExamsProfileInSolicitationRequestDTO = {
-          examProfileId: examProfileId,
           solicitationsId: examProfileRequest.solicitationsId,
+          examProfileId: examProfileId,
         };
 
-        const examsProfileSolicitationsById =
-          await this.examProfileInSolicitationRepository.findByExamProfileId(
-            examProfileId
-          );
-
-        if (!examsProfileSolicitationsById) {
-          const examProfileExists =
-            await this.getUniqueExamProfileUseCase.execute(examProfileId);
-
-          if (!examProfileExists)
-            throw new Error(
-              `Perfil de exame com ID ${examProfileId} não existe!`
-            );
-
-          await this.examProfileInSolicitationRepository.create(dataRequest);
-        }
+        await this.examProfileInSolicitationRepository.create(dataRequest);
       }
 
       return { message: "Perfis de exames adicionados a guia com sucesso!" };
