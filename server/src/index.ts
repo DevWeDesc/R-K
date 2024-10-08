@@ -74,6 +74,8 @@ import ReferralWithSpecialistRepository from "./infra/repositories/ReferralWithS
 import CreateReferralWithSpecialistUseCase from "./domain/useCases/ReferralWithSpecialist/CreateReferralWithSpecialistUseCase";
 import PatologyInSolicitationRepository from "./infra/repositories/PatologyInSolicitation/PatologyInSolicitationRepository";
 import CreatePatologyInSolicitationUseCase from "./domain/useCases/PatologyInSolicitation/CreatePatologyInSolicitationUseCase";
+import CreateExamsWithMaterialInSolicitationUseCase from "./domain/useCases/ExamsInPetOnSolicitations/CreateExamsWithMaterialInSolicitationUseCase";
+import CreateExamsWithSampleUseCase from "./domain/useCases/ExamsInPetOnSolicitations/CreateExamsWithSampleUseCase";
 
 // Repositories
 export const userLoginRepository = new UserLoginRepository();
@@ -250,9 +252,18 @@ export const getAllExamsInPetOnSolicitationsUseCase =
   new GetAllExamsInPetOnSolicitationsUseCase(
     examsInPetOnSolicitationsRepository
   );
+export const createExamsWithMaterialInSolicitationUseCase =
+  new CreateExamsWithMaterialInSolicitationUseCase(
+    examsInPetOnSolicitationsRepository
+  );
+export const createExamsWithSampleUseCase = new CreateExamsWithSampleUseCase(
+  examsInPetOnSolicitationsRepository
+);
 export const createExamsInPetOnSolicitationsUseCase =
   new CreateExamsInPetOnSolicitationsUseCase(
-    examsInPetOnSolicitationsRepository
+    examsInPetOnSolicitationsRepository,
+    createExamsWithSampleUseCase,
+    createExamsWithMaterialInSolicitationUseCase
   );
 export const deleteExamsInPetOnSolicitationsUseCase =
   new DeleteExamsInPetOnSolicitationsUseCase(

@@ -74,14 +74,14 @@ export default class FinalizeSolicitationUseCase {
         pathFile: pathRelative,
       };
 
-      await sendMessageWithWhatsApp.execute(
-        `${FormatterMessageFromWhatsApp(
-          solicitationById,
-          slugForSolicitation
-        )}`,
-        `+55${solicitationById.pet.customer.phone}`,
-        "https://rkdiagnostico.com.br/wp-content/uploads/2021/07/logo-rkdiagnostico-colorido.png"
-      );
+      // await sendMessageWithWhatsApp.execute(
+      //   `${FormatterMessageFromWhatsApp(
+      //     solicitationById,
+      //     slugForSolicitation
+      //   )}`,
+      //   `+55${solicitationById.pet.customer.phone}`,
+      //   "https://rkdiagnostico.com.br/wp-content/uploads/2021/07/logo-rkdiagnostico-colorido.png"
+      // );
 
       // await this.sendMailUseCase.execute(dataSendEmail).catch((err) => {
       //   throw new Error(err);

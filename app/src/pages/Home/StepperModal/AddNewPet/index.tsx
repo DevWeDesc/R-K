@@ -25,10 +25,10 @@ import { useNavigate } from "react-router-dom";
 
 type sexType = "Macho" | "Femea";
 
-interface ISubmitNewClient {
+interface ISubmitNewPet {
   name: string;
   specie: string;
-  age: string;
+  dateOfBirth: string;
   tutor: string;
   sex: sexType;
 }
@@ -46,7 +46,7 @@ export const AddNewPetForm = ({
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<ISubmitNewClient>();
+  } = useForm<ISubmitNewPet>();
 
   const { data } = useQuery({
     queryFn: () => GetCustomerById(customerId ? customerId : ""),
@@ -90,12 +90,12 @@ export const AddNewPetForm = ({
   };
 
   const handleSubmitNewClient = handleSubmit(async (value) => {
-    const { specie, name, age, sex } = value;
+    const { specie, name, dateOfBirth, sex } = value;
     if (customerId) {
       const dataRequest: ICreatePetRequestDTO = {
         name,
         specie,
-        age,
+        dateOfBirth: new Date(dateOfBirth).toISOString(),
         sex,
         customerId: parseInt(customerId),
       };
@@ -103,72 +103,97 @@ export const AddNewPetForm = ({
       await handleCreatePet(dataRequest);
     }
   });
+
   return (
     <form onSubmit={handleSubmitNewClient} className="space-y-2">
-      <Input
-        className="w-full"
-        {...register("name", { required: true })}
-        placeholder="Nome do Pet"
-      />
-      {errors.name && <InputRequiredError className="pl-4" inputName="Nome" />}
-      <Controller
-        name="specie"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
-                <SelectValue
-                  placeholder="Selecione a Espécie do Pet"
-                  {...field}
-                />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="Canino">Canina</SelectItem>
-                  <SelectItem value="Felino">Felino</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {errors.specie && (
-              <InputRequiredError className="px-4" inputName="Espécie" />
-            )}
-          </>
+      <div>
+        <label className="text-sm pl-4 font-medium">Nome do pet</label>
+        <Input
+          className="w-full"
+          {...register("name", { required: true })}
+          placeholder="Nome do Pet"
+        />
+        {errors.name && (
+          <InputRequiredError className="pl-4" inputName="Nome" />
         )}
-      />
-      <Controller
-        name="sex"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
-                <SelectValue placeholder="Selecione o Sexo do Pet" {...field} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="Macho">Macho</SelectItem>
-                  <SelectItem value="Femea">Fêmea</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {errors.sex && (
-              <InputRequiredError className="px-4" inputName="Sexo" />
-            )}
-          </>
-        )}
-      />
+      </div>
+      <div>
+        <label className="text-sm pl-4 font-medium">Espécie do pet</label>
+        <Controller
+          name="specie"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
+                  <SelectValue
+                    placeholder="Selecione a Espécie do Pet"
+                    {...field}
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="Canino">Canina</SelectItem>
+                    <SelectItem value="Felino">Felino</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {errors.specie && (
+                <InputRequiredError className="px-4" inputName="Espécie" />
+              )}
+            </>
+          )}
+        />
+      </div>
 
-      <Input
-        className="w-full"
-        {...register("age", { required: true })}
-        placeholder="Idade do Pet"
-      />
-      {errors.specie && (
-        <InputRequiredError className="pl-4" inputName="Idade do Pet" />
-      )}
+      <div>
+        <label className="text-sm pl-4 font-medium">Sexo do pet</label>
+        <Controller
+          name="sex"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full bg-zinc-200 py-6 rounded-full">
+                  <SelectValue
+                    placeholder="Selecione o Sexo do Pet"
+                    {...field}
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="Macho">Macho</SelectItem>
+                    <SelectItem value="Femea">Fêmea</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {errors.sex && (
+                <InputRequiredError className="px-4" inputName="Sexo" />
+              )}
+            </>
+          )}
+        />
+      </div>
+
+      <div>
+        <label className="text-sm pl-4 font-medium">
+          Data de nascimento do pet
+        </label>
+        <Input
+          type="date"
+          className="w-full"
+          {...register("dateOfBirth", { required: true })}
+          placeholder="Idade do Pet"
+        />
+        {errors.dateOfBirth && (
+          <InputRequiredError
+            className="pl-4"
+            inputName="Data de nascimento do Pet"
+          />
+        )}
+      </div>
       <div>
         <label htmlFor="tutorName" className="text-sm pl-4 font-medium">
           Nome do Tutor

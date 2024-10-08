@@ -17,7 +17,7 @@ export const FormatterMessageFromWhatsApp = (
 *Nome*: ${solicitationModel.pet.name}        *Espécie*: ${
     solicitationModel.pet.specie
   }
-*Idade*: ${solicitationModel.pet.age}        *Sexo do animal*: ${
+*Idade*: ${solicitationModel.pet.dateOfBirth}        *Sexo do animal*: ${
     solicitationModel.pet.sex
   }
 
@@ -42,9 +42,11 @@ ${solicitationModel.exams
 *Guia gerada com sucesso na R&K para o pet ${solicitationModel.pet.name}!*
 Segue o link da Guia: *https://rkdiagnostico.cloud/solicitations/pdf/${pdfName}*
 
-*Link para o WhatsApp do cliente:* https://api.whatsapp.com/send?phone=55${numberFormatted}&text=Olá%20${solicitationModel.pet.customer.name.replace(" ", "%20")
-}%20aqui%20é%20a%20RK!%20Segue%20o%20link%20da%20guia%20do%20${
-solicitationModel.pet.name
-}:%20*https://rkdiagnostico.cloud/solicitations/pdf/${pdfName}*
+*Link para o WhatsApp do cliente:* https://api.whatsapp.com/send?phone=55${numberFormatted}&text=Olá%20${solicitationModel.pet.customer.name.replace(
+    " ",
+    "%20"
+  )}%20aqui%20é%20a%20RK!%20Segue%20o%20link%20da%20guia%20do%20${
+    solicitationModel.pet.name
+  }:%20*https://rkdiagnostico.cloud/solicitations/pdf/${pdfName}*
 `;
 };

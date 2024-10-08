@@ -29,7 +29,7 @@ export interface SolicitationModel {
     name: string;
     specie: string;
     sex: string;
-    age: string;
+    dateOfBirth: string;
     customerId: number;
     customer: {
       id: number;
