@@ -10,6 +10,7 @@ import ReactPDF, {
 import { SolicitationModel } from "../Solicitation";
 import path from "path";
 import { FormatedDate } from "../../../utils/FormatedDate";
+import moment from "moment";
 
 interface PDFProps {
   data: SolicitationModel;
@@ -71,6 +72,15 @@ const styles = StyleSheet.create({
 });
 
 const PDF = ({ data }: PDFProps) => {
+  const ageAnimal = moment(data.pet.dateOfBirth).fromNow().split(" ");
+
+  const formatAnimalAge = () => {
+    return `${ageAnimal[0].replace("a", "1")} ${ageAnimal[1]
+      .replace("months", "meses")
+      .replace("years", "anos")
+      .replace("month", "mês")
+      .replace("year", "ano")}`;
+  };
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -122,7 +132,7 @@ const PDF = ({ data }: PDFProps) => {
               <View style={styles.containerFather}>
                 <View style={styles.containerChild}>
                   <Text style={styles.paragraphBold}>Idade: </Text>
-                  <Text style={styles.paragraph}>{data.pet.age}</Text>
+                  <Text style={styles.paragraph}>{formatAnimalAge()}</Text>
                 </View>
                 <View style={styles.containerChild}>
                   <Text style={styles.paragraphBold}>Sexo do Animal: </Text>
